@@ -11,11 +11,12 @@ import os
 api_key = os.getenv("api_key")
 api_secret = os.getenv("api_secret")
 api_telegram = os.getenv("api_telegram")
+msg_id_telegram = os.getenv("msg_id_telegram")
 
 client = Client(api_key, api_secret)
 
 def getminutedata(symbol, interval, lookback):
-    frame = pd.DataFrame(client.get_historical_klines(symbol, interval, lookback + ' min ago UTC'))
+    frame = pd.DataFrame(client.get_historical_klines(symbol, interval, lookback))
     frame = frame.iloc[:,:6]
     frame.columns = ['Time', 'Open', 'High', 'Low', 'Close', 'Volume']
     frame = frame.set_index('Time')
@@ -23,7 +24,7 @@ def getminutedata(symbol, interval, lookback):
     frame = frame.astype(float)
     return frame
 
-#df = getminutedata('BTCUSDT', '1m', '100')
+#df = getminutedata('BTCUSDT', '4h', "30 day ago UTC")
 #print(df)
 
 def applytechnicals(df):
@@ -53,13 +54,13 @@ class Signals:
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
 
-# inst = Signals(df, 25)
-# inst.decide()
-# df[df.Buy == 1 ]
-# print(df)
+#inst = Signals(df, 25)
+#inst.decide()
+#df[df.Buy == 1 ]
+#print(df)
 
 def strategy(pair, qty, open_position=False):
-    df = getminutedata(pair, '1m', '100')
+    df = getminutedata(pair, '4h', "30 day ago UTC")
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
@@ -84,7 +85,7 @@ def strategy(pair, qty, open_position=False):
         if pair not in clean_buy_list:
             buyprice = str(df.Close.iloc[-1])
             body = pair,"BUY - 1 minute timeframe " + str(df.Close.iloc[-1])
-            base_url = 'https://api.telegram.org/bot' + str(api_telegram) + '/sendMessage?chat_id=1762883817&text="{}"'.format(body)
+            base_url = 'https://api.telegram.org/bot' + str(api_telegram) + '/sendMessage?chat_id=' + str(msg_id_telegram)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
         with open('/root/trading/'+ pair +'_buy.txt', 'a+') as f:
@@ -108,7 +109,7 @@ def strategy(pair, qty, open_position=False):
         ###########################################################################################################
         if pair not in clean_sell_list:
             body = pair,"SELL - 1 minute timeframe " + str(df.Close.iloc[-1])
-            base_url = 'https://api.telegram.org/bot' + str(api_telegram) + '/sendMessage?chat_id=1762883817&text="{}"'.format(body)
+            base_url = 'https://api.telegram.org/bot' + str(api_telegram) + '/sendMessage?chat_id=' + str(msg_id_telegram)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
         with open('/root/trading/'+ pair +'_sell.txt', 'a+') as f:
@@ -117,4 +118,4 @@ while True:
     crypto_coins = ["BTCUSDT", "SLPUSDT", "AXSUSDT", "ETHUSDT"]
     for coins in crypto_coins:
         strategy(coins, 50)
-        time.sleep(10)
+        time.sleep(60)
