@@ -84,7 +84,7 @@ def strategy(pair, qty, open_position=False):
         ##########################################################################################################
         if pair not in clean_buy_list:
             buyprice = str(df.Close.iloc[-1])
-            body = pair,"BUY - 1 minute timeframe " + str(df.Close.iloc[-1])
+            body = pair,"BUY - 4 hour timeframe " + str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram) + '/sendMessage?chat_id=' + str(msg_id_telegram)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
@@ -108,7 +108,7 @@ def strategy(pair, qty, open_position=False):
         file.close()
         ###########################################################################################################
         if pair not in clean_sell_list:
-            body = pair,"SELL - 1 minute timeframe " + str(df.Close.iloc[-1])
+            body = pair,"SELL - 4 hour timeframe " + str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram) + '/sendMessage?chat_id=' + str(msg_id_telegram)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
