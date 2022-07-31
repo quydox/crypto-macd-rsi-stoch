@@ -11,6 +11,7 @@ import os
 api_key = os.getenv("api_key")
 api_secret = os.getenv("api_secret")
 api_telegram = os.getenv("api_telegram")
+msg_id_telegram = os.getenv("msg_id_telegram")
 
 client = Client(api_key, api_secret)
 
@@ -85,7 +86,7 @@ def strategy(pair, qty, open_position=False):
             #order = client.create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty)
             buyprice = str(df.Close.iloc[-1])
             body = pair,"BUY - 15 minutes timeframe " + str(df.Close.iloc[-1])
-            base_url = 'https://api.telegram.org/bot' + str(api_telegram) + '/sendMessage?chat_id=-584537790&text="{}"'.format(body)
+            base_url = 'https://api.telegram.org/bot' + str(api_telegram) + '/sendMessage?chat_id=' + str(msg_id_telegram)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
         with open('/root/trading/'+ pair +'_buy_15m.txt', 'a+') as f:
@@ -111,7 +112,7 @@ def strategy(pair, qty, open_position=False):
         if pair not in clean_sell_list:
             #order = client.create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty)
             body = pair,"SELL - 15 minutes timeframe " + str(df.Close.iloc[-1])
-            base_url = 'https://api.telegram.org/bot' + str(api_telegram) + '/sendMessage?chat_id=-584537790&text="{}"'.format(body)
+            base_url = 'https://api.telegram.org/bot' + str(api_telegram) + '/sendMessage?chat_id=' + str(msg_id_telegram)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
         with open('/root/trading/'+ pair +'_sell_15m.txt', 'a+') as f:
