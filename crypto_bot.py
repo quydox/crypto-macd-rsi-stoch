@@ -115,7 +115,7 @@ def strategy(pair, qty, open_position=False):
         with open('/root/trading/'+ pair +'_sell.txt', 'a+') as f:
             f.write(str(pair) + '\n')
 while True:
-    crypto_coins = ["BTCUSDT", "SLPUSDT", "AXSUSDT", "ETHUSDT"]
+    crypto_coins = ["BTCUSDT", "SLPUSDT", "AXSUSDT", "ETHUSDT", "SHIBUSDT"]
     for coins in crypto_coins:
         strategy(coins, 50)
         time.sleep(60)
