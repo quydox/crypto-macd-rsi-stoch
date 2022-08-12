@@ -1,8 +1,16 @@
 from dotenv import load_dotenv
 load_dotenv()
-import os
+from binance import Client
 import requests
-api_telegram = os.getenv("api_telegram")
+import pandas as pd
+import ta
+import numpy as np
+import time
+import os
+api_key = os.getenv("api_key")
+api_secret = os.getenv("api_secret")
+api_telegram1 = os.getenv("api_telegram1")
+msg_id_telegram 1= os.getenv("msg_id_telegram1")
 body = "Test Upgrade"
-base_url = 'https://api.telegram.org/bot' + str(api_telegram) + '/sendMessage?chat_id=-584537790&text="{}"'.format(body)
+base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
 requests.get(base_url)
