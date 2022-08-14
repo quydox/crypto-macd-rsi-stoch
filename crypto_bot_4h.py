@@ -1,19 +1,20 @@
 from dotenv import load_dotenv
 load_dotenv()
 from binance import Client
+from pathlib import Path
 import requests
 import pandas as pd
 import ta
 import numpy as np
 import time
 import os
+
 api_key = os.getenv("api_key")
 api_secret = os.getenv("api_secret")
 api_telegram1 = os.getenv("api_telegram1")
-msg_id_telegram1= os.getenv("msg_id_telegram1")
+msg_id_telegram1 = os.getenv("msg_id_telegram1")
 
 client = Client(api_key, api_secret)
-exchange_info = client.get_exchange_info()
 
 def getminutedata(symbol, interval, lookback):
     frame = pd.DataFrame(client.get_historical_klines(symbol, interval, lookback))
@@ -24,8 +25,8 @@ def getminutedata(symbol, interval, lookback):
     frame = frame.astype(float)
     return frame
 
-# #df = getminutedata('BTCUSDT', '4h', "30 day ago UTC")
-# #print(df)
+#df = getminutedata('BTCUSDT', '4h', "30 day ago UTC")
+#print(df)
 
 def applytechnicals(df):
     df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
@@ -60,27 +61,26 @@ class Signals:
 #print(df)
 
 def strategy(pair, qty, open_position=False):
-#    df = getminutedata(pair, '4h', "30 day ago UTC")
-#    df = getminutedata(s['symbol'], '4h', "30 days ago UTC")
+    df = getminutedata(pair, '4h', "30 day ago UTC")
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
-    print(f'Current Close is ' + str(df.Close.iloc[-1]), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]))
+    print(pair + f' Current Close is ' + str(df.Close.iloc[-1]), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]))
     if df.Buy.iloc[-1]:
         #####################Read the previous buy text output and empty the file ################################
-        with open('/root/trading/'+ pair +'_buy.txt', 'r') as f:
+        with open(file_path+ pair +'_buy_4h.txt', 'r') as f:
             clean_buy_list = []
             for buy_list in f.readlines():
                 clean_buy_list.append(buy_list.replace("\n", ""))
-        file = open('/root/trading/'+ pair +'_buy.txt', 'w')
+        file = open(file_path+ pair +'_buy_4h.txt', 'w')
         file.close()
         ###########################################################################################################
         #####################Read the previous sell text output and empty the file ###############################
-        with open('/root/trading/'+ pair +'_sell.txt', 'r') as f:
+        with open(file_path+ pair +'_sell_4h.txt', 'r') as f:
             clean_sell_list = []
             for sell_list in f.readlines():
                 clean_sell_list.append(sell_list.replace("\n", ""))
-        file = open('/root/trading/'+ pair +'_sell.txt', 'w')
+        file = open(file_path+ pair +'_sell_4h.txt', 'w')
         file.close()
         ##########################################################################################################
         if pair not in clean_buy_list:
@@ -89,23 +89,23 @@ def strategy(pair, qty, open_position=False):
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
-        with open('/root/trading/'+ pair +'_buy.txt', 'a+') as f:
+        with open(file_path+ pair +'_buy_4h.txt', 'a+') as f:
             f.write(str(pair) + '\n')
     elif df.Sell.iloc[-1]:
         #####################Read the previous sell text output and empty the file ###############################
-        with open('/root/trading/'+ pair +'_sell.txt', 'r') as f:
+        with open(file_path+ pair +'_sell_4h.txt', 'r') as f:
             clean_sell_list = []
             for sell_list in f.readlines():
                 clean_sell_list.append(sell_list.replace("\n", ""))
-        file = open('/root/trading/'+ pair +'_sell.txt', 'w')
+        file = open(file_path+ pair +'_sell_4h.txt', 'w')
         file.close()
         ##########################################################################################################
         #####################Read the previous buy text output and empty the file ################################
-        with open('/root/trading/'+ pair +'_buy.txt', 'r') as f:
+        with open(file_path+ pair +'_buy_4h.txt', 'r') as f:
             clean_buy_list = []
             for buy_list in f.readlines():
                 clean_buy_list.append(buy_list.replace("\n", ""))
-        file = open('/root/trading/'+ pair +'_buy.txt', 'w')
+        file = open(file_path+ pair +'_buy_4h.txt', 'w')
         file.close()
         ###########################################################################################################
         if pair not in clean_sell_list:
@@ -113,15 +113,19 @@ def strategy(pair, qty, open_position=False):
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
-        with open('/root/trading/'+ pair +'_sell.txt', 'a+') as f:
+        with open(file_path+ pair +'_sell_4h.txt', 'a+') as f:
             f.write(str(pair) + '\n')
 while True:
-    for coins in exchange_info['symbols']:
+    crypto_coins = ["BTCUSDT", "SLPUSDT", "AXSUSDT", "ETHUSDT", "SHIBUSDT", "MATICUSDT", "SANDUSDT", "AAVEUSDT", "MKRUSDT", "XRPUSDT", "KNCUSDT", "BCHUSDT", "LINKUSDT", "UNIUSDT", "BATUSDT", "CHZUSDT", "APEUSDT", "GALAUSDT", "ENJUSDT", "MANAUSDT"]
+    for coins in crypto_coins:
         try:
-            df = getminutedata(coins['symbol'], '4h', "30 day ago UTC")
-            if df.Close.iloc[-1] < 0.0001:
-                print(coins['symbol'])
-                strategy(coins['symbol'], 50)
-                time.sleep(10)
+            myfile1 = Path(coins+'_buy_4h.txt')
+            myfile2 = Path(coins+'_sell_4h.txt')
+            myfile1.touch(exist_ok=True)
+            myfile2.touch(exist_ok=True)
+            f = open(myfile1)
+            f = open(myfile2)
+            strategy(coins, 50)
+            time.sleep(10)
         except Exception:
             pass
