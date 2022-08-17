@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 from binance import Client
+from pathlib import Path
 import requests
 import pandas as pd
 import ta
@@ -12,6 +13,7 @@ api_key = os.getenv("api_key")
 api_secret = os.getenv("api_secret")
 api_telegram = os.getenv("api_telegram")
 msg_id_telegram = os.getenv("msg_id_telegram")
+file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
@@ -117,5 +119,9 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = ["BTCUSDT", "SLPUSDT", "AXSUSDT", "ETHUSDT", "SHIBUSDT"]
     for coins in crypto_coins:
+        myfile1 = Path(file_path+ coins+'_buy.txt')
+        myfile2 = Path(file_path+ coins +'_sell.txt')
+        myfile1.touch(exist_ok=True)
+        myfile2.touch(exist_ok=True)
         strategy(coins, 50)
         time.sleep(60)
