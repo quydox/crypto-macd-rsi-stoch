@@ -13,6 +13,7 @@ api_key = os.getenv("api_key")
 api_secret = os.getenv("api_secret")
 api_telegram1 = os.getenv("api_telegram1")
 msg_id_telegram1 = os.getenv("msg_id_telegram1")
+file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
@@ -85,7 +86,7 @@ def strategy(pair, qty, open_position=False):
         ##########################################################################################################
         if pair not in clean_buy_list:
             buyprice = str(df.Close.iloc[-1])
-            body = pair,"BUY - 4 hour timeframe " + str(df.Close.iloc[-1])
+            body = pair,"BUY - 4 hour timeframe version 2" + str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
@@ -109,7 +110,7 @@ def strategy(pair, qty, open_position=False):
         file.close()
         ###########################################################################################################
         if pair not in clean_sell_list:
-            body = pair,"SELL - 4 hour timeframe " + str(df.Close.iloc[-1])
+            body = pair,"SELL - 4 hour timeframe version 2" + str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
@@ -119,12 +120,10 @@ while True:
     crypto_coins = ["BTCUSDT", "SLPUSDT", "AXSUSDT", "ETHUSDT", "SHIBUSDT", "MATICUSDT", "SANDUSDT", "AAVEUSDT", "MKRUSDT", "XRPUSDT", "KNCUSDT", "BCHUSDT", "LINKUSDT", "UNIUSDT", "BATUSDT", "CHZUSDT", "APEUSDT", "GALAUSDT", "ENJUSDT", "MANAUSDT"]
     for coins in crypto_coins:
         try:
-            myfile1 = Path(coins+'_buy_4h.txt')
-            myfile2 = Path(coins+'_sell_4h.txt')
+            myfile1 = Path(file_path+ coins+'_buy_4h.txt')
+            myfile2 = Path(file_path+ coins +'_sell_4h.txt')
             myfile1.touch(exist_ok=True)
             myfile2.touch(exist_ok=True)
-            f = open(myfile1)
-            f = open(myfile2)
             strategy(coins, 50)
             time.sleep(10)
         except Exception:
