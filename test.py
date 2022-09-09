@@ -21,3 +21,5 @@ client.API_URL = 'https://testnet.binance.vision/api'
 #print(client.get_account())
 
 print(client.get_asset_balance(asset='BTC'))
+
+print(client.get_margin_account())
