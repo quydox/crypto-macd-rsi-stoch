@@ -18,4 +18,6 @@ file_path = os.getenv("file_path")
 client = Client(api_key, api_secret)
 
 client.API_URL = 'https://testnet.binance.vision/api'
-print(client.get_account())
+#print(client.get_account())
+
+print(client.get_asset_balance(asset='BTC'))
