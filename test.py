@@ -125,11 +125,11 @@ while True:
     crypto_coins = ["SHIBBUSD"]
     for coins in crypto_coins:
         # try:
-        myfile1 = Path(file_path+ coins+'_buy_1m.txt')
+        myfile1 = Path(file_path+ coins +'_buy_1m.txt')
         myfile2 = Path(file_path+ coins +'_sell_1m.txt')
         myfile1.touch(exist_ok=True)
         myfile2.touch(exist_ok=True)
-        strategy(coins, 746268)
+        strategy(coins, 10.00000000)
         time.sleep(10)
         # except Exception:
             # pass
