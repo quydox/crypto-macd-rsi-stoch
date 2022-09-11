@@ -17,11 +17,18 @@ file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
-pair="SHIBBUSD"
-coins="SHIBBUSD"
-current_price = client.get_symbol_ticker(symbol=coins)
-qty = int(15/(float(current_price['price'])))
-fees = client.get_trade_fee(symbol=pair)
-for item in fees:
-    qty = int(int(qty)-(float(item['takerCommission'])*int(qty)))
-    print(qty)
+# pair="SHIBBUSD"
+# coins="SHIBBUSD"
+# current_price = client.get_symbol_ticker(symbol=coins)
+# qty = int(15/(float(current_price['price'])))
+# fees = client.get_trade_fee(symbol=pair)
+# for item in fees:
+    # qty = int(int(qty)-(float(item['takerCommission'])*int(qty)))
+    # print(qty)
+
+current_price = client.get_symbol_ticker()
+for item in current_price:
+    #print(int(float(item['price'])))
+    if int(float(item['price'])) == 0:
+        coins = item['symbol'],item['price']
+        coins.count(item['symbol'])
