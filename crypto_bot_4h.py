@@ -117,14 +117,17 @@ def strategy(pair, qty, open_position=False):
         with open(file_path+ pair +'_sell_4h.txt', 'a+') as f:
             f.write(str(pair) + '\n')
 while True:
-    crypto_coins = ["BTCUSDT", "SLPUSDT", "AXSUSDT", "ETHUSDT", "SHIBUSDT", "MATICUSDT", "SANDUSDT", "AAVEUSDT", "MKRUSDT", "XRPUSDT", "KNCUSDT", "BCHUSDT", "LINKUSDT", "UNIUSDT", "BATUSDT", "CHZUSDT", "APEUSDT", "GALAUSDT", "ENJUSDT", "MANAUSDT"]
-    for coins in crypto_coins:
-        try:
-            myfile1 = Path(file_path+ coins+'_buy_4h.txt')
-            myfile2 = Path(file_path+ coins +'_sell_4h.txt')
-            myfile1.touch(exist_ok=True)
-            myfile2.touch(exist_ok=True)
-            strategy(coins, 50)
-            time.sleep(10)
-        except Exception:
-            pass
+    crypto_coins = client.get_symbol_ticker()
+    #crypto_coins = ["BTCUSDT", "SLPUSDT", "AXSUSDT", "ETHUSDT", "SHIBUSDT", "MATICUSDT", "SANDUSDT", "AAVEUSDT", "MKRUSDT", "XRPUSDT", "KNCUSDT", "BCHUSDT", "LINKUSDT", "UNIUSDT", "BATUSDT", "CHZUSDT", "APEUSDT", "GALAUSDT", "ENJUSDT", "MANAUSDT"]
+    for item in crypto_coins:
+        if (int(float(item['price'])) < 1) and "BUSD" in item['symbol']:
+            #print(item['symbol'])
+            try:
+                myfile1 = Path(file_path+ item['symbol'] +'_buy_4h.txt')
+                myfile2 = Path(file_path+ item['symbol'] +'_sell_4h.txt')
+                myfile1.touch(exist_ok=True)
+                myfile2.touch(exist_ok=True)
+                strategy(item['symbol'], 50)
+                time.sleep(0.5)
+            except Exception:
+               pass

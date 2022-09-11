@@ -26,9 +26,13 @@ client = Client(api_key, api_secret)
     # qty = int(int(qty)-(float(item['takerCommission'])*int(qty)))
     # print(qty)
 
-current_price = client.get_symbol_ticker()
-for item in current_price:
-    #print(int(float(item['price'])))
-    if int(float(item['price'])) == 0:
-        coins = item['symbol'],item['price']
-        coins.count(item['symbol'])
+# current_price = client.get_symbol_ticker()
+# for item in current_price:
+    # #print(int(float(item['price'])))
+    # if (int(float(item['price'])) < 1) and "BUSD" in item['symbol']:
+        # print(item['symbol'],item['price'])
+
+crypto_coins = client.get_symbol_ticker()
+for item in crypto_coins:
+    if (int(float(item['price'])) < 1) and "BUSD" in item['symbol']:
+        print(item['symbol'])
