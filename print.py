@@ -17,12 +17,10 @@ file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
-# info = client.get_open_orders()
-current_price = client.get_symbol_ticker(symbol='SHIBBUSD')
 pair="SHIBBUSD"
-# info1 = client.get_orderbook_ticker(symbol='SHIBBUSD')
+current_price = client.get_symbol_ticker(symbol=coins)
+qty = int(15/(float(current_price['price'])))
 fees = client.get_trade_fee(symbol=pair)
-test = int(15/(float(current_price['price'])))
 for item in fees:
     qty = int(qty)-(float(item['takerCommission'])*int(qty))
     print(qty)
