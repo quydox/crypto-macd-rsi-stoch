@@ -17,6 +17,6 @@ file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
-info = client.get_symbol_info('SHIBBUSD')
+info = client.get_open_orders()
 
 print(info)
