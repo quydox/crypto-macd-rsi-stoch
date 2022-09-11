@@ -127,14 +127,14 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = ["SHIBBUSD"]
     for coins in crypto_coins:
-        try:
-            current_price = client.get_symbol_ticker(symbol=coins)
-            total_coins = int(15/(float(current_price['price'])))
-            myfile1 = Path(file_path+ coins +'_buy_1m.txt')
-            myfile2 = Path(file_path+ coins +'_sell_1m.txt')
-            myfile1.touch(exist_ok=True)
-            myfile2.touch(exist_ok=True)
-            strategy(coins, total_coins)
-            time.sleep(10)
-        except Exception:
-            pass
+        # try:
+        current_price = client.get_symbol_ticker(symbol=coins)
+        total_coins = int(15/(float(current_price['price'])))
+        myfile1 = Path(file_path+ coins +'_buy_1m.txt')
+        myfile2 = Path(file_path+ coins +'_sell_1m.txt')
+        myfile1.touch(exist_ok=True)
+        myfile2.touch(exist_ok=True)
+        strategy(coins, total_coins)
+        time.sleep(10)
+        # except Exception:
+            # pass

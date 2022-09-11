@@ -17,6 +17,10 @@ file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
-info = client.get_open_orders()
+# info = client.get_open_orders()
+# current_price = client.get_symbol_ticker(symbol='SHIBBUSD')
+# info1 = client.get_orderbook_ticker(symbol='SHIBBUSD')
+# #test = int(15/(float(current_price['price'])))
+# print(info1)
 
-print(info)
+# print(info)
