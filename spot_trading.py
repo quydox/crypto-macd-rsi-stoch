@@ -62,7 +62,6 @@ class Signals:
 #print(df)
 
 def strategy(pair, qty, open_position=False):
-    #df = getminutedata(pair, '1m', "1 day ago UTC")
     df = getminutedata(pair, '4h', "30 day ago UTC")
     applytechnicals(df)
     inst = Signals(df, 25)
@@ -70,46 +69,46 @@ def strategy(pair, qty, open_position=False):
     print(pair + f' Current Close is ' + str(df.Close.iloc[-1]), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]))
     if df.Buy.iloc[-1]:
         #####################Read the previous buy text output and empty the file ################################
-        with open(file_path+ pair +'_buy_1m.txt', 'r') as f:
+        with open(file_path+ pair +'_buy_4h.txt', 'r') as f:
             clean_buy_list = []
             for buy_list in f.readlines():
                 clean_buy_list.append(buy_list.replace("\n", ""))
-        file = open(file_path+ pair +'_buy_1m.txt', 'w')
+        file = open(file_path+ pair +'_buy_4h.txt', 'w')
         file.close()
         ###########################################################################################################
         #####################Read the previous sell text output and empty the file ###############################
-        with open(file_path+ pair +'_sell_1m.txt', 'r') as f:
+        with open(file_path+ pair +'_sell_4h.txt', 'r') as f:
             clean_sell_list = []
             for sell_list in f.readlines():
                 clean_sell_list.append(sell_list.replace("\n", ""))
-        file = open(file_path+ pair +'_sell_1m.txt', 'w')
+        file = open(file_path+ pair +'_sell_4h.txt', 'w')
         file.close()
         ##########################################################################################################
         if pair not in clean_buy_list:
             order = client.create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty)
             buyprice = order['fills'][0]['price']
             open_position = True
-            body = pair, order, "BUY - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
+            body = pair, order, "BUY - 4H timeframe version. Current Price " + str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
-        with open(file_path+ pair +'_buy_1m.txt', 'a+') as f:
+        with open(file_path+ pair +'_buy_4h.txt', 'a+') as f:
             f.write(str(pair) + '\n')
     elif df.Sell.iloc[-1]:
         #####################Read the previous sell text output and empty the file ###############################
-        with open(file_path+ pair +'_sell_1m.txt', 'r') as f:
+        with open(file_path+ pair +'_sell_4h.txt', 'r') as f:
             clean_sell_list = []
             for sell_list in f.readlines():
                 clean_sell_list.append(sell_list.replace("\n", ""))
-        file = open(file_path+ pair +'_sell_1m.txt', 'w')
+        file = open(file_path+ pair +'_sell_4h.txt', 'w')
         file.close()
         ##########################################################################################################
         #####################Read the previous buy text output and empty the file ################################
-        with open(file_path+ pair +'_buy_1m.txt', 'r') as f:
+        with open(file_path+ pair +'_buy_4h.txt', 'r') as f:
             clean_buy_list = []
             for buy_list in f.readlines():
                 clean_buy_list.append(buy_list.replace("\n", ""))
-        file = open(file_path+ pair +'_buy_1m.txt', 'w')
+        file = open(file_path+ pair +'_buy_4h.txt', 'w')
         file.close()
         ###########################################################################################################
         if pair not in clean_sell_list:
@@ -121,19 +120,19 @@ def strategy(pair, qty, open_position=False):
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
-        with open(file_path+ pair +'_sell_1m.txt', 'a+') as f:
+        with open(file_path+ pair +'_sell_4h.txt', 'a+') as f:
             f.write(str(pair) + '\n')
 while True:
     crypto_coins = ["SHIBBUSD"]
     for coins in crypto_coins:
-        # try:
-        current_price = client.get_symbol_ticker(symbol=coins)
-        total_coins = int(15/(float(current_price['price'])))
-        myfile1 = Path(file_path+ coins +'_buy_1m.txt')
-        myfile2 = Path(file_path+ coins +'_sell_1m.txt')
-        myfile1.touch(exist_ok=True)
-        myfile2.touch(exist_ok=True)
-        strategy(coins, total_coins)
-        time.sleep(10)
-        # except Exception:
-            # pass
+        try:
+            current_price = client.get_symbol_ticker(symbol=coins)
+            total_coins = int(15/(float(current_price['price'])))
+            myfile1 = Path(file_path+ coins +'_buy_4h.txt')
+            myfile2 = Path(file_path+ coins +'_sell_4h.txt')
+            myfile1.touch(exist_ok=True)
+            myfile2.touch(exist_ok=True)
+            strategy(coins, total_coins)
+            time.sleep(10)
+        except Exception:
+            pass
