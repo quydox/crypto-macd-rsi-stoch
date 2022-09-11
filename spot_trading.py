@@ -116,7 +116,7 @@ def strategy(pair, qty, open_position=False):
         if pair not in clean_sell_list:
             fees = client.get_trade_fee(symbol=pair)
             for item in fees:
-                qty = int(qty)-(float(item['takerCommission'])*int(qty))
+                qty = int(int(qty)-(float(item['takerCommission'])*int(qty)))
                 order = client.create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty)
                 body = pair, order, "SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
