@@ -50,6 +50,6 @@ client = Client(api_key, api_secret)
     # if item['asset'] == 'SHIB':
         # print(item)
 
-open_pos1 = client.get_open_position()
+open_pos1 = client.get_lending_position()
 for item in open_pos1:
     print(item)
