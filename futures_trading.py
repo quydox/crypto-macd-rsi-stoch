@@ -85,7 +85,7 @@ def strategy(pair, qty, open_position=False):
         file.close()
         ##########################################################################################################
         if pair not in clean_buy_list:
-            order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty)
+            order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=10)
             buyprice = order['fills'][0]['price']
             open_position = True
             #buyprice = str(df.Close.iloc[-1])

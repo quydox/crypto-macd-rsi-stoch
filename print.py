@@ -37,7 +37,13 @@ client = Client(api_key, api_secret)
     # if (int(float(item['price'])) < 1) and "BUSD" in item['symbol']:
         # print(item['symbol'])
 
-crypto_coins = client.futures_coin_symbol_ticker()
+crypto_coins = client.futures_symbol_ticker()
 for item in crypto_coins:
-    print(item['symbol'])
-# print(crypto_coins)
+#    if (int(float(item['price'])) < 1) and item['symbol'].endswith('BUSD'):
+        print(item)
+
+# open_pos = client.futures_account()['positions']
+# print(open_pos)
+
+open_pos1 = client.get_account()['positions']
+print(open_pos1)
