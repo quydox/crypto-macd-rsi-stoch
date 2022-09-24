@@ -42,7 +42,7 @@ client = Client(api_key, api_secret)
 # #    if (int(float(item['price'])) < 1) and item['symbol'].endswith('BUSD'):
         # print(item)
 
-open_pos = client.futures_account()
+open_pos = client.futures_account()['asset']
 print(open_pos)
 
 # open_pos1 = client.get_account()['balances']
