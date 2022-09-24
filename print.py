@@ -53,4 +53,4 @@ client = Client(api_key, api_secret)
         # print(item)
 
 open_pos1 = client.account()
-    print(open_pos1)
+print(open_pos1)
