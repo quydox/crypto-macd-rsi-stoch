@@ -45,7 +45,7 @@ client = Client(api_key, api_secret)
 open_pos = client.futures_account()['positions']
 for item in open_pos:
     if item['symbol'] == '1000SHIBBUSD':
-    print(item)
+        print(item)
 
 # open_pos1 = client.get_account()['balances']
 # for item in open_pos1:
