@@ -47,4 +47,5 @@ client = Client(api_key, api_secret)
 
 open_pos1 = client.get_account()['balances']
 for item in open_pos1:
-    print(item['asset'])
+    if item['asset'] == 'SHIBBUSD':
+        print(item['asset'])
