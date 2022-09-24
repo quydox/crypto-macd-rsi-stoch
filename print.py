@@ -46,5 +46,5 @@ client = Client(api_key, api_secret)
 # print(open_pos)
 
 open_pos1 = client.get_account()['balances']
-    for item in open_pos1:
-        print(item['asset'])
+for item in open_pos1:
+    print(item['asset'])
