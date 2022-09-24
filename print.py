@@ -52,5 +52,5 @@ client = Client(api_key, api_secret)
     # if item['asset'] == 'SHIB':
         # print(item)
 
-open_pos1 = client.account()
+open_pos1 = client.get_account()
 print(open_pos1)
