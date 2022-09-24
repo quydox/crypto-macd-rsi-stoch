@@ -32,7 +32,12 @@ client = Client(api_key, api_secret)
     # if (int(float(item['price'])) < 1) and "BUSD" in item['symbol']:
         # print(item['symbol'],item['price'])
 
-crypto_coins = client.get_symbol_ticker()
+# crypto_coins = client.get_symbol_ticker()
+# for item in crypto_coins:
+    # if (int(float(item['price'])) < 1) and "BUSD" in item['symbol']:
+        # print(item['symbol'])
+
+crypto_coins = client.futures_coin_symbol_ticker()
 for item in crypto_coins:
-    if (int(float(item['price'])) < 1) and "BUSD" in item['symbol']:
-        print(item['symbol'])
+    print(item['symbol'])
+# print(crypto_coins)
