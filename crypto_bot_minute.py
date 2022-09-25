@@ -92,6 +92,8 @@ def strategy(pair, qty, open_position=False):
             print(body)
         with open(file_path+ pair +'_buy_1m.txt', 'a+') as f:
             f.write(str(pair) + '\n')
+        with open(file_path+ pair +'_buy_price_1m.txt', 'a+') as f:
+            f.write(str(buyprice) + '\n')
     elif df.Sell.iloc[-1]:
         #####################Read the previous sell text output and empty the file ###############################
         with open(file_path+ pair +'_sell_1m.txt', 'r') as f:
@@ -111,19 +113,26 @@ def strategy(pair, qty, open_position=False):
         ###########################################################################################################
         if pair not in clean_sell_list:
             body = pair,"SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
+            sellprice = str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
         with open(file_path+ pair +'_sell_1m.txt', 'a+') as f:
             f.write(str(pair) + '\n')
+        with open(file_path+ pair +'_sell_price_1m.txt', 'a+') as f:
+            f.write(str(sellprice) + '\n')
 while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
         try:
             myfile1 = Path(file_path+ coins+'_buy_1m.txt')
             myfile2 = Path(file_path+ coins +'_sell_1m.txt')
+            myfile3 = Path(file_path+ coins+'_buy_price_1m.txt')
+            myfile4 = Path(file_path+ coins+'_sell_price_1m.txt')
             myfile1.touch(exist_ok=True)
             myfile2.touch(exist_ok=True)
+            myfile3.touch(exist_ok=True)
+            myfile4.touch(exist_ok=True)
             strategy(coins, 50)
             time.sleep(10)
         except Exception:
