@@ -63,7 +63,6 @@ client = Client(api_key, api_secret)
 # get_asset = client.get_asset_details(asset='SHIB')
 # print(get_asset)
 
-get_orders = client.get_my_trades(symbol='SHIBBUSD')
+get_orders = client.get_my_trades(symbol='SHIBBUSD',isMaker='True')
 for item in get_orders:
-    if item['isMaker'] == 'True':
-        print(item['isMaker'])
+    print(item['isMaker'])
