@@ -92,8 +92,6 @@ def strategy(pair, qty, open_position=False):
             print(body)
         with open(file_path+ pair +'_buy_1m.txt', 'a+') as f:
             f.write(str(pair) + '\n')
-        with open(file_path+ pair +'_buy_price_1m.txt', 'w') as fprice:
-            fprice.write(str(buyprice))
     elif df.Sell.iloc[-1]:
         #####################Read the previous sell text output and empty the file ###############################
         with open(file_path+ pair +'_sell_1m.txt', 'r') as f:
@@ -103,6 +101,14 @@ def strategy(pair, qty, open_position=False):
         file = open(file_path+ pair +'_sell_1m.txt', 'w')
         file.close()
         ##########################################################################################################
+        #####################Read the previous buy price text output and empty the file ###########################
+        with open(file_path+ pair +'_buy_price_1m.txt', 'r') as f:
+            clean_buy_price_list = []
+            for buy_price_list in f.readlines():
+                clean_buy_price_list.append(buy_price_list.replace("\n", ""))
+        file = open(file_path+ pair +'_buy_price_1m.txt', 'w')
+        file.close()
+        ###########################################################################################################
         #####################Read the previous buy text output and empty the file ################################
         with open(file_path+ pair +'_buy_1m.txt', 'r') as f:
             clean_buy_list = []
@@ -112,15 +118,13 @@ def strategy(pair, qty, open_position=False):
         file.close()
         ###########################################################################################################
         if pair not in clean_sell_list:
-            body = pair,"SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
+            body = pair,clean_buy_price_list,"SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
             sellprice = str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
         with open(file_path+ pair +'_sell_1m.txt', 'a+') as f:
             f.write(str(pair) + '\n')
-        with open(file_path+ pair +'_sell_price_1m.txt', 'w') as fprice:
-            fprice.write(str(sellprice))
 while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
