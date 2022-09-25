@@ -66,7 +66,7 @@ def strategy(pair, qty, open_position=False):
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
-    print(pair + f' Current Close is ' + str(df.Close.iloc[-1]), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]))
+    print(pair + f' Current Close is ' + str(df.Close.iloc[-1]), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]) + f' Buy price ' + str(df.Close.iloc[-1]))
     if df.Buy.iloc[-1]:
         #####################Read the previous buy text output and empty the file ################################
         with open(file_path+ pair +'_buy_1m.txt', 'r') as f:
