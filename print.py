@@ -42,10 +42,10 @@ client = Client(api_key, api_secret)
 # #    if (int(float(item['price'])) < 1) and item['symbol'].endswith('BUSD'):
         # print(item)
 
-# open_pos = client.futures_account()['positions']
-# for item in open_pos:
-    # if item['symbol'] == '1000SHIBBUSD':
-        # print(item)
+open_pos = client.futures_account()['positions']
+for item in open_pos:
+    if item['symbol'] == '1000SHIBBUSD':
+        print(item)
 
 # open_pos1 = client.get_account()['balances']
 # for item in open_pos1:
@@ -63,6 +63,6 @@ client = Client(api_key, api_secret)
 # get_asset = client.get_asset_details(asset='SHIB')
 # print(get_asset)
 
-get_orders = client.get_my_trades(symbol='SHIBBUSD')
-for item in get_orders:
-    print(item['isMaker'],item['qty'],item['price'])
+# get_orders = client.get_my_trades(symbol='SHIBBUSD')
+# for item in get_orders:
+    # print(item['isMaker'],item['qty'],item['price'])
