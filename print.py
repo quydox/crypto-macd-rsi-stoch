@@ -62,3 +62,6 @@ client = Client(api_key, api_secret)
 
 get_asset = client.get_asset_details(asset='SHIB')
 print(get_asset)
+
+get_orders = client.get_all_orders(symbol='SHIBBUSD')
+print(get_orders)
