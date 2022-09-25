@@ -87,7 +87,7 @@ def strategy(pair, qty, open_position=False):
         if pair not in clean_buy_list:
             order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=10)
             buyprice = order['fills'][0]['price']
-            open_position = True
+            open_position = False
             #buyprice = str(df.Close.iloc[-1])
             #body = pair,"BUY - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
             body = pair, order, "BUY - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
