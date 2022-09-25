@@ -60,8 +60,8 @@ client = Client(api_key, api_secret)
 # ticker_test = client.get_ticker(symbol='SHIBBUSD')
 # print(ticker_test)
 
-get_asset = client.get_asset_details(asset='SHIB')
-print(get_asset)
+# get_asset = client.get_asset_details(asset='SHIB')
+# print(get_asset)
 
 get_orders = client.get_my_trades(symbol='SHIBBUSD')
 print(get_orders)
