@@ -84,6 +84,14 @@ def strategy(pair, qty, open_position=False):
         file = open(file_path+ pair +'_sell_1m.txt', 'w')
         file.close()
         ##########################################################################################################
+        #####################Read the previous sell price text output and empty the file ###########################
+        with open(file_path+ pair +'_sell_price_1m.txt', 'r') as f:
+            clean_sell_price_list = []
+            for sell_price_list in f.readlines():
+                clean_sell_price_list.append(sell_price_list.replace("\n", ""))
+        file = open(file_path+ pair +'_sell_price_1m.txt', 'w')
+        file.close()
+        ###########################################################################################################
         if pair not in clean_buy_list:
             buyprice = str(df.Close.iloc[-1])
             body = pair,"BUY - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
