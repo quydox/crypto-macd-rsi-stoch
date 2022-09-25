@@ -68,5 +68,6 @@ client = Client(api_key, api_secret)
     # print(item['isMaker'],item['qty'],item['price'])
 
 open_pos = client.futures_get_open_orders()
-for item in open_pos:
-    print(item)
+print(open_pos)
+# for item in open_pos:
+    # print(item)
