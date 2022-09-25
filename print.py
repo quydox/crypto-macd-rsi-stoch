@@ -56,3 +56,6 @@ open_pos1 = client.get_account()['balances']
 for item in open_pos1:
     if item['asset'] == 'SHIB':
         print(item)
+
+ticker_test = client.get_ticker(symbol='SHIBBUSD')
+print(ticker_test)
