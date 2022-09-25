@@ -62,7 +62,7 @@ class Signals:
 #print(df)
 
 def strategy(pair, qty, open_position=False):
-    df = getminutedata(pair, '5m', "1 day ago UTC")
+    df = getminutedata(pair, '1m', "1 day ago UTC")
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
@@ -117,7 +117,7 @@ def strategy(pair, qty, open_position=False):
         with open(file_path+ pair +'_sell_1m.txt', 'a+') as f:
             f.write(str(pair) + '\n')
 while True:
-    crypto_coins = ["SHIBBUSD"]
+    crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
         try:
             myfile1 = Path(file_path+ coins+'_buy_1m.txt')
