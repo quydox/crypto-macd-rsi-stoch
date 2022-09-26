@@ -113,7 +113,8 @@ def strategy(pair, qty, open_position=False):
         ##########################################################################################################
         #####################Read the previous buy price text output and empty the file ###########################
         with open(file_path+ pair +'_buy_price_1m.txt', 'r') as f:
-            for clean_buy_price_list in f.readlines():
+            for buy_price_list in f.readlines():
+                clean_buy_price_list = buy_price_list 
         file = open(file_path+ pair +'_buy_price_1m.txt', 'r')
         file.close()
         ###########################################################################################################
