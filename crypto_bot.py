@@ -125,3 +125,5 @@ while True:
         myfile2.touch(exist_ok=True)
         strategy(coins, 50)
         time.sleep(60)
+
+#Test
