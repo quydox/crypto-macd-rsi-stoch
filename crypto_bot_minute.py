@@ -127,7 +127,7 @@ def strategy(pair, qty, open_position=False):
         file = open(file_path+ pair +'_buy_1m.txt', 'w')
         file.close()
         ###########################################################################################################
-        if pair not in clean_sell_list:
+        if pair not in clean_sell_list and float(df.Close.iloc[-1]) <= float(clean_buy_price_list) * .85 or pair not in clean_sell_list and float(df.Close.iloc[-1]) > float(clean_buy_price_list)
             body = pair,clean_buy_price_list,"SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
             sellprice = str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
@@ -140,16 +140,16 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = ["BTCBUSD", "LUNCBUSD"]
     for coins in crypto_coins:
-        try:
-            myfile1 = Path(file_path+ coins+'_buy_1m.txt')
-            myfile2 = Path(file_path+ coins +'_sell_1m.txt')
-            myfile3 = Path(file_path+ coins+'_buy_price_1m.txt')
-            myfile4 = Path(file_path+ coins+'_sell_price_1m.txt')
-            myfile1.touch(exist_ok=True)
-            myfile2.touch(exist_ok=True)
-            myfile3.touch(exist_ok=True)
-            myfile4.touch(exist_ok=True)
-            strategy(coins, 50)
-            time.sleep(10)
-        except Exception:
-            pass
+        # try:
+        myfile1 = Path(file_path+ coins+'_buy_1m.txt')
+        myfile2 = Path(file_path+ coins +'_sell_1m.txt')
+        myfile3 = Path(file_path+ coins+'_buy_price_1m.txt')
+        myfile4 = Path(file_path+ coins+'_sell_price_1m.txt')
+        myfile1.touch(exist_ok=True)
+        myfile2.touch(exist_ok=True)
+        myfile3.touch(exist_ok=True)
+        myfile4.touch(exist_ok=True)
+        strategy(coins, 50)
+        time.sleep(10)
+        # except Exception:
+            # pass
