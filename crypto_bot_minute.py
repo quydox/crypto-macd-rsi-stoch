@@ -129,14 +129,14 @@ def strategy(pair, qty, open_position=False):
         ###########################################################################################################
         if (pair not in clean_sell_list and (float(df.Close.iloc[-1]) <= float(clean_buy_price_list) * .85)) or (pair not in clean_sell_list and float(df.Close.iloc[-1]) > float(clean_buy_price_list)):
             body = pair,clean_buy_price_list,"SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
-            sellprice = str(df.Close.iloc[-1])
+            #sellprice = str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
         with open(file_path+ pair +'_sell_1m.txt', 'a+') as f:
             f.write(str(pair) + '\n')
         with open(file_path+ pair +'_sell_price_1m.txt', 'a+') as f:
-            f.write(str(sellprice) + '\n')
+            f.write(str(df.Close.iloc[-1]) + '\n')
 while True:
     crypto_coins = ["BTCBUSD", "LUNCBUSD"]
     for coins in crypto_coins:
