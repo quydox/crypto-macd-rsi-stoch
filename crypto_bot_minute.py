@@ -121,8 +121,7 @@ def strategy(pair, qty, open_position=False):
         with open(file_path+ pair +'_buy_price_1m.txt', 'r') as f:
             clean_buy_price_list = []
             for buy_price_list in f.readlines():
-                if buy_price_list < df.Sell.iloc[-1]: 
-                    clean_buy_price_list.append(buy_price_list.replace("\n", ""))
+                clean_buy_price_list.append(buy_price_list.replace("\n", ""))
         file = open(file_path+ pair +'_buy_price_1m.txt', 'w')
         file.close()
         ###########################################################################################################
