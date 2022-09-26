@@ -113,12 +113,9 @@ def strategy(pair, qty, open_position=False):
         ##########################################################################################################
         #####################Read the previous buy price text output and empty the file ###########################
         with open(file_path+ pair +'_buy_price_1m.txt', 'r') as f:
-            clean_buy_price_list = []
-            for buy_price_list in f.readlines():
-                if buy_price_list < df.Close.iloc[-1]:
-                    clean_buy_price_list.append(buy_price_list.replace("\n", ""))
-                    file = open(file_path+ pair +'_buy_price_1m.txt', 'w')
-                    file.close()
+            for clean_buy_price_list in f.readlines():
+        file = open(file_path+ pair +'_buy_price_1m.txt', 'r')
+        file.close()
         ###########################################################################################################
         #####################Read the previous buy text output and empty the file ################################
         with open(file_path+ pair +'_buy_1m.txt', 'r') as f:
