@@ -101,7 +101,7 @@ def strategy(pair, qty, open_position=False):
         with open(file_path+ pair +'_buy_1m.txt', 'a+') as f:
             f.write(str(pair) + '\n')
         with open(file_path+ pair +'_buy_price_1m.txt', 'a+') as f:
-            f.write(str(buyprice) + '\n')
+            f.write(buyprice + '\n')
     elif df.Sell.iloc[-1]:
         #####################Read the previous sell text output and empty the file ###############################
         with open(file_path+ pair +'_sell_1m.txt', 'r') as f:
