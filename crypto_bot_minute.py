@@ -137,6 +137,14 @@ def strategy(pair, qty, open_position=False):
             f.write(str(pair) + '\n')
         with open(file_path+ pair +'_sell_price_1m.txt', 'a+') as f:
             f.write(str(df.Close.iloc[-1]) + '\n')
+        #####################Read the previous sell price text output and empty the file ###########################
+        with open(file_path+ pair +'_buy_price_1m.txt', 'r') as f:
+            clean_buy_price_list = []
+            for buy_price_list in f.readlines():
+                clean_buy_price_list.append(buy_price_list.replace("\n", ""))
+        file = open(file_path+ pair +'_buy_price_1m.txt', 'w')
+        file.close()
+        ###########################################################################################################
 while True:
     crypto_coins = ["BTCBUSD", "LUNCBUSD"]
     for coins in crypto_coins:
