@@ -134,9 +134,8 @@ def strategy(pair, qty, open_position=False):
         file = open(file_path+ pair +'_buy_1m.txt', 'w')
         file.close()
         ###########################################################################################################
-        print(clean_buy_price_list,df.Close.iloc[-1])
         if pair not in clean_sell_list:
-            body = pair,clean_buy_price_list,"SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
+            body = pair,"SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
             #sellprice = str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
             requests.get(base_url)
