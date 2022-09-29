@@ -84,13 +84,13 @@ def strategy(pair, qty, open_position=False):
         file = open(file_path+ pair +'_sell_1m.txt', 'w')
         file.close()
         ##########################################################################################################
-        #####################Read the previous sell price text output and empty the file ###########################
-        with open(file_path+ pair +'_sell_price_1m.txt', 'r') as f:
-            clean_sell_price_list = []
-            for sell_price_list in f.readlines():
-                clean_sell_price_list.append(sell_price_list.replace("\n", ""))
-        file = open(file_path+ pair +'_sell_price_1m.txt', 'w')
-        file.close()
+        # #####################Read the previous sell price text output and empty the file ###########################
+        # with open(file_path+ pair +'_sell_price_1m.txt', 'r') as f:
+            # clean_sell_price_list = []
+            # for sell_price_list in f.readlines():
+                # clean_sell_price_list.append(sell_price_list.replace("\n", ""))
+        # file = open(file_path+ pair +'_sell_price_1m.txt', 'w')
+        # file.close()
         ###########################################################################################################
         if pair not in clean_buy_list:
             #buyprice = str(df.Close.iloc[-1])
@@ -100,14 +100,14 @@ def strategy(pair, qty, open_position=False):
             print(body)
         with open(file_path+ pair +'_buy_1m.txt', 'a+') as f:
             f.write(str(pair) + '\n')
-        #####################Read the previous buy price text output and empty the file ###########################
-        with open(file_path+ pair +'_buy_price_1m.txt', 'r') as f:
-            clean_buy_price_list = ['0']
-            for buy_price_list in f.readlines():
-                clean_buy_price_list.append(buy_price_list.replace("\n", ""))
-        file = open(file_path+ pair +'_buy_price_1m.txt', 'w')
-        file.close()
-        ###########################################################################################################
+        # #####################Read the previous buy price text output and empty the file ###########################
+        # with open(file_path+ pair +'_buy_price_1m.txt', 'r') as f:
+            # clean_buy_price_list = ['0']
+            # for buy_price_list in f.readlines():
+                # clean_buy_price_list.append(buy_price_list.replace("\n", ""))
+        # file = open(file_path+ pair +'_buy_price_1m.txt', 'w')
+        # file.close()
+        # ###########################################################################################################
     elif df.Sell.iloc[-1]:
         #####################Read the previous sell text output and empty the file ###############################
         with open(file_path+ pair +'_sell_1m.txt', 'r') as f:
@@ -135,7 +135,7 @@ def strategy(pair, qty, open_position=False):
         file.close()
         ###########################################################################################################
         print(clean_buy_price_list,df.Close.iloc[-1])
-        if (pair not in clean_sell_list and (df.Close.iloc[-1] <= (float(clean_buy_price_list) * float('.85')))) or (pair not in clean_sell_list and df.Close.iloc[-1] > clean_buy_price_list):
+        if pair not in clean_sell_list:
             body = pair,clean_buy_price_list,"SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
             #sellprice = str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
@@ -143,20 +143,20 @@ def strategy(pair, qty, open_position=False):
             print(body)
         with open(file_path+ pair +'_sell_1m.txt', 'a+') as f:
             f.write(str(pair) + '\n')
-        with open(file_path+ pair +'_sell_price_1m.txt', 'a+') as f:
-            f.write(str(df.Close.iloc[-1]) + '\n')
+        # with open(file_path+ pair +'_sell_price_1m.txt', 'a+') as f:
+            # f.write(str(df.Close.iloc[-1]) + '\n')
 while True:
-    crypto_coins = ["BTCBUSD", "LUNCBUSD"]
+    crypto_coins = ["BTCBUSD", "ETHBUSD"]
     for coins in crypto_coins:
         # try:
         myfile1 = Path(file_path+ coins+'_buy_1m.txt')
         myfile2 = Path(file_path+ coins +'_sell_1m.txt')
-        myfile3 = Path(file_path+ coins+'_buy_price_1m.txt')
-        myfile4 = Path(file_path+ coins+'_sell_price_1m.txt')
+        # myfile3 = Path(file_path+ coins+'_buy_price_1m.txt')
+        # myfile4 = Path(file_path+ coins+'_sell_price_1m.txt')
         myfile1.touch(exist_ok=True)
         myfile2.touch(exist_ok=True)
-        myfile3.touch(exist_ok=True)
-        myfile4.touch(exist_ok=True)
+        # myfile3.touch(exist_ok=True)
+        # myfile4.touch(exist_ok=True)
         strategy(coins, 50)
         time.sleep(10)
         # except Exception:
