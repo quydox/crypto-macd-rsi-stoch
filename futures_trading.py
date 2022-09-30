@@ -26,8 +26,8 @@ def getminutedata(symbol, interval, lookback):
     frame = frame.astype(float)
     return frame
 
-# df = getminutedata('BTCUSDT', '1m', "1 day ago UTC")
-# print(df)
+#df = getminutedata('BTCUSDT', '4h', "30 day ago UTC")
+#print(df)
 
 def applytechnicals(df):
     df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
@@ -36,8 +36,8 @@ def applytechnicals(df):
     df['macd'] = ta.trend.macd_diff(df.Close)
     df.dropna(inplace=True)
 
-# applytechnicals(df)
-# print(df)
+#applytechnicals(df)
+#print(df)
 
 class Signals:
     def __init__(self,df, lags):
@@ -56,10 +56,10 @@ class Signals:
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
 
-# inst = Signals(df, 25)
-# inst.decide()
-# df[df.Buy == 1 ]
-# print(df)
+#inst = Signals(df, 25)
+#inst.decide()
+#df[df.Buy == 1 ]
+#print(df)
 
 def strategy(pair, qty, open_position=False):
     df = getminutedata(pair, '1m', "1 day ago UTC")
@@ -69,71 +69,70 @@ def strategy(pair, qty, open_position=False):
     print(pair + f' Current Close is ' + str(df.Close.iloc[-1]), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]))
     if df.Buy.iloc[-1]:
         #####################Read the previous buy text output and empty the file ################################
-        with open(file_path+ pair +'_buy_1m.txt', 'r') as f:
+        with open(file_path+ pair +'_buy_future.txt', 'r') as f:
             clean_buy_list = []
             for buy_list in f.readlines():
                 clean_buy_list.append(buy_list.replace("\n", ""))
-        file = open(file_path+ pair +'_buy_1m.txt', 'w')
+        file = open(file_path+ pair +'_buy_future.txt', 'w')
         file.close()
         ###########################################################################################################
         #####################Read the previous sell text output and empty the file ###############################
-        with open(file_path+ pair +'_sell_1m.txt', 'r') as f:
+        with open(file_path+ pair +'_sell_future.txt', 'r') as f:
             clean_sell_list = []
             for sell_list in f.readlines():
                 clean_sell_list.append(sell_list.replace("\n", ""))
-        file = open(file_path+ pair +'_sell_1m.txt', 'w')
+        file = open(file_path+ pair +'_sell_future.txt', 'w')
         file.close()
         ##########################################################################################################
         if pair not in clean_buy_list:
             order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=10)
             buyprice = order['fills'][0]['price']
-            open_position = False
-            #buyprice = str(df.Close.iloc[-1])
-            #body = pair,"BUY - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
-            body = pair, order, "BUY - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
+            open_position = True
+            body = pair, order, "BUY - 4H timeframe version. Current Price " + str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
-        with open(file_path+ pair +'_buy_1m.txt', 'a+') as f:
+        with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
             f.write(str(pair) + '\n')
     elif df.Sell.iloc[-1]:
         #####################Read the previous sell text output and empty the file ###############################
-        with open(file_path+ pair +'_sell_1m.txt', 'r') as f:
+        with open(file_path+ pair +'_sell_future.txt', 'r') as f:
             clean_sell_list = []
             for sell_list in f.readlines():
                 clean_sell_list.append(sell_list.replace("\n", ""))
-        file = open(file_path+ pair +'_sell_1m.txt', 'w')
+        file = open(file_path+ pair +'_sell_future.txt', 'w')
         file.close()
         ##########################################################################################################
         #####################Read the previous buy text output and empty the file ################################
-        with open(file_path+ pair +'_buy_1m.txt', 'r') as f:
+        with open(file_path+ pair +'_buy_future.txt', 'r') as f:
             clean_buy_list = []
             for buy_list in f.readlines():
                 clean_buy_list.append(buy_list.replace("\n", ""))
-        file = open(file_path+ pair +'_buy_1m.txt', 'w')
+        file = open(file_path+ pair +'_buy_future.txt', 'w')
         file.close()
         ###########################################################################################################
         if pair not in clean_sell_list:
-            # fees = client.get_trade_fee(symbol=pair)
-            # for item in fees:
-                # qty = int(qty)-(float(item['takerCommission'])*int(qty))
-                # order = client.create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty)
-                # body = pair, order, "SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
-            body = pair, "SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
-            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
-            requests.get(base_url)
-            print(body)
-        with open(file_path+ pair +'_sell_1m.txt', 'a+') as f:
+            fees = client.get_trade_fee(symbol=pair)
+            for item in fees:
+                qty_order = qty-(float(item['takerCommission'])*qty)
+                order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=10)
+                body = pair, order, "SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
+                base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
+                requests.get(base_url)
+                print(body)
+        with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
             f.write(str(pair) + '\n')
 while True:
-    crypto_coins = ["BTCUSD"]
+    crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
-        #try:
-        myfile1 = Path(file_path+ coins +'_buy_1m.txt')
-        myfile2 = Path(file_path+ coins +'_sell_1m.txt')
-        myfile1.touch(exist_ok=True)
-        myfile2.touch(exist_ok=True)
-        strategy(coins, 770000)
-        time.sleep(10)
-        # except Exception:
-            # pass
+        try:
+            current_price = client.get_symbol_ticker(symbol=coins)
+            total_coins = round(float(15/(float(current_price['price']))),8)
+            myfile1 = Path(file_path+ coins +'_buy_future.txt')
+            myfile2 = Path(file_path+ coins +'_sell_future.txt')
+            myfile1.touch(exist_ok=True)
+            myfile2.touch(exist_ok=True)
+            strategy(coins, total_coins)
+            time.sleep(10)
+        except Exception:
+            pass
