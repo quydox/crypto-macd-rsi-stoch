@@ -77,5 +77,6 @@ for item in fees:
 # for item in open_pos:
     # print(item)
 
-exchange_info = client.get_exchange_info(symbol='NEARBNB')
-print(exchange_info)
+exchange_info = client.get_exchange_info()
+for item in exchange_info:
+print(item['symbol'])
