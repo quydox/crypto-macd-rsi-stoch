@@ -28,8 +28,8 @@ qty = round(float(15/(float(current_price['price']))),8)
 fees = client.get_trade_fee(symbol=coins)
 # print(fees['takerCommission'])
 for item in fees:
-    qty1 = qty-(float(item['takerCommission'])*qty)
-    print(qty1)
+    qty = qty-(float(item['takerCommission'])*qty)
+    print(qty)
 
 # current_price = client.get_symbol_ticker()
 # for item in current_price:
