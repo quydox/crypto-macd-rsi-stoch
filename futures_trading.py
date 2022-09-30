@@ -88,7 +88,7 @@ def strategy(pair, qty, open_position=False):
             order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty)
             #buyprice = order['fills'][0]['price']
             open_position = True
-            body = pair, order, "BUY - 4H timeframe version. Current Price " + str(df.Close.iloc[-1])
+            body = pair, order, "BUY - 1m timeframe version. Current Price " + str(df.Close.iloc[-1])
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
             requests.get(base_url)
             print(body)
