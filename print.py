@@ -76,3 +76,6 @@ for item in fees:
 # print(open_pos)
 # for item in open_pos:
     # print(item)
+
+exchange_info = client.get_exchange_info('BTCBUSD')
+print(exchange_info)
