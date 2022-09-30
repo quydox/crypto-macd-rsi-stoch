@@ -18,9 +18,9 @@ file_path = os.getenv("file_path")
 client = Client(api_key, api_secret)
 
 # pair="SHIBBUSD"
-# coins="SHIBBUSD"
-# current_price = client.get_symbol_ticker(symbol=coins)
-# qty = int(15/(float(current_price['price'])))
+coins="BTCBUSD"
+current_price = client.get_symbol_ticker(symbol=coins)
+qty = int(15/(float(current_price['price'])))
 # fees = client.get_trade_fee(symbol=pair)
 # for item in fees:
     # qty = int(int(qty)-(float(item['takerCommission'])*int(qty)))
@@ -67,7 +67,7 @@ client = Client(api_key, api_secret)
 # for item in get_orders:
     # print(item['isMaker'],item['qty'],item['price'])
 
-open_pos = client.futures_get_open_orders()
-print(open_pos)
+# open_pos = client.futures_get_open_orders()
+# print(open_pos)
 # for item in open_pos:
     # print(item)
