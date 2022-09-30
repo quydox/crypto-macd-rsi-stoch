@@ -17,15 +17,15 @@ file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
-pair="BTCBUSD"
-# coins="BTCBUSD"
-# current_price = client.get_symbol_ticker(symbol=coins)
-# qty = round(float(15/(float(current_price['price']))),8)
-# print(qty)
+# pair="BTCBUSD"
+coins="BTCBUSD"
+current_price = client.get_symbol_ticker(symbol=coins)
+qty = round(float(15/(float(current_price['price']))),8)
+print(qty)
 # #print(round(qty,8))
 
 #qty = int(15/(float(current_price['price'])))
-fees = client.get_trade_fee(symbol=pair)
+fees = client.get_trade_fee(symbol=coins)
 for item in fees:
     qty = int(int(qty)-(float(item['takerCommission'])*int(qty)))
     print(qty)
