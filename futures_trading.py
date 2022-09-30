@@ -66,6 +66,7 @@ def strategy(pair, qty, open_position=False):
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
+    buyprice[]
     print(pair + f' Current Close is ' + str(df.Close.iloc[-1]), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]))
     print(buyprice)
     if df.Buy.iloc[-1]:
