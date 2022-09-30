@@ -85,7 +85,7 @@ def strategy(pair, qty, open_position=False):
         file.close()
         ##########################################################################################################
         if pair not in clean_buy_list:
-            order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty)
+            order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=10)
             #buyprice = order['fills'][0]['price']
             open_position = True
             body = pair, order, "BUY - 1m timeframe version. Current Price " + str(df.Close.iloc[-1])
@@ -115,7 +115,7 @@ def strategy(pair, qty, open_position=False):
             fees = client.get_trade_fee(symbol=pair)
             for item in fees:
                 qty_order = qty-(float(item['takerCommission'])*qty)
-                order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order)
+                order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=10)
                 body = pair, order, "SELL - 1 minute timeframe version. Current Price " + str(df.Close.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                 requests.get(base_url)
