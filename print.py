@@ -17,19 +17,19 @@ file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
-# pair="BTCBUSD"
-coins="BTCBUSD"
-current_price = client.get_symbol_ticker(symbol=coins)
-qty = round(float(15/(float(current_price['price']))),8)
-#print(qty)
-# #print(round(qty,8))
+# # pair="BTCBUSD"
+# coins="BTCBUSD"
+# current_price = client.get_symbol_ticker(symbol=coins)
+# qty = round(float(15/(float(current_price['price']))),8)
+# #print(qty)
+# # #print(round(qty,8))
 
-#qty = int(15/(float(current_price['price'])))
-fees = client.get_trade_fee(symbol=coins)
-# print(fees['takerCommission'])
-for item in fees:
-    qty = qty-(float(item['takerCommission'])*qty)
-    print(qty)
+# #qty = int(15/(float(current_price['price'])))
+# fees = client.get_trade_fee(symbol=coins)
+# # print(fees['takerCommission'])
+# for item in fees:
+    # qty = qty-(float(item['takerCommission'])*qty)
+    # print(qty)
 
 # current_price = client.get_symbol_ticker()
 # for item in current_price:
@@ -77,6 +77,8 @@ for item in fees:
 # for item in open_pos:
     # print(item)
 
-exchange_info = client.get_exchange_info()
-for item in exchange_info:
-    print(item['symbols'])
+# exchange_info = client.get_exchange_info()
+# for item in exchange_info:
+    # print(item['symbols'])
+price = 0.00076334
+round_len = len(str(price))
