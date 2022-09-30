@@ -21,7 +21,7 @@ client = Client(api_key, api_secret)
 coins="BTCBUSD"
 current_price = client.get_symbol_ticker(symbol=coins)
 qty = round(float(15/(float(current_price['price']))),8)
-print(qty)
+#print(qty)
 # #print(round(qty,8))
 
 #qty = int(15/(float(current_price['price'])))
