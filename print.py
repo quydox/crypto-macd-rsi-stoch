@@ -29,7 +29,7 @@ fees = client.get_trade_fee(symbol=coins)
 # print(fees['takerCommission'])
 for item in fees:
     # qty1 = qty-(float(item['takerCommission'])*qty)
-    print(item)
+    print(item['takerCommission'])
 
 # current_price = client.get_symbol_ticker()
 # for item in current_price:
