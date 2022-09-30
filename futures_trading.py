@@ -14,6 +14,7 @@ api_secret = os.getenv("api_secret")
 api_telegram1 = os.getenv("api_telegram1")
 msg_id_telegram1 = os.getenv("msg_id_telegram1")
 file_path = os.getenv("file_path")
+buyprice = []
 
 client = Client(api_key, api_secret)
 
@@ -66,7 +67,6 @@ def strategy(pair, qty, open_position=False):
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
-    buyprice[]
     print(pair + f' Current Close is ' + str(df.Close.iloc[-1]), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]))
     print(buyprice)
     if df.Buy.iloc[-1]:
