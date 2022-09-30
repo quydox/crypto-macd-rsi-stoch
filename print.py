@@ -79,4 +79,4 @@ for item in fees:
 
 exchange_info = client.get_exchange_info()
 for item in exchange_info:
-    print(item)
+    print(item['symbols']['symbol'])
