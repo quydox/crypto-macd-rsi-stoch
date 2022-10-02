@@ -128,7 +128,7 @@ def strategy(pair, qty, open_position=False):
                 for entry_check in active_position:
                     if entry_check['symbol'] == pair:
                         entry_price = int(float(entry_check['entryPrice']))
-                        if entry_price > 0:
+                        if entry_price == 0:
                             for item in fees:
                                 qty_order = qty-(float(item['takerCommission'])*qty)
                                 order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=20)
