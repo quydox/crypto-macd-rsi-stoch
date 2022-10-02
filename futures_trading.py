@@ -129,6 +129,7 @@ while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
         # try:
+        acc_balance = client.futures_account_balance()
         current_price = client.get_symbol_ticker(symbol=coins)
         total_coins = round(float(155/(float(current_price['price']))),3)
         myfile1 = Path(file_path+ coins +'_buy_future.txt')
