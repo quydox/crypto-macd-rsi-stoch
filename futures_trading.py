@@ -127,7 +127,7 @@ def strategy(pair, qty, open_position=False):
                 ###########################################################################################################                
                 for entry_check in active_position:
                     if entry_check['symbol'] == pair:
-                        entry_price = int(entry_check['entryPrice'])
+                        entry_price = int(float(entry_check['entryPrice']))
                         if entry_price > 0:
                             for item in fees:
                                 qty_order = qty-(float(item['takerCommission'])*qty)
