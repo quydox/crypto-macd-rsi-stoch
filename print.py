@@ -66,3 +66,5 @@ active_position = client.futures_account()['positions']
 for item in active_position:
     if item['symbol'] == "BTCBUSD":
         print(item)
+
+print(active_position | selectattr('symbol','eq','BTCBUSD') | list)
