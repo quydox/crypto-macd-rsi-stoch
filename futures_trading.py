@@ -97,6 +97,17 @@ def strategy(pair, qty, open_position=False):
                     print(body)
                 with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                     f.write(str(pair) + '\n')
+                ###########################################################################################################
+                for entry_check in active_position:
+                    if entry_check['symbol'] == pair:
+                        entry_price = int(float(entry_check['entryPrice']))
+                        if entry_price == 0:
+                            order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=20)
+                            open_position = True
+                            body = pair,"Profit: ",profit_balance, order, "BUY - 1m timeframe version. Current Price " + str(df.Close.iloc[-1])
+                            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
+                            requests.get(base_url)
+                            print(body)
             elif df.Sell.iloc[-1]:
                 #####################Read the previous sell text output and empty the file ###############################
                 with open(file_path+ pair +'_sell_future.txt', 'r') as f:
