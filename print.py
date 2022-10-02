@@ -80,5 +80,3 @@ client = Client(api_key, api_secret)
 # exchange_info = client.get_exchange_info()
 # for item in exchange_info:
     # print(item['symbols'])
-price = 0.00076334
-round_len = len(str(price))
