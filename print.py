@@ -71,4 +71,4 @@ active_position = client.futures_position_information(symbol='BTCBUSD')
 print(active_position)
 
 current_price = client.get_symbol_ticker(symbol='BTCBUSD')
-print(current_price)
+print(current_price['price'])
