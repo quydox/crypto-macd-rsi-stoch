@@ -66,7 +66,7 @@ def strategy(pair, qty, open_position=False):
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
-    print(pair + f' Current Close is ' + str(df.Close.iloc[-1]), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]), df.Close.iloc[-1] * 0.995 )
+    print(pair + f' Current Close is ' + str(df.Close.iloc[-1]), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]) )
     for check_balance in acc_balance:
         if check_balance['asset'] == "BUSD":
             busd_balance = check_balance["balance"]
@@ -89,7 +89,7 @@ def strategy(pair, qty, open_position=False):
                 file.close()
                 ##########################################################################################################
                 if pair not in clean_buy_list:
-                    order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=20,icebergQty=stop_market_buy_price)
+                    order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=20)
                     open_position = True
                     body = pair,"Profit: ",profit_balance, order, "BUY - 15m timeframe version. Current Price " + str(df.Close.iloc[-1])
                     base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
@@ -118,7 +118,7 @@ def strategy(pair, qty, open_position=False):
                     fees = client.get_trade_fee(symbol=pair)
                     for item in fees:
                         qty_order = qty-(float(item['takerCommission'])*qty)
-                        order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=20,icebergQty=stop_market_sell_price)
+                        order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=20)
                         body = pair,"Profit: ",profit_balance, order, "SELL - 15m timeframe version. Current Price " + str(df.Close.iloc[-1])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
