@@ -72,3 +72,5 @@ print(active_position)
 
 current_price = client.get_symbol_ticker(symbol='BTCBUSD')
 print(int(float(current_price['price']) * 0.995))
+
+print(int(float(current_price['price']) * 1.005))
