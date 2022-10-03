@@ -89,7 +89,7 @@ def strategy(pair, qty, open_position=False):
                 file.close()
                 ##########################################################################################################
                 if pair not in clean_buy_list:
-                    order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=20,stopPrice=int(float(current_price['price']) * 0.995))
+                    order = client.futures_create_order(symbol=pair,side='BUY',type='STOP_MARKET',quantity=qty,leverage=20,stopPrice=stop_market_buy_price)
                     open_position = True
                     body = pair,"Profit: ",profit_balance, order, "BUY - 15m timeframe version. Current Price " + str(df.Close.iloc[-1])
                     base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
@@ -118,7 +118,7 @@ def strategy(pair, qty, open_position=False):
                     fees = client.get_trade_fee(symbol=pair)
                     for item in fees:
                         qty_order = qty-(float(item['takerCommission'])*qty)
-                        order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=20,stopPrice=int(float(current_price['price']) * 1.005))
+                        order = client.futures_create_order(symbol=pair,side='SELL',type='STOP_MARKET',quantity=qty_order,leverage=20,stopPrice=stop_market_sell_price)
                         body = pair,"Profit: ",profit_balance, order, "SELL - 15m timeframe version. Current Price " + str(df.Close.iloc[-1])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
@@ -131,6 +131,8 @@ while True:
         # try:
         acc_balance = client.futures_account_balance()
         current_price = client.get_symbol_ticker(symbol=coins)
+        stop_market_buy_price = int(float(current_price['price']) * 0.995)
+        stop_market_sell_price = int(float(current_price['price']) * 1.005)
         total_coins = round(float(155/(float(current_price['price']))),3)
         myfile1 = Path(file_path+ coins +'_buy_future.txt')
         myfile2 = Path(file_path+ coins +'_sell_future.txt')
