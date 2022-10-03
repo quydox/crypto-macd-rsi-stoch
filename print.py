@@ -67,5 +67,8 @@ client = Client(api_key, api_secret)
     # if item['symbol'] == "BTCBUSD":
         # print(item)
 
-active_position = client.futures_top_longshort_position_ratio(symbol='BTCBUSD')
-print(active_position)
+# active_position = client.futures_top_longshort_position_ratio(symbol='BTCBUSD')
+# print(active_position)
+
+current_price = client.get_symbol_ticker(symbol='BTCBUSD')
+print(current_price)
