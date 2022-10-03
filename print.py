@@ -62,9 +62,10 @@ client = Client(api_key, api_secret)
 #        busd_balance = check_balance["balance"]
 #        print(int(float(busd_balance))/168 * 100 - 100)
 
-active_position = client.futures_account()['positions']
-for item in active_position:
-    if item['symbol'] == "BTCBUSD":
-        print(item)
+#active_position = client.futures_account()['positions']
+# for item in active_position:
+    # if item['symbol'] == "BTCBUSD":
+        # print(item)
 
-# print(active_position | setattr('symbol','eq','BTCBUSD') | list)
+active_position = futures_get_position_mode
+print(active_position)
