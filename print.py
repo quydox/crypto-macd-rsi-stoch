@@ -67,4 +67,4 @@ for item in active_position:
     if item['symbol'] == "BTCBUSD":
         print(item)
 
-print(active_position | setattr('symbol','eq','BTCBUSD') | list)
+# print(active_position | setattr('symbol','eq','BTCBUSD') | list)
