@@ -89,7 +89,7 @@ def strategy(pair, qty, open_position=False):
                 file.close()
                 ##########################################################################################################
                 if pair not in clean_buy_list:
-                    order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=20)
+                    order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=20,stopPrice=int(float(current_price['price']) * 0.995))
                     open_position = True
                     body = pair,"Profit: ",profit_balance, order, "BUY - 15m timeframe version. Current Price " + str(df.Close.iloc[-1])
                     base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
