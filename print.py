@@ -67,10 +67,14 @@ client = Client(api_key, api_secret)
     # if item['symbol'] == "BTCBUSD":
         # print(item)
 
-active_position = client.futures_position_information(symbol='BTCBUSD')
-print(active_position)
+# active_position = client.futures_position_information(symbol='BTCBUSD')
+# print(active_position)
 
-current_price = client.get_symbol_ticker(symbol='BTCBUSD')
-print(int(float(current_price['price']) * 0.995))
+# current_price = client.get_symbol_ticker(symbol='BTCBUSD')
+# print(int(float(current_price['price']) * 0.995))
 
-print(int(float(current_price['price']) * 1.005))
+# print(int(float(current_price['price']) * 1.005))
+
+
+fees = client.get_trade_fee(symbol='BTCBUSD')
+print(fees)
