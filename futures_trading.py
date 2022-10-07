@@ -115,7 +115,7 @@ def strategy(pair, qty, open_position=False):
                     file = open(file_path+ pair +'_buy_future.txt', 'w')
                     file.close()
                     ###########################################################################################################
-                    if pair not in clean_sell_list or int(float(df.Close.iloc[-1])) <= int(float(open_position['entryPrice'])) * 0.998:
+                    if pair not in clean_sell_list or int(float(df.Close.iloc[-1])) <= int(float(open_position['entryPrice'])) * 0.999:
                         fees = client.get_trade_fee(symbol=pair)
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
