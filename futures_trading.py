@@ -17,7 +17,7 @@ file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
-def getminutedata(symbol, interval, lookback):
+def getminutedata(symbol, interval, start_str):
     frame = pd.DataFrame(client.futures_historical_klines(symbol, interval, lookback))
     frame = frame.iloc[:,:6]
     frame.columns = ['Time', 'Open', 'High', 'Low', 'Close', 'Volume']
