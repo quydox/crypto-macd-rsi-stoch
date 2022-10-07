@@ -74,7 +74,7 @@ for item in active_position:
     #if int(float(df.Close.iloc[-1])) > int(float(item['entryPrice'])):
     if close_price > int(float(item['entryPrice'])):
         print("BUY", str(item['entryPrice']))
-    elif close_price <= int(float(item['entryPrice'])) * 0.995
+    elif close_price <= int(float(item['entryPrice'])) * 0.995:
         print("SELL", str(item['entryPrice']))
 
 # current_price = client.get_symbol_ticker(symbol='BTCBUSD')
