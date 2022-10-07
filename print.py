@@ -71,7 +71,7 @@ active_position = client.futures_position_information(symbol='BTCBUSD')
 for item in active_position:
     #if int(float(df.Close.iloc[-1])) > int(float(item['entryPrice'])):
     if 19381 > int(float(item['entryPrice'])):
-        print("BUY", str(item['entryPrice'])
+        print("BUY", str(item['entryPrice']))
     else:
         print("SELL", str(item['entryPrice']))
 
