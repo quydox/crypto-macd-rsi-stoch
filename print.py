@@ -76,5 +76,5 @@ print(active_position)
 # print(int(float(current_price['price']) * 1.005))
 
 
-fees = client.get_trade_fee(symbol='BTCBUSD')
-print(fees)
+# fees = client.get_trade_fee(symbol='BTCBUSD')
+# print(fees)
