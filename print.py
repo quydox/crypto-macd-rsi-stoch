@@ -68,7 +68,7 @@ client = Client(api_key, api_secret)
         # print(item)
 
 active_position = client.futures_position_information(symbol='BTCBUSD')
-print(active_position)
+print(active_position['entryPrice'])
 
 # current_price = client.get_symbol_ticker(symbol='BTCBUSD')
 # print(int(float(current_price['price']) * 0.995))
