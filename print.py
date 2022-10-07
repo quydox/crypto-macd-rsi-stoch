@@ -69,7 +69,7 @@ client = Client(api_key, api_secret)
 
 active_position = client.futures_position_information(symbol='BTCBUSD')
 print(active_position)
-close_price = 19567
+close_price = 19300
 for item in active_position:
     #if int(float(df.Close.iloc[-1])) > int(float(item['entryPrice'])):
     if close_price > int(float(item['entryPrice'])):
