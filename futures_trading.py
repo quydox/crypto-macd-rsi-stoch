@@ -62,7 +62,7 @@ class Signals:
 #print(df)
 
 def strategy(pair, qty, open_position=False):
-    df = getminutedata(pair, '4h', "1 day ago SGT")
+    df = getminutedata(pair, '4h', "1 day ago UTC")
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
@@ -128,17 +128,17 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
-        try:
-            acc_balance = client.futures_account_balance()
-            current_price = client.get_symbol_ticker(symbol=coins)
-            stop_market_buy_price = int(float(current_price['price']) * 0.995)
-            stop_market_sell_price = int(float(current_price['price']) * 1.005)
-            total_coins = round(float(155/(float(current_price['price']))),3)
-            myfile1 = Path(file_path+ coins +'_buy_future.txt')
-            myfile2 = Path(file_path+ coins +'_sell_future.txt')
-            myfile1.touch(exist_ok=True)
-            myfile2.touch(exist_ok=True)
-            strategy(coins, total_coins)
-            time.sleep(5)
-        except Exception:
-            pass
+        # try:
+        acc_balance = client.futures_account_balance()
+        current_price = client.get_symbol_ticker(symbol=coins)
+        stop_market_buy_price = int(float(current_price['price']) * 0.995)
+        stop_market_sell_price = int(float(current_price['price']) * 1.005)
+        total_coins = round(float(155/(float(current_price['price']))),3)
+        myfile1 = Path(file_path+ coins +'_buy_future.txt')
+        myfile2 = Path(file_path+ coins +'_sell_future.txt')
+        myfile1.touch(exist_ok=True)
+        myfile2.touch(exist_ok=True)
+        strategy(coins, total_coins)
+        time.sleep(5)
+        # except Exception:
+            # pass
