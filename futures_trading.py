@@ -62,7 +62,7 @@ class Signals:
 #print(df)
 
 def strategy(pair, qty, open_position=False):
-    df = getminutedata(pair, '1m', "1 hour ago UTC")
+    df = getminutedata(pair, '1m', "4 hour ago UTC")
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
@@ -90,7 +90,7 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif df.Sell.iloc[-1] or int(float(df.Close.iloc[-1])) <= int(float(open_position['entryPrice'])) * 0.995:
+                elif df.Sell.iloc[-1] or int(float(df.Close.iloc[-1])) <= int(float(open_position['entryPrice'])) * 0.999:
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
                         clean_buy_list = []
