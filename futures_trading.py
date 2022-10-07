@@ -90,7 +90,7 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif df.Sell.iloc[-1]:
+                elif df.Sell.iloc[-1] or int(float(df.Close.iloc[-1])) <= int(float(open_position['entryPrice'])) * 0.995:
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
                         clean_buy_list = []
@@ -99,15 +99,14 @@ def strategy(pair, qty, open_position=False):
                     file = open(file_path+ pair +'_buy_future.txt', 'w')
                     file.close()
                     ###########################################################################################################
-                    if int(float(df.Close.iloc[-1])) <= int(float(open_position['entryPrice'])) * 0.995:
-                        fees = client.get_trade_fee(symbol=pair)
-                        for item in fees:
-                            qty_order = qty-(float(item['takerCommission'])*qty)
-                            order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=20)
-                            body = pair,"Profit: ",profit_balance, order, "SELL - 15m timeframe version. Current Price " + str(df.Close.iloc[-1])
-                            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
-                            requests.get(base_url)
-                            print(body)
+                    fees = client.get_trade_fee(symbol=pair)
+                    for item in fees:
+                        qty_order = qty-(float(item['takerCommission'])*qty)
+                        order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=20)
+                        body = pair,"Profit: ",profit_balance, order, "SELL - 15m timeframe version. Current Price " + str(df.Close.iloc[-1])
+                        base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
+                        requests.get(base_url)
+                        print(body)
 while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
