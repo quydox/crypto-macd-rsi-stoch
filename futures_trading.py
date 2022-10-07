@@ -26,7 +26,7 @@ def getminutedata(symbol, interval, lookback):
     frame = frame.astype(float)
     return frame
 
-df = getminutedata('BTCBUSD', '4h', "30 day ago UTC")
+df = getminutedata('BTCBUSD', '1m', "30 minutes ago UTC")
 print(df)
 
 # def applytechnicals(df):
