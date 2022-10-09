@@ -34,6 +34,7 @@ def applytechnicals(df):
     df['%D'] = df['%K'].rolling(3).mean()
     df['rsi'] = ta.momentum.rsi(df.Close, window=14)
     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
+    df['ema'] = ta.trend.ema_indicator(df.Close, window=20)
     df.dropna(inplace=True)
 
 #applytechnicals(df)
