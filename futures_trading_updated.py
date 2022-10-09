@@ -63,7 +63,7 @@ class Signals:
         self.df['Sell'] = np.where((self.df['%K'] > 70) & (self.df['%D'] > 70) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
         self.df['Buy1'] = np.where((self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
         self.df['Sell1'] = np.where((self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
-        self.df['ematest'] = np.where((self.df.ema < df.Close), 1, 0))
+        self.df['ematest'] = np.where((self.df.ema < df.Close), 1, 0)
 
 inst = Signals(df, 25)
 inst.decide()
