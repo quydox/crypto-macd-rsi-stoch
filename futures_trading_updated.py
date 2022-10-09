@@ -26,19 +26,19 @@ def getminutedata(symbol, interval, lookback):
     frame = frame.astype(float)
     return frame
 
-# df = getminutedata('BTCUSDT', '1m', "1 day ago UTC")
+#df = getminutedata('BTCUSDT', '4h', "30 day ago UTC")
 #print(df)
 
 def applytechnicals(df):
     df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
     df['%D'] = df['%K'].rolling(3).mean()
     df['rsi'] = ta.momentum.rsi(df.Close, window=14)
-    df['macd'] = ta.trend.macd_diff(df.Close,window_slow=21, window_fast=8, window_sign=5)
+    df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
     df['ema'] = ta.trend.ema_indicator(df.Close, window=20)
     df.dropna(inplace=True)
 
-# applytechnicals(df)
-# print(df)
+#applytechnicals(df)
+#print(df)
 
 class Signals:
     def __init__(self,df, lags):
@@ -56,14 +56,16 @@ class Signals:
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema > df.Close) , 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema < df.Close), 1, 0)
+        # self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
+        # self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
 
-# inst = Signals(df, 25)
-# inst.decide()
-# df[df.Buy == 1 ]
-# print(df)
+#inst = Signals(df, 25)
+#inst.decide()
+#df[df.Buy == 1 ]
+#print(df)
 
 def strategy(pair, qty, open_position=False):
-    df = getminutedata(pair, '15m', "1 day ago UTC")
+    #df = getminutedata(pair, '15m', "1 day ago UTC")
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
@@ -131,6 +133,7 @@ while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
         # try:
+        df = getminutedata(coins, '1m', "1 day ago UTC")
         acc_balance = client.futures_account_balance()
         active_position = client.futures_position_information(symbol=coins)
         current_price = client.get_symbol_ticker(symbol=coins)
