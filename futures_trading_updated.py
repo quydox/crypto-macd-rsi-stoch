@@ -45,16 +45,16 @@ class Signals:
         self.df = df
         self.lags = lags
 
-    def gettrigger(self):
-        dfx = pd.DataFrame()
-        for i in range(self.lags +1):
-            mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
-            dfx = pd.concat([mask], ignore_index=True)
-        return dfx.sum(axis=0)
+    # def gettrigger(self):
+        # dfx = pd.DataFrame()
+        # for i in range(self.lags +1):
+            # mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
+            # dfx = pd.concat([mask], ignore_index=True)
+        # return dfx.sum(axis=0)
 
     def decide(self):
         # self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-        self.df['trigger'] = np.where(self.gettrigger())
+        self.df['trigger'] = self.df['%K']
         # self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,30)) & (self.df['%D'].between(20,30)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema > df.Close), 1, 0)
         # self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(70,80)) & (self.df['%D'].between(70,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema < df.Close), 1, 0)
         # self.df['Test'] = (self.df['%K'].between(20,80),1, 0)
