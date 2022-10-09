@@ -65,7 +65,7 @@ class Signals:
 #print(df)
 
 def strategy(pair, qty, open_position=False):
-    df = getminutedata(pair, '15m', "1 day ago UTC")
+    #df = getminutedata(pair, '15m', "1 day ago UTC")
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
@@ -131,6 +131,7 @@ def strategy(pair, qty, open_position=False):
                         f.write(str(pair) + '\n')
 while True:
     crypto_coins = ["BTCBUSD"]
+    df = getminutedata(pair, '15m', "1 day ago UTC")
     for coins in crypto_coins:
         # try:
         acc_balance = client.futures_account_balance()
