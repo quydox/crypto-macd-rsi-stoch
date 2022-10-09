@@ -27,7 +27,7 @@ def getminutedata(symbol, interval, lookback):
     return frame
 
 df = getminutedata('BTCUSDT', '1m', "1 hour ago UTC")
-print(df)
+# print(df)
 
 def applytechnicals(df):
     df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
@@ -38,31 +38,31 @@ def applytechnicals(df):
     df.dropna(inplace=True)
 
 applytechnicals(df)
-print(df)
+# print(df)
 
-# class Signals:
-    # def __init__(self,df, lags):
-        # self.df = df
-        # self.lags = lags
+class Signals:
+    def __init__(self,df, lags):
+        self.df = df
+        self.lags = lags
 
-    # def gettrigger(self):
-        # dfx = pd.DataFrame()
-        # for i in range(self.lags +1):
-            # mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
-            # dfx = pd.concat([mask], ignore_index=True)
-        # return dfx.sum(axis=0)
+    def gettrigger(self):
+        dfx = pd.DataFrame()
+        for i in range(self.lags +1):
+            mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
+            dfx = pd.concat([mask], ignore_index=True)
+        return dfx.sum(axis=0)
 
-    # def decide(self):
-        # self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-        # self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema > df.Close) , 1, 0)
-        # self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema < df.Close), 1, 0)
-        # # self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
-        # # self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
+    def decide(self):
+        self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
+        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema > df.Close) , 1, 0)
+        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema < df.Close), 1, 0)
+        # self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
+        # self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
 
-# #inst = Signals(df, 25)
-# #inst.decide()
-# #df[df.Buy == 1 ]
-# #print(df)
+inst = Signals(df, 25)
+inst.decide()
+# df[df.Buy == 1 ]
+# print(df)
 
 # def strategy(pair, qty, open_position=False):
     # #df = getminutedata(pair, '15m', "1 day ago UTC")
