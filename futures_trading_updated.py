@@ -57,10 +57,10 @@ class Signals:
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema < df.Close) , 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema < df.Close), 1, 0)
 
-#inst = Signals(df, 25)
-#inst.decide()
-#df[df.Buy == 1 ]
-#print(df)
+inst = Signals(df, 25)
+inst.decide()
+df[df.Buy == 1 ]
+print(df)
 
 # def strategy(pair, qty, open_position=False):
     # df = getminutedata(pair, '15m', "1 day ago UTC")
