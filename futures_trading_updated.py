@@ -26,7 +26,7 @@ def getminutedata(symbol, interval, lookback):
     frame = frame.astype(float)
     return frame
 
-df = getminutedata('BTCUSDT', '1m', "30 day ago SGT")
+df = getminutedata('BTCUSDT', '4h', "90 day ago SGT")
 # print(df)
 
 def applytechnicals(df):
