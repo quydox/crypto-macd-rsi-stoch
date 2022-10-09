@@ -131,9 +131,9 @@ def strategy(pair, qty, open_position=False):
                         f.write(str(pair) + '\n')
 while True:
     crypto_coins = ["BTCBUSD"]
-    df = getminutedata(pair, '15m', "1 day ago UTC")
     for coins in crypto_coins:
         # try:
+        df = getminutedata(coins, '15m', "1 day ago UTC")
         acc_balance = client.futures_account_balance()
         active_position = client.futures_position_information(symbol=coins)
         current_price = client.get_symbol_ticker(symbol=coins)
