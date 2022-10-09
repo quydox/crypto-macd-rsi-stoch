@@ -34,7 +34,7 @@ def applytechnicals(df):
     df['%D'] = df['%K'].rolling(3).mean()
     df['rsi'] = ta.momentum.rsi(df.Close, window=14)
     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
-    df['ema'] = ta.trend.ema_indicator(df.Close, window=20)
+    df['ema'] = ta.trend.EMAIndicator(df.Close, window=20)
     df.dropna(inplace=True)
 
 applytechnicals(df)
@@ -63,6 +63,7 @@ class Signals:
         self.df['Sell'] = np.where((self.df['%K'] > 70) & (self.df['%D'] > 70) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
         self.df['Buy1'] = np.where((self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
         self.df['Sell1'] = np.where((self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
+        self.df['ematest'] = np.where((self.df.ema < df.Close), 1, 0))
 
 inst = Signals(df, 25)
 inst.decide()
