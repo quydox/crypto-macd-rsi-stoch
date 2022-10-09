@@ -26,7 +26,7 @@ def getminutedata(symbol, interval, lookback):
     frame = frame.astype(float)
     return frame
 
-df = getminutedata('BTCUSDT', '1m', "30 day ago SGT")
+df = getminutedata('BTCUSDT', '5m', "30 day ago SGT")
 # print(df)
 
 def applytechnicals(df):
@@ -68,7 +68,7 @@ class Signals:
 inst = Signals(df, 25)
 inst.decide()
 # df[df.oversold == 1 ]
-print(df[df.Buy1 == 1])
+print(df[df.Buy == 1])
 
 # def strategy(pair, qty, open_position=False):
     # #df = getminutedata(pair, '15m', "1 day ago UTC")
