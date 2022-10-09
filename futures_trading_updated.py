@@ -62,7 +62,7 @@ class Signals:
 inst = Signals(df, 25)
 inst.decide()
 # df[df.Buy == 1 ]
-# print(df)
+print(df)
 
 # def strategy(pair, qty, open_position=False):
     # #df = getminutedata(pair, '15m', "1 day ago UTC")
