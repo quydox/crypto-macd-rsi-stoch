@@ -56,6 +56,8 @@ class Signals:
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema > df.Close) , 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema < df.Close), 1, 0)
+        self.df['Test_Sell'] = np.where((self.df.trigger) & (self.df.ema < df.Close), 1, 0)
+        self.df['Test_Buy'] = np.where((self.df.trigger) & (self.df.ema < df.Close), 1, 0)
 
 inst = Signals(df, 25)
 inst.decide()
