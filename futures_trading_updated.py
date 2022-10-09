@@ -66,7 +66,7 @@ class Signals:
 
 inst = Signals(df, 25)
 inst.decide()
-# df[df.Buy == 1 ]
+df[df.oversold == 1 ]
 print(df)
 
 # def strategy(pair, qty, open_position=False):
