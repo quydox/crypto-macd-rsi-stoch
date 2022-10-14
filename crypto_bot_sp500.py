@@ -158,6 +158,6 @@ while True:
         # myfile3.touch(exist_ok=True)
         # myfile4.touch(exist_ok=True)
         strategy(coins, 50)
-        time.sleep(5)
+        time.sleep(1)
         # except Exception:
             # pass
