@@ -146,7 +146,7 @@ def strategy(pair, qty, open_position=False):
         # with open(file_path+ pair +'_sell_price_1m.txt', 'a+') as f:
             # f.write(str(df.Close.iloc[-1]) + '\n')
 while True:
-    crypto_coins = ["BTCBUSD", "ETHBUSD"]
+    crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
         # try:
         myfile1 = Path(file_path+ coins+'_buy_sp500.txt')
