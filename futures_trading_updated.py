@@ -62,7 +62,6 @@ class Signals:
 # print(df)
 
 def strategy(pair, qty, open_position=False):
-    #df = getminutedata(pair, '15m', "1 day ago UTC")
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
