@@ -121,13 +121,13 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
-        #try:
-        df = getminutedata(coins, '1m', "1 day ago SGT")
-        myfile1 = Path(file_path+ coins+'_buy_sp500v2.txt')
-        myfile2 = Path(file_path+ coins +'_sell_sp500v2.txt')
-        myfile1.touch(exist_ok=True)
-        myfile2.touch(exist_ok=True)
-        strategy(coins, 50)
-        time.sleep(1)
-        #except Exception:
-        #    pass
+        try:
+            df = getminutedata(coins, '1m', "1 day ago SGT")
+            myfile1 = Path(file_path+ coins+'_buy_sp500v2.txt')
+            myfile2 = Path(file_path+ coins +'_sell_sp500v2.txt')
+            myfile1.touch(exist_ok=True)
+            myfile2.touch(exist_ok=True)
+            strategy(coins, 50)
+            time.sleep(1)
+        except Exception:
+            pass
