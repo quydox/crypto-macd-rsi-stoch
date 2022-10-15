@@ -26,7 +26,7 @@ def getminutedata(symbol, interval, lookback):
     frame = frame.astype(float)
     return frame
 
-df = getminutedata('BTCUSDT', '5m', "30 day ago SGT")
+# df = getminutedata('BTCUSDT', '5m', "30 day ago SGT")
 # print(df)
 
 def applytechnicals(df):
@@ -34,10 +34,10 @@ def applytechnicals(df):
     df['%D'] = df['%K'].rolling(3).mean()
     df['rsi'] = ta.momentum.rsi(df.Close, window=14)
     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
-    df['ema'] = ta.trend.ema_indicator(df.Close, window=20)
+#    df['ema'] = ta.trend.ema_indicator(df.Close, window=20)
     df.dropna(inplace=True)
 
-applytechnicals(df)
+#applytechnicals(df)
 #print(df)
 
 class Signals:
@@ -45,12 +45,12 @@ class Signals:
         self.df = df
         self.lags = lags
 
-    # def gettrigger(self):
-        # dfx = pd.DataFrame()
-        # for i in range(self.lags +1):
-            # mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
-            # dfx = pd.concat([mask], ignore_index=True)
-        # return dfx.sum(axis=0)
+    def gettrigger(self):
+        dfx = pd.DataFrame()
+        for i in range(self.lags +1):
+            mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
+            dfx = pd.concat([mask], ignore_index=True)
+        return dfx.sum(axis=0)
 
     def decide(self):
         # self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
