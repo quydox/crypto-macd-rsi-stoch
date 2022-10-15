@@ -68,11 +68,12 @@ def strategy(pair, qty, open_position=False):
     inst.decide()
     for open_position in active_position:
         print(pair + f' Current Close is ' + str(df.Close.iloc[-1]) + f' Entry ' + str(open_position['entryPrice']), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]), str(df.ema.iloc[-1]) )
-        print(acc_balance)
-        # for check_balance in acc_balance:
-            # if check_balance['asset'] == "BUSD":
-                # busd_balance = check_balance["balance"]
-                # profit_balance = int(float(busd_balance))/82 * 100 - 100
+        for check_balance in acc_balance:
+            if check_balance['asset'] == "BUSD":
+                busd_balance = check_balance["balance"]
+                profit_balance = int(float(busd_balance))/82 * 100 - 100
+                print(busd_balance)
+                print(profit_balance)
                 # if df.Buy.iloc[-1]:
                     # #####################Read the previous buy text output and empty the file ################################
                     # with open(file_path+ pair +'_buy_future.txt', 'r') as f:
