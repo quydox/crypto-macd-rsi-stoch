@@ -92,7 +92,7 @@ def strategy(pair, qty, open_position=False):
                     if pair not in clean_buy_list:
                         order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=30)
                         open_position = True
-                        body = pair + "\n" + "PROFIT: " + profit_balance + "\n" + "ORDER: " + order + "\n" + "BUY - TAKE PROFIT FROM SELL: " + str(df.Close.iloc[-1]) + "\n" + "EMA: " + str(df.ema.iloc[-1])+ "\n" + " MACD: " + str(df.macd.iloc[-1])
+                        body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "BUY - TAKE PROFIT FROM SELL: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
@@ -101,7 +101,7 @@ def strategy(pair, qty, open_position=False):
                         order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=30)
                         stoploss_buy = client.futures_create_order(symbol=pair, side='BUY', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true')
                         open_position = True
-                        body = pair + "\n" + "PROFIT: " + profit_balance + "\n" + "ORDER: " + order + "\n" + "BUY - NEW ENTRY: " + str(df.Close.iloc[-1]) + "\n" + "EMA: " + str(df.ema.iloc[-1])+ "\n" + " MACD: " + str(df.macd.iloc[-1], stoploss_buy)
+                        body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order, "\n" + "BUY - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1], stoploss_buy)
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
@@ -129,7 +129,7 @@ def strategy(pair, qty, open_position=False):
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
                             order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=30)
-                            body = pair + "\n" + "PROFIT: " + profit_balance + "\n" + "ORDER: " + order + "\n" + "SELL - TAKE PROFIT FROM BUY: " + str(df.Close.iloc[-1]) + "\n" + "EMA: " + str(df.ema.iloc[-1])+ "\n" + " MACD: " + str(df.macd.iloc[-1])
+                            body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - TAKE PROFIT FROM BUY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
@@ -140,7 +140,7 @@ def strategy(pair, qty, open_position=False):
                             qty_order = qty-(float(item['takerCommission'])*qty)
                             order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=30)
                             stoploss_sell = client.futures_create_order(symbol=pair, side='SELL', type='STOP_MARKET', stopPrice=stop_loss_market_sell, closePosition='true')
-                            body = pair + "\n" + "PROFIT: " + profit_balance + "\n" + "ORDER: " + order + "\n" + "SELL - NEW ENTRY: " + str(df.Close.iloc[-1]) + "\n" + "EMA: " + str(df.ema.iloc[-1])+ "\n" + " MACD: " + str(df.macd.iloc[-1], stoploss_sell)
+                            body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order, "\n" + "SELL - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1], stoploss_sell)
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
