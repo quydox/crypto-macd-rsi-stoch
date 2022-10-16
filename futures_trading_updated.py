@@ -130,7 +130,7 @@ def strategy(pair, qty, open_position=False):
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
                             order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=50)
-                            body = pair,"Profit: ",profit_balance, order, "SELL - 1m TF. Close Price" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
+                            body = pair,"Profit: ",profit_balance, order, "SELL - TAKE PROFIT. Close Price" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
@@ -146,8 +146,6 @@ def strategy(pair, qty, open_position=False):
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
-                    with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
-                        f.write(str(pair) + '\n')
 
 while True:
     crypto_coins = ["BTCBUSD"]
