@@ -135,7 +135,7 @@ def strategy(pair, qty, open_position=False):
                     with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
                     ###########################################################################################################
-                    if pair in clean_sell_list and float(open_position_check['entryPrice']) == 0:
+                    if pair in clean_sell_list and float(df.rsi.iloc[-1]) < 50 and float(open_position_check['entryPrice']) == 0:
                         fees = client.get_trade_fee(symbol=pair)
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
