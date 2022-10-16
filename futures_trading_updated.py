@@ -66,7 +66,7 @@ def strategy(pair, qty, open_position=False):
     inst = Signals(df, 25)
     inst.decide()
     for open_position_check in active_position:
-        print(df)
+        #print(df)
         print(pair + f' Current Close is ' + str(df.Close.iloc[-1]) + f' Entry ' + str(open_position_check['entryPrice']), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]), str(df.ema.iloc[-1]) )
         for check_balance in acc_balance:
             if check_balance['asset'] == "BUSD":
@@ -102,7 +102,7 @@ def strategy(pair, qty, open_position=False):
                     if pair in clean_buy_list and float(open_position_check['entryPrice']) == 0:
                         order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=30)
                         open_position = True
-                        body = pair,"Profit: ",profit_balance, order, "BUY - 1m TF Close Price" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
+                        body = pair,"Profit: ",profit_balance, order, "BUY - 1m TF New Entry - Close Price" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
@@ -148,17 +148,17 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
-        # try:
-        df = getminutedata(coins, '1m', "1 day ago UTC")
-        acc_balance = client.futures_account_balance()
-        active_position = client.futures_position_information(symbol=coins)
-        current_price = client.get_symbol_ticker(symbol=coins)
-        total_coins = round(float(70/(float(current_price['price']))),3)
-        myfile1 = Path(file_path+ coins +'_buy_future.txt')
-        myfile2 = Path(file_path+ coins +'_sell_future.txt')
-        myfile1.touch(exist_ok=True)
-        myfile2.touch(exist_ok=True)
-        strategy(coins, total_coins)
-        time.sleep(5)
-        # except Exception:
-            # pass
+        try:
+            df = getminutedata(coins, '1m', "1 day ago UTC")
+            acc_balance = client.futures_account_balance()
+            active_position = client.futures_position_information(symbol=coins)
+            current_price = client.get_symbol_ticker(symbol=coins)
+            total_coins = round(float(70/(float(current_price['price']))),3)
+            myfile1 = Path(file_path+ coins +'_buy_future.txt')
+            myfile2 = Path(file_path+ coins +'_sell_future.txt')
+            myfile1.touch(exist_ok=True)
+            myfile2.touch(exist_ok=True)
+            strategy(coins, total_coins)
+            time.sleep(5)
+        except Exception:
+            pass
