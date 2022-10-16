@@ -92,7 +92,7 @@ def strategy(pair, qty, open_position=False):
                     if pair not in clean_buy_list:
                         order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=30)
                         open_position = True
-                        body = pair,"Profit: ",profit_balance, order, "BUY - 1m TF Close Price" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
+                        body = pair,"Profit: ",profit_balance, order, "BUY - TAKE PROFIT FROM SELL" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
@@ -102,7 +102,7 @@ def strategy(pair, qty, open_position=False):
                     if pair in clean_buy_list and float(open_position_check['entryPrice']) == 0:
                         order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=30)
                         open_position = True
-                        body = pair,"Profit: ",profit_balance, order, "BUY - 1m TF New Entry - Close Price" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
+                        body = pair,"Profit: ",profit_balance, order, "BUY - NEW ENTRY - Close Price" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
@@ -140,7 +140,7 @@ def strategy(pair, qty, open_position=False):
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
                             order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=30)
-                            body = pair,"Profit: ",profit_balance, order, "SELL - 1m TF. Close Price" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
+                            body = pair,"Profit: ",profit_balance, order, "SELL - NEW ENTRY. Close Price" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
