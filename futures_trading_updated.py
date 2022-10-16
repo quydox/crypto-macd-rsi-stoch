@@ -65,8 +65,8 @@ def strategy(pair, qty, open_position=False):
     applytechnicals(df)
     inst = Signals(df, 25)
     inst.decide()
-    for open_position in active_position:
-        print(pair + f' Current Close is ' + str(df.Close.iloc[-1]) + f' Entry ' + str(open_position['entryPrice']), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]), str(df.ema.iloc[-1]) )
+    for open_position_check in active_position:
+        print(pair + f' Current Close is ' + str(df.Close.iloc[-1]) + f' Entry ' + str(open_position_check['entryPrice']), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]), str(df.ema.iloc[-1]) )
         for check_balance in acc_balance:
             if check_balance['asset'] == "BUSD":
                 busd_balance = check_balance["balance"]
@@ -125,6 +125,19 @@ def strategy(pair, qty, open_position=False):
                             print(body)
                     with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
+                    ###########################################################################################################
+                    if pair in clean_sell_list and float(open_position_check['entryPrice']) > 0:
+                        fees = client.get_trade_fee(symbol=pair)
+                        for item in fees:
+                            qty_order = qty-(float(item['takerCommission'])*qty)
+                            order = client.futures_create_order(symbol=pair,side='SELL',type='MARKET',quantity=qty_order,leverage=50)
+                            body = pair,"Profit: ",profit_balance, order, "SELL - 1m TF. Close Price" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
+                            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
+                            requests.get(base_url)
+                            print(body)
+                    with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
+                        f.write(str(pair) + '\n')
+
 while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
