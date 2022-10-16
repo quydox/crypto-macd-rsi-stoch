@@ -97,6 +97,7 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
+                    ##########################################################################################################
                     if pair in clean_buy_list and float(open_position_check['entryPrice']) == 0:
                         order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=50)
                         open_position = True
@@ -155,7 +156,7 @@ while True:
         acc_balance = client.futures_account_balance()
         active_position = client.futures_position_information(symbol=coins)
         current_price = client.get_symbol_ticker(symbol=coins)
-        total_coins = round(float(70/(float(current_price['price']))),3)
+        total_coins = round(float(35/(float(current_price['price']))),3)
         myfile1 = Path(file_path+ coins +'_buy_future.txt')
         myfile2 = Path(file_path+ coins +'_sell_future.txt')
         myfile1.touch(exist_ok=True)
