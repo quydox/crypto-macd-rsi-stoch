@@ -66,6 +66,7 @@ def strategy(pair, qty, open_position=False):
     inst = Signals(df, 25)
     inst.decide()
     for open_position_check in active_position:
+        print(df)
         print(pair + f' Current Close is ' + str(df.Close.iloc[-1]) + f' Entry ' + str(open_position_check['entryPrice']), str(df.macd.iloc[-1]), str(df.rsi.iloc[-1]), str(df.ema.iloc[-1]) )
         for check_balance in acc_balance:
             if check_balance['asset'] == "BUSD":
