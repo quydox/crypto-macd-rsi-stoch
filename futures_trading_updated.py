@@ -148,17 +148,17 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
-        try:
-            df = getminutedata(coins, '1m', "1 day ago UTC")
-            acc_balance = client.futures_account_balance()
-            active_position = client.futures_position_information(symbol=coins)
-            current_price = client.get_symbol_ticker(symbol=coins)
-            total_coins = round(float(70/(float(current_price['price']))),3)
-            myfile1 = Path(file_path+ coins +'_buy_future.txt')
-            myfile2 = Path(file_path+ coins +'_sell_future.txt')
-            myfile1.touch(exist_ok=True)
-            myfile2.touch(exist_ok=True)
-            strategy(coins, total_coins)
-            time.sleep(5)
-        except Exception:
-            pass
+        #try:
+        df = getminutedata(coins, '1m', "1 day ago UTC")
+        acc_balance = client.futures_account_balance()
+        active_position = client.futures_position_information(symbol=coins)
+        current_price = client.get_symbol_ticker(symbol=coins)
+        total_coins = round(float(70/(float(current_price['price']))),3)
+        myfile1 = Path(file_path+ coins +'_buy_future.txt')
+        myfile2 = Path(file_path+ coins +'_sell_future.txt')
+        myfile1.touch(exist_ok=True)
+        myfile2.touch(exist_ok=True)
+        strategy(coins, total_coins)
+        time.sleep(5)
+        #except Exception:
+            #pass
