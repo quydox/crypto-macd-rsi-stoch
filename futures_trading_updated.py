@@ -92,7 +92,7 @@ def strategy(pair, qty, open_position=False):
                     if pair not in clean_buy_list:
                         order = client.futures_create_order(symbol=pair,side='BUY',type='MARKET',quantity=qty,leverage=30)
                         open_position = True
-                        body = pair,"Profit: ",profit_balance, order, "BUY - TAKE PROFIT FROM SELL" + str(df.Close.iloc[-1]), " EMA " + str(df.ema.iloc[-1]), " MACD " + str(df.macd.iloc[-1])
+                        body = pair + "\n" + "PROFIT: " + profit_balance + "\n" + "ORDER:" + order + "\n" + "BUY - TAKE PROFIT FROM SELL:" + str(df.Close.iloc[-1]) + "\n" + "EMA: " + str(df.ema.iloc[-1])+ "\n" + " MACD:" + str(df.macd.iloc[-1])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
