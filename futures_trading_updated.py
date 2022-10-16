@@ -124,7 +124,7 @@ def strategy(pair, qty, open_position=False):
                     file = open(file_path+ pair +'_buy_future.txt', 'w')
                     file.close()
                     ###########################################################################################################
-                    if pair not in clean_sell_list and float(open_position_check['entryPrice']) != 0:
+                    if pair not in clean_sell_list and float(open_position_check['entryPrice']) != 0 and float(df.rsi.iloc[-1]) > 50:
                         fees = client.get_trade_fee(symbol=pair)
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
@@ -133,8 +133,10 @@ def strategy(pair, qty, open_position=False):
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
+                    with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
+                        f.write(str(pair) + '\n')
                     ###########################################################################################################
-                    if pair not in clean_sell_list and float(open_position_check['entryPrice']) == 0:
+                    if pair in clean_sell_list and float(open_position_check['entryPrice']) == 0 and float(df.rsi.iloc[-1]) < 50:
                         fees = client.get_trade_fee(symbol=pair)
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
