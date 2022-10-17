@@ -58,9 +58,12 @@ class Signals:
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.macd.iloc[-1] < 0) & (self.df.ema.iloc[-1] < df.Close.iloc[-1]), 1, 0)
         self.df['Sell1'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi.iloc[-1] < 50) & (self.df.macd.iloc[-1] < 0) & (self.df.ema.iloc[-1] > df.Close.iloc[-1]), 1, 0)
         self.df['Test'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)), 1, 0)
-        self.df['Test2'] = np.where((self.df.trigger), 1, 0)
-        self.df['Sell3'] = np.where((self.df.trigger) & (self.df.ema.iloc[-1] > df.Close.iloc[-1]), 1, 0)
-        self.df['Buy3'] = np.where((self.df.trigger) & (self.df.ema.iloc[-1] < df.Close.iloc[-1]), 1, 0)
+        self.df['rsiSELL'] = np.where((self.df.trigger) & (self.df.rsi.iloc[-1] < 50), 1, 0)
+        self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi.iloc[-1] > 50), 1, 0)
+        self.df['emaSELL'] = np.where((self.df.trigger) & (self.df.ema.iloc[-1] > df.Close.iloc[-1]), 1, 0)
+        self.df['emaBUY'] = np.where((self.df.trigger) & (self.df.ema.iloc[-1] < df.Close.iloc[-1]), 1, 0)
+        self.df['macdSELL'] = np.where((self.df.trigger) & (self.df.macd.iloc[-1] < 0), 1, 0)
+        self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd.iloc[-1] > 0), 1, 0)
 
 
 # inst = Signals(df, 2)
