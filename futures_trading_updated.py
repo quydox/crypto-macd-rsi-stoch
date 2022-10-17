@@ -30,7 +30,7 @@ def getminutedata(symbol, interval, lookback):
 # print(df)
 
 def applytechnicals(df):
-    df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
+    df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=5, smooth_window=3)
     df['%D'] = df['%K'].rolling(3).mean()
     df['rsi'] = ta.momentum.rsi(df.Close, window=14)
     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
@@ -56,7 +56,7 @@ class Signals:
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema > df.Close), 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.macd < 0) & (self.df.ema < df.Close), 1, 0)
-        self.df['Sell1'] = np.where((self.df.trigger) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema < df.Close), 1, 0)
+        self.df['Sell1'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema < df.Close), 1, 0)
 
 # inst = Signals(df, 2)
 # inst.decide()
