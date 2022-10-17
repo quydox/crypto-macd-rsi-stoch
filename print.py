@@ -70,7 +70,7 @@ client = Client(api_key, api_secret)
 active_position = client.futures_position_information(symbol='BTCBUSD')
 for open_position_check in active_position:
     print(str(open_position_check['entryPrice']))
-    if float(open_position_check['entryPrice']) > 0:
+    if float(open_position_check['entryPrice']) < 0:
         print("Entry price not equal zero")
     if float(open_position_check['entryPrice']) == 0:
         print("Entry price is equal zero")
