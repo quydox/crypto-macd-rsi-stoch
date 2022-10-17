@@ -70,6 +70,10 @@ client = Client(api_key, api_secret)
 active_position = client.futures_position_information(symbol='BTCBUSD')
 for open_position_check in active_position:
     print(str(open_position_check['entryPrice']))
+    if float(open_position_check['entryPrice']) != 0:
+        print("Entry price not equal zero")
+    if float(open_position_check['entryPrice']) == 0:
+        print("Entry price is equal zero")
     # #if int(float(df.Close.iloc[-1])) > int(float(item['entryPrice'])):
     # if close_price > int(float(open_position_check['entryPrice'])):
     #     print("BUY", str(open_position_check['entryPrice']))
