@@ -188,7 +188,7 @@ while True:
         total_coins = round(float(70/(float(current_price['price']))),3)
         myfile1 = Path(file_path+ coins +'_buy_future.txt')
         myfile2 = Path(file_path+ coins +'_sell_future.txt')
-        myfile3 = Path(file_path+ coins +'_sell_future.txt')
+        myfile3 = Path(file_path+ coins +'_sell1_future.txt')
         myfile1.touch(exist_ok=True)
         myfile2.touch(exist_ok=True)
         myfile3.touch(exist_ok=True)
