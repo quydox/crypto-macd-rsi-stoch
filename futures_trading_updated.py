@@ -64,7 +64,7 @@ class Signals:
 
 def strategy(pair, qty, open_position=False):
     applytechnicals(df)
-    inst = Signals(df, 2)
+    inst = Signals(df, 6)
     inst.decide()
     for open_position_check in active_position:
         print(df)
@@ -183,7 +183,7 @@ while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
         #try:
-        df = getminutedata(coins, '1m', "1 day ago UTC")
+        df = getminutedata(coins, '1m', "1 hour ago UTC")
         acc_balance = client.futures_account_balance()
         active_position = client.futures_position_information(symbol=coins)
         current_price = client.get_symbol_ticker(symbol=coins)
