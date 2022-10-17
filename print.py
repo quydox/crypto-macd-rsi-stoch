@@ -67,7 +67,8 @@ client = Client(api_key, api_secret)
     # if item['symbol'] == "BTCBUSD":
         # print(item)
 
-active_position = client.futures_position_information(symbol='BTCBUSD')
+#active_position = client.futures_position_information(symbol='BTCBUSD')
+active_position = 0.0
 for open_position_check in active_position:
     print(str(open_position_check['entryPrice']))
     if float(open_position_check['entryPrice']) < 0:
