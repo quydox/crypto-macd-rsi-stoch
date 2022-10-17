@@ -71,7 +71,7 @@ class Signals:
 
 def strategy(pair, qty, open_position=False):
     applytechnicals(df)
-    inst = Signals(df, 2)
+    inst = Signals(df, 5)
     inst.decide()
     for open_position_check in active_position:
         print(df)
