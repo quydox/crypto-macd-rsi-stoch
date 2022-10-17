@@ -98,7 +98,7 @@ def strategy(pair, qty, open_position=False):
                     file = open(file_path+ pair +'_sell1_future.txt', 'w')
                     file.close()
                     ##########################################################################################################
-                    if pair not in clean_buy_list and float(open_position_check['entryPrice']) != 0:
+                    if pair not in clean_buy_list: # and float(open_position_check['entryPrice']) != 0:
                         #order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=30)
                         open_position = True
                         #body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "BUY - TAKE PROFIT FROM SELL: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
