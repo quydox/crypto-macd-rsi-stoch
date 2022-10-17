@@ -68,14 +68,13 @@ client = Client(api_key, api_secret)
         # print(item)
 
 active_position = client.futures_position_information(symbol='BTCBUSD')
-print(active_position)
-close_price = 19300
-for item in active_position:
-    #if int(float(df.Close.iloc[-1])) > int(float(item['entryPrice'])):
-    if close_price > int(float(item['entryPrice'])):
-        print("BUY", str(item['entryPrice']))
-    elif close_price <= int(float(item['entryPrice'])) * 0.995:
-        print("SELL", str(item['entryPrice']))
+for open_position_check in active_position:
+    print(str(open_position_check['entryPrice']))
+    # #if int(float(df.Close.iloc[-1])) > int(float(item['entryPrice'])):
+    # if close_price > int(float(open_position_check['entryPrice'])):
+    #     print("BUY", str(open_position_check['entryPrice']))
+    # elif close_price <= int(float(open_position_check['entryPrice'])) * 0.995:
+    #     print("SELL", str(open_position_check['entryPrice']))
 
 # current_price = client.get_symbol_ticker(symbol='BTCBUSD')
 # print(int(float(current_price['price']) * 0.995))
