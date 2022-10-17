@@ -37,8 +37,8 @@ def applytechnicals(df):
     df['ema'] = ta.trend.ema_indicator(df.Close, window=9)
     df.dropna(inplace=True)
 
-# applytechnicals(df)
-# print(df)
+applytechnicals(df)
+print(df)
 
 class Signals:
     def __init__(self,df, lags):
