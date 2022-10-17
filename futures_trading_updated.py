@@ -56,6 +56,7 @@ class Signals:
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema > df.Close), 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.macd < 0) & (self.df.ema < df.Close), 1, 0)
+        self.df['Sell1'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema < df.Close), 1, 0)
 
 # inst = Signals(df, 25)
 # inst.decide()
@@ -66,7 +67,7 @@ def strategy(pair, qty, open_position=False):
     inst = Signals(df, 25)
     inst.decide()
     for open_position_check in active_position:
-        #print(df)
+        print(df)
         print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA: " + str(df.ema.iloc[-1]) )
         for check_balance in acc_balance:
             if check_balance['asset'] == "BUSD":
@@ -87,6 +88,14 @@ def strategy(pair, qty, open_position=False):
                         for sell_list in f.readlines():
                             clean_sell_list.append(sell_list.replace("\n", ""))
                     file = open(file_path+ pair +'_sell_future.txt', 'w')
+                    file.close()
+                    ##########################################################################################################
+                    #####################Read the previous sell1 text output and empty the file ###############################
+                    with open(file_path+ pair +'_sell1_future.txt', 'r') as f:
+                        clean_sell_list = []
+                        for sell_list in f.readlines():
+                            clean_sell_list.append(sell_list.replace("\n", ""))
+                    file = open(file_path+ pair +'_sell1_future.txt', 'w')
                     file.close()
                     ##########################################################################################################
                     if pair not in clean_buy_list and float(open_position_check['entryPrice']) != 0:
@@ -124,7 +133,7 @@ def strategy(pair, qty, open_position=False):
                     file = open(file_path+ pair +'_buy_future.txt', 'w')
                     file.close()
                     ###########################################################################################################
-                    if pair not in clean_sell_list and float(open_position_check['entryPrice']) != 0 and float(df.rsi.iloc[-1]) > 50:
+                    if pair not in clean_sell_list and float(open_position_check['entryPrice']) != 0:
                         fees = client.get_trade_fee(symbol=pair)
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
@@ -135,8 +144,25 @@ def strategy(pair, qty, open_position=False):
                             print(body)
                     with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
+                elif df.Sell1.iloc[-1]:
+                    #####################Read the previous sell text output and empty the file ###############################
+                    with open(file_path+ pair +'_sell1_future.txt', 'r') as f:
+                        clean_sell_list = []
+                        for sell_list in f.readlines():
+                            clean_sell_list.append(sell_list.replace("\n", ""))
+                    file = open(file_path+ pair +'_sell1_future.txt', 'w')
+                    file.close()
+                    ##########################################################################################################
+                    #####################Read the previous buy text output and empty the file ################################
+                    with open(file_path+ pair +'_buy_future.txt', 'r') as f:
+                        clean_buy_list = []
+                        for buy_list in f.readlines():
+                            clean_buy_list.append(buy_list.replace("\n", ""))
+                    file = open(file_path+ pair +'_buy_future.txt', 'w')
+                    file.close()
                     ###########################################################################################################
-                    if pair in clean_sell_list and float(open_position_check['entryPrice']) == 0 and float(df.rsi.iloc[-1]) < 50:
+                    ###########################################################################################################
+                    if pair not in clean_sell_list and float(open_position_check['entryPrice']) == 0:
                         fees = client.get_trade_fee(symbol=pair)
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
@@ -146,7 +172,7 @@ def strategy(pair, qty, open_position=False):
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
-                    with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
+                    with open(file_path+ pair +'_sell1_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
 
 while True:
@@ -162,8 +188,10 @@ while True:
         total_coins = round(float(70/(float(current_price['price']))),3)
         myfile1 = Path(file_path+ coins +'_buy_future.txt')
         myfile2 = Path(file_path+ coins +'_sell_future.txt')
+        myfile3 = Path(file_path+ coins +'_sell_future.txt')
         myfile1.touch(exist_ok=True)
         myfile2.touch(exist_ok=True)
+        myfile3.touch(exist_ok=True)
         strategy(coins, total_coins)
         time.sleep(5)
         #except Exception:
