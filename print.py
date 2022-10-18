@@ -137,6 +137,6 @@ class Signals:
 #         self.df['emaSELL'] = np.where((self.df.trigger) & (self.df.ema > self.df.Close), 1, 0)
 
 
-inst = Signals(df, 25)
+inst = Signals(df, 5)
 inst.decide()
 print(df)
