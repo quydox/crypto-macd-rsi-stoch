@@ -138,5 +138,6 @@ class Signals:
 
 
 inst = Signals(df, 2)
+inst.gettrigger()
 # inst.decide()
 print(df)
