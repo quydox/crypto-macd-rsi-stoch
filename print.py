@@ -102,7 +102,7 @@ df = getminutedata('BTCUSDT', '1m', "1 day ago SGT")
 # print(df)
 
 def applytechnicals(df):
-    df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=5, smooth_window=3)
+    df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
     df['%D'] = df['%K'].rolling(3).mean()
     df['rsi'] = ta.momentum.rsi(df.Close, window=14)
     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
