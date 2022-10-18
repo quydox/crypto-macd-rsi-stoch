@@ -110,19 +110,19 @@ def applytechnicals(df):
     df.dropna(inplace=True)
 
 applytechnicals(df)
-print(df)
+#print(df)
 
-# class Signals:
-#     def __init__(self,df, lags):
-#         self.df = df
-#         self.lags = lags
+class Signals:
+    def __init__(self,df, lags):
+        self.df = df
+        self.lags = lags
 
-#     def gettrigger(self):
-#         dfx = pd.DataFrame()
-#         for i in range(self.lags +1):
-#             mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
-#             dfx = pd.concat([mask], ignore_index=True)
-#         return dfx.sum(axis=0)
+    def gettrigger(self):
+        dfx = pd.DataFrame()
+        for i in range(self.lags +1):
+            mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
+            dfx = pd.concat([mask], ignore_index=True)
+        return dfx.sum(axis=0)
 
 #     def decide(self):
 #         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
@@ -137,6 +137,6 @@ print(df)
 #         self.df['emaSELL'] = np.where((self.df.trigger) & (self.df.ema > self.df.Close), 1, 0)
 
 
-# inst = Signals(df, 2)
+inst = Signals(df, 2)
 # inst.decide()
-# print(df)
+print(df)
