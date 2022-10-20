@@ -77,6 +77,7 @@ def strategy(pair, qty, open_position=False):
     for open_position_check in active_position:
         print(df)
         print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA: " + str(df.ema.iloc[-1]) )
+        print(df.Sell.iloc[-1])
         for check_balance in acc_balance:
             if check_balance['asset'] == "BUSD":
                 busd_balance = check_balance["balance"]
