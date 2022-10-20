@@ -57,6 +57,7 @@ class Signals:
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema < self.df.Close), 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema > self.df.Close), 1, 0)
         self.df['SellRule1'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.macd < 0) & (self.df.ema > self.df.Close), 1, 0)
+        self.df['BuyRule1'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.macd > 0) & (self.df.ema < self.df.Close), 1, 0)
         self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)), 1, 0)
         self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi > 50), 1, 0)
         self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd > 0), 1, 0)
@@ -78,6 +79,7 @@ def strategy(pair, qty, open_position=False):
         print(df)
         print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA: " + str(df.ema.iloc[-1]) )
         print(df.SellRule1.iloc[-1])
+        print(df.BuyRule1.iloc[-1])
         for check_balance in acc_balance:
             if check_balance['asset'] == "BUSD":
                 busd_balance = check_balance["balance"]
