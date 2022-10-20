@@ -176,7 +176,6 @@ while True:
         myfile2 = Path(file_path+ coins +'_sell_future.txt')
         myfile1.touch(exist_ok=True)
         myfile2.touch(exist_ok=True)
-        myfile3.touch(exist_ok=True)
         strategy(coins, total_coins)
         time.sleep(10)
         #except Exception:
