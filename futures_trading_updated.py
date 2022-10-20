@@ -150,18 +150,6 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                    ##########################################################################################################
-                    if pair in clean_buy_list and float(open_position_check['entryPrice']) == 0:
-                        order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=50)
-                        ##stoploss_buy = client.futures_create_order(symbol=pair, side='BUY', type='STOP_MARKET', stopPrice=int(stop_loss_market_buy), closePosition='true')
-                        open_position = True
-                        body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order, "\n" + "BUY - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
-                        #body = "BUY - NEW ENTRY"
-                        base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
-                        requests.get(base_url)
-                        print(body)
-                    with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
-                        f.write(str(pair) + '\n')
                 elif df.Sell.iloc[-1]:
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future.txt', 'r') as f:
@@ -227,19 +215,6 @@ def strategy(pair, qty, open_position=False):
                             qty_order = qty-(float(item['takerCommission'])*qty)
                             order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=50)
                             body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - TAKE PROFIT FROM BUY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
-                            #body = "SELL - TAKE PROFIT FROM BUY"
-                            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
-                            requests.get(base_url)
-                            print(body)
-                    with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
-                        f.write(str(pair) + '\n')
-                    ###########################################################################################################
-                    if pair in clean_sell_list and float(open_position_check['entryPrice']) == 0:
-                        fees = client.get_trade_fee(symbol=pair)
-                        for item in fees:
-                            qty_order = qty-(float(item['takerCommission'])*qty)
-                            order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=50)
-                            body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
                             #body = "SELL - TAKE PROFIT FROM BUY"
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
