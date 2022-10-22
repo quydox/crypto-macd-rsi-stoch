@@ -59,10 +59,7 @@ class Signals:
         self.df['Buy'] = np.where((self.df.trigger) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema < self.df.Close), 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema > self.df.Close), 1, 0)
         self.df['SellRule1'] = np.where((self.df.trigger) & (self.df.macd < 0) & (self.df.ema > self.df.Close), 1, 0)
-        self.df['SellRule2'] = np.where((self.df.trigger) & (self.df.rsi < 50) & (self.df.ema > self.df.Close), 1, 0)
         self.df['BuyRule1'] = np.where((self.df.trigger) & (self.df.macd > 0) & (self.df.ema < self.df.Close), 1, 0)
-        self.df['BuyRule2'] = np.where((self.df.trigger) & (self.df.rsi > 50) & (self.df.ema < self.df.Close), 1, 0)
-        self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
         self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi > 50), 1, 0)
         self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd > 0), 1, 0)
         self.df['emaBUY'] = np.where((self.df.trigger) & (self.df.ema < self.df.Close), 1, 0)
@@ -129,7 +126,7 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif df.BuyRule1.iloc[-1] or df.BuyRule2.iloc[-1]:
+                elif df.BuyRule1.iloc[-1]:
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
                         clean_buy_list = []
@@ -198,7 +195,7 @@ def strategy(pair, qty, open_position=False):
                             print(body)
                     with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif df.SellRule1.iloc[-1] or df.SellRule2.iloc[-1]:
+                elif df.SellRule1.iloc[-1]:
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future.txt', 'r') as f:
                         clean_sell_list = []
