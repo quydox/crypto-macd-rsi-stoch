@@ -60,6 +60,7 @@ class Signals:
         # self.df['Sell'] = np.where((self.df.trigger) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema > self.df.Close), 1, 0)
         self.df['SellRule1'] = np.where((self.df.trigger) & (self.df.macd < 0) & (self.df.ema > self.df.Close), 1, 0)
         self.df['BuyRule1'] = np.where((self.df.trigger) & (self.df.macd > 0) & (self.df.ema < self.df.Close), 1, 0)
+        self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
         self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi > 50), 1, 0)
         self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd > 0), 1, 0)
         self.df['emaBUY'] = np.where((self.df.trigger) & (self.df.ema < self.df.Close), 1, 0)
