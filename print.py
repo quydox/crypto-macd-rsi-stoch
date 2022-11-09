@@ -98,7 +98,7 @@ def getminutedata(symbol, interval, lookback):
     frame = frame.astype(float)
     return frame
 
-df = getminutedata('BTCUSDT', '1m', "1 day ago SGT")
+df = getminutedata('BTCUSDT', '1m', "1 hour ago SGT")
 # print(df)
 
 def applytechnicals(df):
@@ -106,26 +106,27 @@ def applytechnicals(df):
     df['%D'] = df['%K'].rolling(3).mean()
     df['rsi'] = ta.momentum.rsi(df.Close, window=14)
     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
-    df['ema'] = ta.trend.ema_indicator(df.Close, window=9)
+    df['ema7'] = ta.trend.ema_indicator(df.Close, window=7)
+    df['ema25'] = ta.trend.ema_indicator(df.Close, window=25)
     df.dropna(inplace=True)
 
 applytechnicals(df)
-#print(df)
+print(df)
 
-class Signals:
-    def __init__(self,df, lags):
-        self.df = df
-        self.lags = lags
+# class Signals:
+#     def __init__(self,df, lags):
+#         self.df = df
+#         self.lags = lags
 
-    def gettrigger(self):
-        dfx = pd.DataFrame()
-        for i in range(self.lags +1):
-            mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
-            dfx = pd.concat([mask], ignore_index=True)
-        return dfx.sum(axis=0)
+#     def gettrigger(self):
+#         dfx = pd.DataFrame()
+#         for i in range(self.lags +1):
+#             mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
+#             dfx = pd.concat([mask], ignore_index=True)
+#         return dfx.sum(axis=0)
 
-    def decide(self):
-        self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
+#     def decide(self):
+#         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
 #         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema < self.df.Close), 1, 0)
 #         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema > self.df.Close), 1, 0)
 #         self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)), 1, 0)
@@ -137,6 +138,6 @@ class Signals:
 #         self.df['emaSELL'] = np.where((self.df.trigger) & (self.df.ema > self.df.Close), 1, 0)
 
 
-inst = Signals(df, 5)
-inst.decide()
-print(df)
+# inst = Signals(df, 5)
+# inst.decide()
+# print(df)
