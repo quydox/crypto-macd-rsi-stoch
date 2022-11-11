@@ -124,7 +124,7 @@ def strategy(pair, qty, open_position=False):
                     #     print(body)
                     # with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                     #     f.write(str(pair) + '\n')
-                elif df.BuyRule1.iloc[-1]:
+                elif df.BuyRule1.iloc[-1] and df.Buy.iloc[-1] == 0:
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
                         clean_buy_list = []
@@ -204,7 +204,7 @@ def strategy(pair, qty, open_position=False):
                     #         print(body)
                     # with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
                     #     f.write(str(pair) + '\n')
-                elif df.SellRule1.iloc[-1]:
+                elif df.SellRule1.iloc[-1] and df.Sell.iloc[-1] == 0:
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future.txt', 'r') as f:
                         clean_sell_list = []
