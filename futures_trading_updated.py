@@ -140,8 +140,7 @@ def strategy(pair, qty, open_position=False):
                             clean_sell_list.append(sell_list.replace("\n", ""))
                     file = open(file_path+ pair +'_sell_future.txt', 'w')
                     file.close()
-                    ##########################################################################################################
-                    if pair not in clean_buy_list:# and float(open_position_check['entryPrice']) != 0:
+                    if pair in clean_sell_list:# and float(open_position_check['entryPrice']) != 0:
                         # order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=50)
                         # open_position = True
                         # body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "BUY - TAKE PROFIT FROM SELL: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema7.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
@@ -149,9 +148,21 @@ def strategy(pair, qty, open_position=False):
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
-                    with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
-                        f.write(str(pair) + '\n')
+                    # with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
+                    #     f.write(str(pair) + '\n')
                 elif df.Sell.iloc[-1]:
+                    ##########################################################################################################
+                #     if pair not in clean_buy_list:# and float(open_position_check['entryPrice']) != 0:
+                #         # order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=50)
+                #         # open_position = True
+                #         # body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "BUY - TAKE PROFIT FROM SELL: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema7.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
+                #         body = "BUY - TAKE PROFIT FROM SELL" + "\n" + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA7: " + str(df.ema7.iloc[-1]) + "\n" + "EMA25: " + str(df.ema25.iloc[-1])
+                #         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
+                #         requests.get(base_url)
+                #         print(body)
+                #     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
+                #         f.write(str(pair) + '\n')
+                # elif df.Sell.iloc[-1]:
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future.txt', 'r') as f:
                         clean_sell_list = []
@@ -210,7 +221,7 @@ def strategy(pair, qty, open_position=False):
                     file = open(file_path+ pair +'_buy_future.txt', 'w')
                     file.close()
                     ###########################################################################################################
-                    if pair not in clean_sell_list:# and float(open_position_check['entryPrice']) != 0:
+                    if pair in clean_buy_list:# and float(open_position_check['entryPrice']) != 0:
                         fees = client.get_trade_fee(symbol=pair)
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
@@ -220,8 +231,21 @@ def strategy(pair, qty, open_position=False):
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
-                    with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
-                        f.write(str(pair) + '\n')
+                    # with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
+                    #     f.write(str(pair) + '\n')
+                    # ###########################################################################################################
+                    # if pair not in clean_sell_list:# and float(open_position_check['entryPrice']) != 0:
+                    #     fees = client.get_trade_fee(symbol=pair)
+                    #     for item in fees:
+                    #         qty_order = qty-(float(item['takerCommission'])*qty)
+                    #         # order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=50)
+                    #         # body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - TAKE PROFIT FROM BUY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema7.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
+                    #         body = "SELL - TAKE PROFIT FROM BUY" + "\n" + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA7: " + str(df.ema7.iloc[-1]) + "\n" + "EMA25: " + str(df.ema25.iloc[-1])
+                    #         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
+                    #         requests.get(base_url)
+                    #         print(body)
+                    # with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
+                    #     f.write(str(pair) + '\n')
 while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
