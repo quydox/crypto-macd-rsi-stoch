@@ -148,7 +148,7 @@ def strategy(pair, qty, open_position=False):
                         requests.get(base_url)
                         print(body)
                     with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
-                        f.write(str("") + '\n')
+                        f.write(str(pair) + '\n')
                 elif df.Sell.iloc[-1]:
                     ##########################################################################################################
                 #     if pair not in clean_buy_list:# and float(open_position_check['entryPrice']) != 0:
@@ -230,7 +230,7 @@ def strategy(pair, qty, open_position=False):
                             requests.get(base_url)
                             print(body)
                         with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
-                            f.write(str("") + '\n')
+                            f.write(str(pair) + '\n')
                     # ###########################################################################################################
                     # if pair not in clean_sell_list:# and float(open_position_check['entryPrice']) != 0:
                     #     fees = client.get_trade_fee(symbol=pair)
