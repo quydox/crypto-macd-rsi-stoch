@@ -89,29 +89,29 @@ client = Client(api_key, api_secret)
 # fees = client.get_trade_fee(symbol='BTCBUSD')
 # print(fees)
 
-def getminutedata(symbol, interval, lookback):
-    frame = pd.DataFrame(client.futures_historical_klines(symbol, interval, lookback))
-    frame = frame.iloc[:,:6]
-    frame.columns = ['Time', 'Open', 'High', 'Low', 'Close', 'Volume']
-    frame = frame.set_index('Time')
-    frame.index = pd.to_datetime(frame.index, unit='ms')
-    frame = frame.astype(float)
-    return frame
+# def getminutedata(symbol, interval, lookback):
+#     frame = pd.DataFrame(client.futures_historical_klines(symbol, interval, lookback))
+#     frame = frame.iloc[:,:6]
+#     frame.columns = ['Time', 'Open', 'High', 'Low', 'Close', 'Volume']
+#     frame = frame.set_index('Time')
+#     frame.index = pd.to_datetime(frame.index, unit='ms')
+#     frame = frame.astype(float)
+#     return frame
 
-df = getminutedata('BTCUSDT', '1m', "1 hour ago SGT")
+# df = getminutedata('BTCUSDT', '1m', "1 hour ago SGT")
+# # print(df)
+
+# def applytechnicals(df):
+#     df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
+#     df['%D'] = df['%K'].rolling(3).mean()
+#     df['rsi'] = ta.momentum.rsi(df.Close, window=14)
+#     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
+#     df['ema7'] = ta.trend.ema_indicator(df.Close, window=7)
+#     df['ema25'] = ta.trend.ema_indicator(df.Close, window=25)
+#     df.dropna(inplace=True)
+
+# applytechnicals(df)
 # print(df)
-
-def applytechnicals(df):
-    df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
-    df['%D'] = df['%K'].rolling(3).mean()
-    df['rsi'] = ta.momentum.rsi(df.Close, window=14)
-    df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
-    df['ema7'] = ta.trend.ema_indicator(df.Close, window=7)
-    df['ema25'] = ta.trend.ema_indicator(df.Close, window=25)
-    df.dropna(inplace=True)
-
-applytechnicals(df)
-print(df)
 
 # class Signals:
 #     def __init__(self,df, lags):
@@ -141,3 +141,7 @@ print(df)
 # inst = Signals(df, 5)
 # inst.decide()
 # print(df)
+coins="BTCUSDT"
+current_price = client.get_symbol_ticker(symbol=coins)
+stop_loss_market_buy = int(float(current_price['price']) * 0.995)
+client.futures_create_order(symbol=coins, side='BUY', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true')
