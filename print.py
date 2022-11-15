@@ -145,4 +145,4 @@ coins="BTCUSDT"
 current_price = client.get_symbol_ticker(symbol=coins)
 stop_loss_market_buy = int(float(current_price['price']) * 0.995)
 print(stop_loss_market_buy)
-client.futures_create_order(symbol='BTCUSDT', side='BUY', type='STOP_MARKET', stopPrice='16939')
+client.futures_create_order(symbol='BTCUSDT', side='BOTH', type='STOP_MARKET', stopPrice='15000', closePosition='true')
