@@ -144,4 +144,5 @@ client = Client(api_key, api_secret)
 coins="BTCUSDT"
 current_price = client.get_symbol_ticker(symbol=coins)
 stop_loss_market_buy = int(float(current_price['price']) * 0.995)
-client.futures_create_order(symbol=coins, side='BUY', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true')
+print(stop_loss_market_buy)
+#client.futures_create_order(symbol=coins, side='BUY', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true')
