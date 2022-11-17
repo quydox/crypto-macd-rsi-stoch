@@ -26,7 +26,7 @@ def getminutedata(symbol, interval, lookback):
     frame = frame.astype(float)
     return frame
 
-# df = getminutedata('BTCUSDT', '1h', "7 days ago SGT")
+# df = getminutedata('BTCUSDT', '1m', "1 day ago SGT")
 # print(df)
 
 def applytechnicals(df):
@@ -183,7 +183,7 @@ while True:
     crypto_coins = ["BTCUSDT"]
     for coins in crypto_coins:
         # try:
-        df = getminutedata(coins, '1h', "7 days ago SGT")
+        df = getminutedata(coins, '1m', "7 day ago SGT")
         acc_balance = client.futures_account_balance()
         active_position = client.futures_position_information(symbol=coins)
         current_price = client.get_symbol_ticker(symbol=coins)
@@ -195,6 +195,6 @@ while True:
         myfile1.touch(exist_ok=True)
         myfile2.touch(exist_ok=True)
         strategy(coins, total_coins)
-        time.sleep(10)
+        time.sleep(5)
         # except Exception:
         #    pass
