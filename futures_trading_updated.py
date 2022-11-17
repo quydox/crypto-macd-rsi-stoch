@@ -102,7 +102,7 @@ def strategy(pair, qty, open_position=False):
                     file = open(file_path+ pair +'_sell_future.txt', 'w')
                     file.close()
                     ##########################################################################################################
-                    if pair not in clean_buy_list:
+                    if pair not in clean_buy_list and float(open_position_check['entryPrice']) == 0:
                         order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=125)
                         client.futures_create_order(symbol=pair, side='SELL', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC' )
                         client.futures_create_order(symbol=pair,side='SELL',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC')
@@ -148,7 +148,7 @@ def strategy(pair, qty, open_position=False):
                     file = open(file_path+ pair +'_buy_future.txt', 'w')
                     file.close()
                     ###########################################################################################################
-                    if pair not in clean_sell_list:
+                    if pair not in clean_sell_list and float(open_position_check['entryPrice']) == 0:
                         fees = client.get_trade_fee(symbol=pair)
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
