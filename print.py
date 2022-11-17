@@ -158,4 +158,5 @@ print(stop_loss_market_buy)
                         
 for item in fees:
     qty_order = total_coins-(float(item['takerCommission'])*total_coins)
-    print(qty_order)
+    order = client.futures_create_order(symbol=coins, side='SELL', type='MARKET', quantity=qty_order, leverage=125)
+    print(order)
