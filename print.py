@@ -145,10 +145,11 @@ coins="BTCUSDT"
 current_price = client.get_symbol_ticker(symbol=coins)
 stop_loss_market_buy = int(float(current_price['price']) * 0.995)
 stop_loss_market_sell = int(float(current_price['price']) * 1.005)
+total_coins = round(float(20/(float(current_price['price']))),3)
 
 print(stop_loss_market_sell)
 print(current_price)
 print(stop_loss_market_buy)
-client.futures_create_order(symbol=coins, side='BUY', type='MARKET', quantity=20, leverage=25)
+client.futures_create_order(symbol=coins, side='BUY', type='MARKET', quantity=total_coins, leverage=125)
 client.futures_create_order(symbol='BTCUSDT', side='SELL', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC' )
 client.futures_create_order(symbol='BTCUSDT',side='SELL',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC')
