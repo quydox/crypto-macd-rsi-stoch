@@ -104,7 +104,8 @@ def strategy(pair, qty, open_position=False):
                     ##########################################################################################################
                     if pair not in clean_buy_list:
                         order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=125)
-                        #client.futures_create_order(symbol=pair, side='SELL', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true')
+                        client.futures_create_order(symbol=pair, side='SELL', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC' )
+                        client.futures_create_order(symbol=pair,side='SELL',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC')
                         open_position = True
                         body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "BUY - CLOSE OR NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema7.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
                         #body = "BUY -" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA7: " + str(df.ema7.iloc[-1]) + "\n" + "EMA25: " + str(df.ema25.iloc[-1] + "\n" + order)
@@ -124,8 +125,6 @@ def strategy(pair, qty, open_position=False):
                     file.close()
                     if pair in clean_sell_list and float(open_position_check['entryPrice']) != 0:
                         order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=125)
-                        client.futures_create_order(symbol=pair, side='SELL', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC' )
-                        client.futures_create_order(symbol=pair,side='SELL',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC')
                         open_position = True
                         body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "BUY - TAKE PROFIT FROM SELL: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema7.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
                         #body = "BUY - TAKE PROFIT FROM SELL" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA7: " + str(df.ema7.iloc[-1]) + "\n" + "EMA25: " + str(df.ema25.iloc[-1] + "\n" + order)
