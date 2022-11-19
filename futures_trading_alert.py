@@ -84,24 +84,24 @@ def strategy(pair, qty, open_position=False):
         print(df)
         print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA7: " + str(df.ema7.iloc[-1]) + "\n" + "EMA25: " + str(df.ema25.iloc[-1]))
         for check_balance in acc_balance:
-            if check_balance['asset'] == "BUSD":
+            if check_balance['asset'] == "USDT":
                 busd_balance = check_balance["balance"]
                 profit_balance = int(float(busd_balance))/280 * 100 - 100
                 if df.Buy.iloc[-1]:
                     #####################Read the previous buy text output and empty the file ################################
-                    with open(file_path+ pair +'_buy_future.txt', 'r') as f:
+                    with open(file_path+ pair +'_buy_future_alert.txt', 'r') as f:
                         clean_buy_list = []
                         for buy_list in f.readlines():
                             clean_buy_list.append(buy_list.replace("\n", ""))
-                    file = open(file_path+ pair +'_buy_future.txt', 'w')
+                    file = open(file_path+ pair +'_buy_future_alert.txt', 'w')
                     file.close()
                     ###########################################################################################################
                     #####################Read the previous sell text output and empty the file ###############################
-                    with open(file_path+ pair +'_sell_future.txt', 'r') as f:
+                    with open(file_path+ pair +'_sell_future_alert.txt', 'r') as f:
                         clean_sell_list = []
                         for sell_list in f.readlines():
                             clean_sell_list.append(sell_list.replace("\n", ""))
-                    file = open(file_path+ pair +'_sell_future.txt', 'w')
+                    file = open(file_path+ pair +'_sell_future_alert.txt', 'w')
                     file.close()
                     ##########################################################################################################
                     if pair not in clean_buy_list:
@@ -112,15 +112,15 @@ def strategy(pair, qty, open_position=False):
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
-                    with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
+                    with open(file_path+ pair +'_buy_future_alert.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
                 elif df.BuyRule1.iloc[-1] and df.Buy.iloc[-1] == 0:
                     #####################Read the previous sell text output and empty the file ###############################
-                    with open(file_path+ pair +'_sell_future.txt', 'r') as f:
+                    with open(file_path+ pair +'_sell_future_alert.txt', 'r') as f:
                         clean_sell_list = []
                         for sell_list in f.readlines():
                             clean_sell_list.append(sell_list.replace("\n", ""))
-                    file = open(file_path+ pair +'_sell_future.txt', 'w')
+                    file = open(file_path+ pair +'_sell_future_alert.txt', 'w')
                     file.close()
                     if pair in clean_sell_list:# and float(open_position_check['entryPrice']) != 0:
                         # order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=50)
@@ -132,19 +132,19 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                 elif df.Sell.iloc[-1]:
                     #####################Read the previous sell text output and empty the file ###############################
-                    with open(file_path+ pair +'_sell_future.txt', 'r') as f:
+                    with open(file_path+ pair +'_sell_future_alert.txt', 'r') as f:
                         clean_sell_list = []
                         for sell_list in f.readlines():
                             clean_sell_list.append(sell_list.replace("\n", ""))
-                    file = open(file_path+ pair +'_sell_future.txt', 'w')
+                    file = open(file_path+ pair +'_sell_future_alert.txt', 'w')
                     file.close()
                     ##########################################################################################################
                     #####################Read the previous buy text output and empty the file ################################
-                    with open(file_path+ pair +'_buy_future.txt', 'r') as f:
+                    with open(file_path+ pair +'_buy_future_alert.txt', 'r') as f:
                         clean_buy_list = []
                         for buy_list in f.readlines():
                             clean_buy_list.append(buy_list.replace("\n", ""))
-                    file = open(file_path+ pair +'_buy_future.txt', 'w')
+                    file = open(file_path+ pair +'_buy_future_alert.txt', 'w')
                     file.close()
                     ###########################################################################################################
                     if pair not in clean_sell_list:
@@ -157,15 +157,15 @@ def strategy(pair, qty, open_position=False):
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
-                    with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
+                    with open(file_path+ pair +'_sell_future_alert.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
                 elif df.SellRule1.iloc[-1] and df.Sell.iloc[-1] == 0:
                     #####################Read the previous buy text output and empty the file ################################
-                    with open(file_path+ pair +'_buy_future.txt', 'r') as f:
+                    with open(file_path+ pair +'_buy_future_alert.txt', 'r') as f:
                         clean_buy_list = []
                         for buy_list in f.readlines():
                             clean_buy_list.append(buy_list.replace("\n", ""))
-                    file = open(file_path+ pair +'_buy_future.txt', 'w')
+                    file = open(file_path+ pair +'_buy_future_alert.txt', 'w')
                     file.close()
                     ###########################################################################################################
                     if pair in clean_buy_list:# and float(open_position_check['entryPrice']) != 0:
@@ -189,8 +189,8 @@ while True:
             stop_loss_market_buy = int(float(current_price['price']) * 0.995)
             stop_loss_market_sell = int(float(current_price['price']) * 1.005)
             total_coins = round(float(20/(float(current_price['price']))),3)
-            myfile1 = Path(file_path+ coins +'_buy_future.txt')
-            myfile2 = Path(file_path+ coins +'_sell_future.txt')
+            myfile1 = Path(file_path+ coins +'_buy_future_alert.txt')
+            myfile2 = Path(file_path+ coins +'_sell_future_alert.txt')
             myfile1.touch(exist_ok=True)
             myfile2.touch(exist_ok=True)
             strategy(coins, total_coins)
