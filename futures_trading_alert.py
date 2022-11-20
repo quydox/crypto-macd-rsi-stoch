@@ -56,7 +56,7 @@ class Signals:
     def decide(self):
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema7 < self.df.Close) & (self.df.ema7 > self.df.ema25), 1, 0)
-        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema7 > self.df.Close) & (self.df.ema7 < self.df.ema25), 1, 0))
+        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema7 > self.df.Close) & (self.df.ema7 < self.df.ema25), 1, 0)
         # self.df['SellRule1'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.macd < 0), 1, 0)
         # self.df['BuyRule1'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.macd > 0), 1, 0)
         self.df['SellRule1'] = np.where((self.df.trigger) & (self.df['%K'] > 70) & (self.df['%D'] > 70) & (self.df.rsi > 70), 1, 0)
