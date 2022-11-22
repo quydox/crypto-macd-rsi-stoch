@@ -157,13 +157,13 @@ def strategy(pair):
 while True:
     crypto_coins = ["^GSPC"]
     for coins in crypto_coins:
-        # try:
-        df = getminutedata(coins)
-        myfile1 = Path(file_path+ coins +'_buy_indices.txt')
-        myfile2 = Path(file_path+ coins +'_sell_indices.txt')
-        myfile1.touch(exist_ok=True)
-        myfile2.touch(exist_ok=True)
-        strategy(coins)
-        time.sleep(10)
-        # except Exception:
-        #    pass
+        try:
+            df = getminutedata(coins)
+            myfile1 = Path(file_path+ coins +'_buy_indices.txt')
+            myfile2 = Path(file_path+ coins +'_sell_indices.txt')
+            myfile1.touch(exist_ok=True)
+            myfile2.touch(exist_ok=True)
+            strategy(coins)
+            time.sleep(10)
+        except Exception:
+           pass
