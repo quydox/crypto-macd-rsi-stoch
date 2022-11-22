@@ -194,34 +194,34 @@ class Controller(object):
                 requests.get(base_url)
             with open(file_path_stock+ stock +'_sell.txt', 'a+') as f:
                 f.write(str(stock) + '\n')
-df = pd.read_csv(file_path_stock+'etoro_stock.csv')
-#monitor_stock = ["TSLA"]
-for stock in df['Symbol']:
-#for stock in monitor_stock:
-    try:  
-        def main():
-            ####################Create an empty the file if does not exist #########################################
-            myfile1 = Path(file_path_stock+ stock +'_buy.txt')
-            myfile2 = Path(file_path_stock+ stock +'_sell.txt')
-            myfile1.touch(exist_ok=True)
-            myfile2.touch(exist_ok=True)
-            #########################################################################################################
-            commands = {
-                "stock":{
-                    "ticker":stock,
-                    'interval':"1wk",
-                    'period':"ytd"
-                },
-                "algorithm":{
-                    "slow_ma":21,
-                    "fast_ma":8,
-                    "smooth":5
-                }
+#df = pd.read_csv(file_path_stock+'etoro_stock.csv')
+monitor_stock = ["TSLA"]
+# for stock in df['Symbol']:
+for stock in monitor_stock:
+    # try:  
+    def main():
+        # ####################Create an empty the file if does not exist #########################################
+        # myfile1 = Path(file_path_stock+ stock +'_buy.txt')
+        # myfile2 = Path(file_path_stock+ stock +'_sell.txt')
+        # myfile1.touch(exist_ok=True)
+        # myfile2.touch(exist_ok=True)
+        # #########################################################################################################
+        commands = {
+            "stock":{
+                "ticker":stock,
+                'interval':"1wk",
+                'period':"ytd"
+            },
+            "algorithm":{
+                "slow_ma":21,
+                "fast_ma":8,
+                "smooth":5
             }
-            helper = Controller(commands=commands)
-            response  = helper.get()
-    
-        if __name__ == "__main__":
-            main()
-    except Exception:
-        pass
+        }
+        helper = Controller(commands=commands)
+        response  = helper.get()
+
+    if __name__ == "__main__":
+        main()
+    # except Exception:
+        # pass
