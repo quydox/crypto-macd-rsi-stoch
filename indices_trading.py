@@ -16,7 +16,7 @@ api_key = os.getenv("api_key")
 api_secret = os.getenv("api_secret")
 api_telegram1 = os.getenv("api_telegram1")
 msg_id_telegram1 = os.getenv("msg_id_telegram1")
-file_path_stock = os.getenv("file_path_stock")
+file_path = os.getenv("file_path")
 
 def getminutedata(symbol):
     frame = pd.DataFrame(yf.download(symbol, interval = "15m", period = "30d"))
@@ -159,8 +159,8 @@ while True:
     for coins in crypto_coins:
         # try:
         df = getminutedata(coins)
-        myfile1 = Path(file_path_stock+ coins +'_buy_indices.txt')
-        myfile2 = Path(file_path_stock+ coins +'_sell_indices.txt')
+        myfile1 = Path(file_path+ coins +'_buy_indices.txt')
+        myfile2 = Path(file_path+ coins +'_sell_indices.txt')
         myfile1.touch(exist_ok=True)
         myfile2.touch(exist_ok=True)
         strategy(coins)
