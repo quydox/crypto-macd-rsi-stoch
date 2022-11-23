@@ -197,6 +197,6 @@ while True:
             myfile1.touch(exist_ok=True)
             myfile2.touch(exist_ok=True)
             strategy(coins, total_coins)
-            time.sleep(10)
+            time.sleep(1)
         except Exception:
            pass
