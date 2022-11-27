@@ -57,10 +57,8 @@ class Signals:
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema7 < self.df.Close) & (self.df.ema7 > self.df.ema25), 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema7 > self.df.Close) & (self.df.ema7 < self.df.ema25), 1, 0)
-        # self.df['SellRule1'] = np.where((self.df.trigger) & (self.df['%K'] > 80) & (self.df['%D'] > 80) & (self.df.rsi > 70), 1, 0)
-        # self.df['BuyRule1'] = np.where((self.df.trigger) & (self.df['%K'] < 20) & (self.df['%D'] < 20) & (self.df.rsi < 30), 1, 0)
-        self.df['SellRule1'] = np.where((self.df.trigger) & (self.df['%K'] > 80) & (self.df['%D'] > 80), 1, 0)
-        self.df['BuyRule1'] = np.where((self.df.trigger) & (self.df['%K'] < 20) & (self.df['%D'] < 20), 1, 0)
+        self.df['SellRule1'] = np.where((self.df.trigger) & (self.df['%K'] > 80) & (self.df['%D'] > 80) & (self.df.rsi > 70), 1, 0)
+        self.df['BuyRule1'] = np.where((self.df.trigger) & (self.df['%K'] < 20) & (self.df['%D'] < 20) & (self.df.rsi < 30), 1, 0)
         self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
         self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi > 50), 1, 0)
         self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd > 0), 1, 0)
@@ -181,19 +179,19 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = ["BTCUSDT"]
     for coins in crypto_coins:
-        # try:
-        df = getminutedata(coins, '1m', "1 day ago SGT")
-        acc_balance = client.futures_account_balance()
-        active_position = client.futures_position_information(symbol=coins)
-        current_price = client.get_symbol_ticker(symbol=coins)
-        stop_loss_market_buy = int(float(current_price['price']) * 0.999)
-        stop_loss_market_sell = int(float(current_price['price']) * 1.001)
-        total_coins = round(float(20/(float(current_price['price']))),3)
-        myfile1 = Path(file_path+ coins +'_buy_future_alert.txt')
-        myfile2 = Path(file_path+ coins +'_sell_future_alert.txt')
-        myfile1.touch(exist_ok=True)
-        myfile2.touch(exist_ok=True)
-        strategy(coins, total_coins)
-        time.sleep(5)
-        # except Exception:
-        #    pass
+        try:
+            df = getminutedata(coins, '1m', "1 day ago SGT")
+            acc_balance = client.futures_account_balance()
+            active_position = client.futures_position_information(symbol=coins)
+            current_price = client.get_symbol_ticker(symbol=coins)
+            stop_loss_market_buy = int(float(current_price['price']) * 0.999)
+            stop_loss_market_sell = int(float(current_price['price']) * 1.001)
+            total_coins = round(float(20/(float(current_price['price']))),3)
+            myfile1 = Path(file_path+ coins +'_buy_future_alert.txt')
+            myfile2 = Path(file_path+ coins +'_sell_future_alert.txt')
+            myfile1.touch(exist_ok=True)
+            myfile2.touch(exist_ok=True)
+            strategy(coins, total_coins)
+            time.sleep(5)
+        except Exception:
+           pass
