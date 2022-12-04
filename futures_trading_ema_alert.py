@@ -127,7 +127,7 @@ def strategy(pair, open_position=False):
         with open(file_path+ pair +'_sell_future_ema_alert.txt', 'a+') as f:
             f.write(str(pair) + '\n')
 while True:
-    crypto_coins = ["BTCUSDT", "ETHUSDT", "SLPUSDT", "AXSUSDT"]
+    crypto_coins = ["BTCUSDT", "ETHUSDT", "AXSUSDT"]
     for coins in crypto_coins:
         # try:
         df = getminutedata(coins, '4h', "30 days ago SGT")
