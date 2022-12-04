@@ -19,7 +19,7 @@ client = Client(api_key, api_secret)
 
 crypto_coins = client.futures_symbol_ticker()
 for item in crypto_coins:
-#    if (int(float(item['price'])) < 1) and item['symbol'].endswith('USDT'):
+   if (int(float(item['price'])) < 1) and item['symbol'].endswith('USDT'):
         print(item)
 
 # open_pos = client.futures_account()['positions']
