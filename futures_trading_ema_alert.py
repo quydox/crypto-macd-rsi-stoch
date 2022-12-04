@@ -74,7 +74,7 @@ class Signals:
 # inst.decide()
 # print(df)
 
-def strategy(pair, qty, open_position=False):
+def strategy(pair, open_position=False):
     applytechnicals(df)
     inst = Signals(df, 5)
     inst.decide()
@@ -164,7 +164,7 @@ while True:
         myfile2 = Path(file_path+ coins +'_sell_future_ema_alert.txt')
         myfile1.touch(exist_ok=True)
         myfile2.touch(exist_ok=True)
-        strategy(coins, total_coins)
+        strategy(coins)
         time.sleep(5)
         # except Exception:
         #    pass
