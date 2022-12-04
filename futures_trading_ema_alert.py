@@ -56,14 +56,19 @@ class Signals:
 
     def decide(self):
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema7 > self.df.ema99) & (self.df.ema25 > self.df.ema99), 1, 0)
-        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema7 < self.df.ema99) & (self.df.ema25 < self.df.ema99), 1, 0)
+        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema7 > self.df.ema99) & (self.df.ema25 > self.df.ema99) & (self.df.macd > 0) & (self.df.rsi > 50), 1, 0)
+        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema7 < self.df.ema99) & (self.df.ema25 < self.df.ema99) & (self.df.macd < 0) & (self.df.rsi < 50), 1, 0)
         self.df['SellRule1'] = np.where((self.df.trigger) & (self.df['%K'] > 80) & (self.df['%D'] > 80) & (self.df.rsi > 70), 1, 0)
         self.df['BuyRule1'] = np.where((self.df.trigger) & (self.df['%K'] < 20) & (self.df['%D'] < 20) & (self.df.rsi < 30), 1, 0)
         self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
         self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi > 50), 1, 0)
+        self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd > 0), 1, 0)
+        self.df['emaBUY1'] = np.where((self.df.trigger) & (self.df.ema7 > self.df.ema99), 1, 0)
+        self.df['emaBUY2'] = np.where((self.df.trigger) & (self.df.ema25 > self.df.ema99), 1, 0)
+        self.df['macdSELL'] = np.where((self.df.trigger) & (self.df.macd < 0), 1, 0)
         self.df['rsiSELL'] = np.where((self.df.trigger) & (self.df.rsi < 50), 1, 0)
-
+        self.df['emaSELL1'] = np.where((self.df.trigger) & (self.df.ema7 < self.df.ema99), 1, 0)
+        self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema25 < self.df.ema99), 1, 0)
 
 # inst = Signals(df, 2)
 # inst.decide()
