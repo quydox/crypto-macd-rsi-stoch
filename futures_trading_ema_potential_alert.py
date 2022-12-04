@@ -131,13 +131,13 @@ while True:
     crypto_coins = client.futures_symbol_ticker()
     for item in crypto_coins:
         if (int(float(item['price'])) < 1) and item['symbol'].endswith('USDT'):
-            # try:
-            df = getminutedata(item['symbol'], '4h', "30 days ago SGT")
-            myfile1 = Path(file_path+ item['symbol'] +'_buy_future_ema_potential_alert.txt')
-            myfile2 = Path(file_path+ item['symbol'] +'_sell_future_ema_potential_alert.txt')
-            myfile1.touch(exist_ok=True)
-            myfile2.touch(exist_ok=True)
-            strategy(item['symbol'])
-            time.sleep(5)
-            # except Exception:
-            #    pass
+            try:
+                df = getminutedata(item['symbol'], '4h', "30 days ago SGT")
+                myfile1 = Path(file_path+ item['symbol'] +'_buy_future_ema_potential_alert.txt')
+                myfile2 = Path(file_path+ item['symbol'] +'_sell_future_ema_potential_alert.txt')
+                myfile1.touch(exist_ok=True)
+                myfile2.touch(exist_ok=True)
+                strategy(item['symbol'])
+                time.sleep(5)
+            except Exception:
+               pass
