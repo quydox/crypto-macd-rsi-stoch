@@ -130,17 +130,17 @@ while True:
     #crypto_coins = ["BTCUSDT", "ETHUSDT", "AXSUSDT"]
     crypto_coins = client.futures_symbol_ticker()
     for item in crypto_coins:
-        if (int(float(item['price'])) < 1) and item['symbol'].endswith('USDT'):
-            crypto_coins_filtered = item['symbol']
-            for coins in crypto_coins_filtered:
-                print(coins)
-                # try:
-                # df = getminutedata(coins, '4h', "30 days ago SGT")
-                # myfile1 = Path(file_path+ coins +'_buy_future_ema_potential_alert.txt')
-                # myfile2 = Path(file_path+ coins +'_sell_future_ema_potential_alert.txt')
-                # myfile1.touch(exist_ok=True)
-                # myfile2.touch(exist_ok=True)
-                # strategy(coins)
-                # time.sleep(5)
-                # # except Exception:
-                # #    pass
+        crypto_coins_filtered = if (int(float(item['price'])) < 1) and item['symbol'].endswith('USDT'):
+            #crypto_coins_filtered = item['symbol']
+        for coins in crypto_coins_filtered:
+            print(coins)
+            # try:
+            # df = getminutedata(coins, '4h', "30 days ago SGT")
+            # myfile1 = Path(file_path+ coins +'_buy_future_ema_potential_alert.txt')
+            # myfile2 = Path(file_path+ coins +'_sell_future_ema_potential_alert.txt')
+            # myfile1.touch(exist_ok=True)
+            # myfile2.touch(exist_ok=True)
+            # strategy(coins)
+            # time.sleep(5)
+            # # except Exception:
+            # #    pass
