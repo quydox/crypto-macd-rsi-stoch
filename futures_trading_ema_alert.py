@@ -134,7 +134,7 @@ while True:
     crypto_coins = ["BTCUSDT"]
     for coins in crypto_coins:
         try:
-            df = getminutedata(coins, '4h', "30 days ago SGT")
+            df = getminutedata(coins, '5m', "1 day ago SGT")
             myfile1 = Path(file_path+ coins +'_buy_future_ema_alert.txt')
             myfile2 = Path(file_path+ coins +'_sell_future_ema_alert.txt')
             myfile1.touch(exist_ok=True)
