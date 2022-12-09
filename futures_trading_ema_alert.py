@@ -69,8 +69,8 @@ class Signals:
         self.df['rsiSELL'] = np.where((self.df.trigger) & (self.df.rsi < 50), 1, 0)
         self.df['emaSELL1'] = np.where((self.df.trigger) & (self.df.ema7 < self.df.ema99), 1, 0)
         self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema25 < self.df.ema99), 1, 0)
-        self.df['CPLTPP'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
-        self.df['CPGTPP'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
+        self.df['CPLTPPSELL'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
+        self.df['CPGTPPBUY'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
 
 # inst = Signals(df, 2)
 # inst.decide()
