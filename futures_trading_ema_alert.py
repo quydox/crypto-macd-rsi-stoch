@@ -69,8 +69,10 @@ class Signals:
         self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema25 < self.df.ema99), 1, 0)
         self.df['CPLTPP'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
         self.df['CPGTPP'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
-        self.df['TPBUY'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
-        self.df['TPSELL'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
+        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
+        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
+        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 60) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
+        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 40) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
 
 # inst = Signals(df, 2)
 # inst.decide()
@@ -106,7 +108,7 @@ def strategy(pair, open_position=False):
             print(body)
         with open(file_path+ pair +'_buy_future_ema_alert.txt', 'a+') as f:
             f.write(str(pair) + '\n')
-    elif df.TPBUY.iloc[-1]:
+    elif df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]:
         #####################Read the previous buy text output and empty the file ################################
         with open(file_path+ pair +'_buy_future_ema_alert.txt', 'r') as f:
             clean_buy_list = []
@@ -152,7 +154,7 @@ def strategy(pair, open_position=False):
             print(body)
         with open(file_path+ pair +'_sell_future_ema_alert.txt', 'a+') as f:
             f.write(str(pair) + '\n')
-    elif df.TPSELL.iloc[-1]:
+    elif df.TPSELL1.iloc[-1] or df.TPSELL1.iloc[-1]:
         #####################Read the previous sell text output and empty the file ###############################
         with open(file_path+ pair +'_sell_future_ema_alert.txt', 'r') as f:
             clean_sell_list = []
@@ -177,13 +179,13 @@ def strategy(pair, open_position=False):
 while True:
     crypto_coins = ["BTCUSDT"]
     for coins in crypto_coins:
-        try:
-            df = getminutedata(coins, '1h', "30 days ago SGT")
-            myfile1 = Path(file_path+ coins +'_buy_future_ema_alert.txt')
-            myfile2 = Path(file_path+ coins +'_sell_future_ema_alert.txt')
-            myfile1.touch(exist_ok=True)
-            myfile2.touch(exist_ok=True)
-            strategy(coins)
-            time.sleep(5)
-        except Exception:
-           pass
+        # try:
+        df = getminutedata(coins, '1h', "30 days ago SGT")
+        myfile1 = Path(file_path+ coins +'_buy_future_ema_alert.txt')
+        myfile2 = Path(file_path+ coins +'_sell_future_ema_alert.txt')
+        myfile1.touch(exist_ok=True)
+        myfile2.touch(exist_ok=True)
+        strategy(coins)
+        time.sleep(5)
+        # except Exception:
+        #    pass
