@@ -36,6 +36,7 @@ def applytechnicals(df):
     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
     df['ema7'] = ta.trend.ema_indicator(df.Close, window=7)
     df['ema25'] = ta.trend.ema_indicator(df.Close, window=25)
+    df['ema99'] = ta.trend.ema_indicator(df.Close, window=99)
     df.dropna(inplace=True)
 
 # applytechnicals(df)
@@ -55,8 +56,8 @@ class Signals:
 
     def decide(self):
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema7 < self.df.Close) & (self.df.ema7 > self.df.ema25), 1, 0)
-        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema7 > self.df.Close) & (self.df.ema7 < self.df.ema25), 1, 0)
+        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema7 > self.df.ema99) & (self.df.ema25 > self.df.ema99) & (self.df.macd > 0) & (self.df.rsi > 50), 1, 0)
+        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema7 < self.df.ema99) & (self.df.ema25 < self.df.ema99) & (self.df.macd < 0) & (self.df.rsi < 50), 1, 0)
         self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
         self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi > 50), 1, 0)
         self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd > 0), 1, 0)
