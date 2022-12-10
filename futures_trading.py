@@ -57,8 +57,6 @@ class Signals:
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema7 < self.df.Close) & (self.df.ema7 > self.df.ema25), 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema7 > self.df.Close) & (self.df.ema7 < self.df.ema25), 1, 0)
-        self.df['SellRule1'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
-        self.df['BuyRule1'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
         self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
         self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi > 50), 1, 0)
         self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd > 0), 1, 0)
@@ -70,7 +68,10 @@ class Signals:
         self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema7 < self.df.ema25), 1, 0)
         self.df['CPLTPP'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
         self.df['CPGTPP'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
-
+        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
+        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
+        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 60) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
+        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 40) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
 # inst = Signals(df, 2)
 # inst.decide()
 # print(df)
@@ -116,7 +117,7 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif df.BuyRule1.iloc[-1] and df.Buy.iloc[-1] == 0:
+                elif (df.TPBUY1.iloc[-1] and df.Buy.iloc[-1] == 0) or (df.TPBUY2.iloc[-1] and df.Buy.iloc[-1] == 0):
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future.txt', 'r') as f:
                         clean_sell_list = []
@@ -163,7 +164,7 @@ def strategy(pair, qty, open_position=False):
                             print(body)
                     with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif df.SellRule1.iloc[-1] and df.Sell.iloc[-1] == 0:
+                elif (df.TPSELL1.iloc[-1] and df.Sell.iloc[-1] == 0) or (df.TPSELL2.iloc[-1] and df.Sell.iloc[-1] == 0):
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
                         clean_buy_list = []
@@ -185,19 +186,19 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = ["BTCUSDT"]
     for coins in crypto_coins:
-        try:
-            df = getminutedata(coins, '1h', "30 days ago SGT")
-            acc_balance = client.futures_account_balance()
-            active_position = client.futures_position_information(symbol=coins)
-            current_price = client.get_symbol_ticker(symbol=coins)
-            stop_loss_market_buy = int(float(current_price['price']) * 0.995)
-            stop_loss_market_sell = int(float(current_price['price']) * 1.005)
-            total_coins = round(float(2500/(float(current_price['price']))),3)
-            myfile1 = Path(file_path+ coins +'_buy_future.txt')
-            myfile2 = Path(file_path+ coins +'_sell_future.txt')
-            myfile1.touch(exist_ok=True)
-            myfile2.touch(exist_ok=True)
-            strategy(coins, total_coins)
-            time.sleep(5)
-        except Exception:
-           pass
+        # try:
+        df = getminutedata(coins, '1h', "30 days ago SGT")
+        acc_balance = client.futures_account_balance()
+        active_position = client.futures_position_information(symbol=coins)
+        current_price = client.get_symbol_ticker(symbol=coins)
+        stop_loss_market_buy = int(float(current_price['price']) * 0.995)
+        stop_loss_market_sell = int(float(current_price['price']) * 1.005)
+        total_coins = round(float(2500/(float(current_price['price']))),3)
+        myfile1 = Path(file_path+ coins +'_buy_future.txt')
+        myfile2 = Path(file_path+ coins +'_sell_future.txt')
+        myfile1.touch(exist_ok=True)
+        myfile2.touch(exist_ok=True)
+        strategy(coins, total_coins)
+        time.sleep(5)
+        # except Exception:
+        #    pass
