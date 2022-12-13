@@ -69,8 +69,8 @@ class Signals:
         self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema25 < self.df.ema99), 1, 0)
         self.df['CPLTPP'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
         self.df['CPGTPP'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
-        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
-        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
+        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.rsi > 70), 1, 0)
+        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.rsi < 30), 1, 0)
         self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 60) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
         self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 40) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
 
@@ -180,7 +180,7 @@ while True:
     crypto_coins = ["BTCUSDT"]
     for coins in crypto_coins:
         # try:
-        df = getminutedata(coins, '1h', "30 days ago SGT")
+        df = getminutedata(coins, '5m', "7 days ago SGT")
         myfile1 = Path(file_path+ coins +'_buy_future_ema_alert.txt')
         myfile2 = Path(file_path+ coins +'_sell_future_ema_alert.txt')
         myfile1.touch(exist_ok=True)

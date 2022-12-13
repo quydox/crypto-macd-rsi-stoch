@@ -69,9 +69,9 @@ class Signals:
         self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema25 < self.df.ema99), 1, 0)
         self.df['CPLTPP'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
         self.df['CPGTPP'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
-        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
-        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
+        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.rsi > 70), 1, 0)
         self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 60) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2] ), 1, 0)
+        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.rsi < 30), 1, 0)
         self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 40) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2] ), 1, 0)
 # inst = Signals(df, 2)
 # inst.decide()
@@ -188,12 +188,12 @@ while True:
     crypto_coins = ["BTCUSDT"]
     for coins in crypto_coins:
         try:
-            df = getminutedata(coins, '1h', "30 days ago SGT")
+            df = getminutedata(coins, '5m', "7 days ago SGT")
             acc_balance = client.futures_account_balance()
             active_position = client.futures_position_information(symbol=coins)
             current_price = client.get_symbol_ticker(symbol=coins)
-            stop_loss_market_buy = int(float(current_price['price']) * 0.995)
-            stop_loss_market_sell = int(float(current_price['price']) * 1.005)
+            stop_loss_market_buy = int(float(current_price['price']) * 0.998)
+            stop_loss_market_sell = int(float(current_price['price']) * 1.002)
             total_coins = round(float(1900/(float(current_price['price']))),3)
             myfile1 = Path(file_path+ coins +'_buy_future.txt')
             myfile2 = Path(file_path+ coins +'_sell_future.txt')
