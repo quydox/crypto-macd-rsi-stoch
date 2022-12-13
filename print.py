@@ -17,10 +17,10 @@ file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
-# crypto_coins = client.futures_symbol_ticker()
-# for item in crypto_coins:
-# #    if (int(float(item['price'])) < 1) and item['symbol'].endswith('BUSD'):
-        # print(item)
+crypto_coins = client.futures_symbol_ticker()
+for item in crypto_coins:
+   if (int(float(item['price'])) < 1) and item['symbol'].endswith('USDT'):
+        print(item['symbol'])
 
 # open_pos = client.futures_account()['positions']
 # for item in open_pos:
@@ -141,22 +141,22 @@ client = Client(api_key, api_secret)
 # inst = Signals(df, 5)
 # inst.decide()
 # print(df)
-coins="BTCUSDT"
-current_price = client.get_symbol_ticker(symbol=coins)
-stop_loss_market_buy = int(float(current_price['price']) * 0.995)
-stop_loss_market_sell = int(float(current_price['price']) * 1.005)
-total_coins = round(float(20/(float(current_price['price']))),3)
-fees = client.get_trade_fee(symbol=coins)
+# coins="BTCUSDT"
+# current_price = client.get_symbol_ticker(symbol=coins)
+# stop_loss_market_buy = int(float(current_price['price']) * 0.995)
+# stop_loss_market_sell = int(float(current_price['price']) * 1.005)
+# total_coins = round(float(20/(float(current_price['price']))),3)
+# fees = client.get_trade_fee(symbol=coins)
 
-print(stop_loss_market_sell)
-print(current_price)
-print(stop_loss_market_buy)
-# client.futures_create_order(symbol=coins, side='BUY', type='MARKET', quantity=total_coins, leverage=125)
-# client.futures_create_order(symbol='BTCUSDT', side='SELL', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC' )
-# client.futures_create_order(symbol='BTCUSDT',side='SELL',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC')
+# print(stop_loss_market_sell)
+# print(current_price)
+# print(stop_loss_market_buy)
+# # client.futures_create_order(symbol=coins, side='BUY', type='MARKET', quantity=total_coins, leverage=125)
+# # client.futures_create_order(symbol='BTCUSDT', side='SELL', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC' )
+# # client.futures_create_order(symbol='BTCUSDT',side='SELL',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC')
 
                         
-for item in fees:
-    qty_order = total_coins-(float(item['takerCommission'])*total_coins)
-    order = client.futures_create_order(symbol=coins, side='SELL', type='MARKET', quantity=qty_order, leverage=125)
-    print(order)
+# for item in fees:
+#     qty_order = total_coins-(float(item['takerCommission'])*total_coins)
+#     order = client.futures_create_order(symbol=coins, side='SELL', type='MARKET', quantity=qty_order, leverage=125)
+#     print(order)
