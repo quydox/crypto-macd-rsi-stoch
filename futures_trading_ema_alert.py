@@ -71,8 +71,6 @@ class Signals:
         self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema7 > self.df.ema99) & (self.df.rsi > 50), 1, 0)
         self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 80), 1, 0)
         self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 20), 1, 0)
-        self.df['rsib'] = np.where((self.df.trigger) & (self.df['rsi'].between(50,60)), 1, 0)
-        self.df['rsis'] = np.where((self.df.trigger) & (self.df['rsi'].between(40,50)), 1, 0)
 
 # inst = Signals(df, 2)
 # inst.decide()
