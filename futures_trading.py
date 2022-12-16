@@ -67,8 +67,8 @@ class Signals:
         self.df['rsiSELL'] = np.where((self.df.trigger) & (self.df.rsi < 50), 1, 0)
         self.df['emaSELL1'] = np.where((self.df.trigger) & (self.df.ema7 < self.df.ema99), 1, 0)
         self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema25 < self.df.ema99), 1, 0)
-        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema7 < self.df.ema99) & (self.df.rsi < 50), 1, 0)
-        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema7 > self.df.ema99) & (self.df.rsi > 50), 1, 0)
+        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema7 < self.df.ema25) & (self.df.rsi < 50), 1, 0)
+        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema7 > self.df.ema25) & (self.df.rsi > 50), 1, 0)
         self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 80), 1, 0)
         self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 20), 1, 0)
 # inst = Signals(df, 2)
@@ -186,18 +186,18 @@ while True:
     crypto_coins = ["BTCUSDT"]
     for coins in crypto_coins:
         # try:
-        df = getminutedata(coins, '1h', "30 days ago SGT")
+        df = getminutedata(coins, '1m', "1 day ago SGT")
         acc_balance = client.futures_account_balance()
         active_position = client.futures_position_information(symbol=coins)
         current_price = client.get_symbol_ticker(symbol=coins)
         stop_loss_market_buy = int(float(current_price['price']) * 0.998)
         stop_loss_market_sell = int(float(current_price['price']) * 1.002)
-        total_coins = round(float(3100/(float(current_price['price']))),3)
+        total_coins = round(float(2500/(float(current_price['price']))),3)
         myfile1 = Path(file_path+ coins +'_buy_future.txt')
         myfile2 = Path(file_path+ coins +'_sell_future.txt')
         myfile1.touch(exist_ok=True)
         myfile2.touch(exist_ok=True)
         strategy(coins, total_coins)
-        time.sleep(10)
+        time.sleep(5)
         # except Exception:
         #    pass
