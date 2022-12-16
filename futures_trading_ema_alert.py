@@ -106,7 +106,7 @@ def strategy(pair, open_position=False):
                 print(body)
             with open(file_path+ pair +'_buy_future_ema_alert.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]:
+        elif df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1] or (df.Stochastic.iloc[-1] == 0 and df.Buy.iloc[-1] == 0):
             #####################Read the previous buy text output and empty the file ################################
             with open(file_path+ pair +'_buy_future_ema_alert.txt', 'r') as f:
                 clean_buy_list = []
@@ -143,7 +143,7 @@ def strategy(pair, open_position=False):
                 print(body)
             with open(file_path+ pair +'_sell_future_ema_alert.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1]:
+        elif df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1] or (df.Stochastic.iloc[-1] == 0 and df.Sell.iloc[-1] == 0):
             #####################Read the previous sell text output and empty the file ###############################
             with open(file_path+ pair +'_sell_future_ema_alert.txt', 'r') as f:
                 clean_sell_list = []
@@ -162,7 +162,7 @@ while True:
     for coins in crypto_coins:
         # try:
         active_position = client.futures_position_information(symbol=coins)
-        df = getminutedata(coins, '1m', "1 day ago SGT")
+        df = getminutedata(coins, '1h', "7 days ago SGT")
         myfile1 = Path(file_path+ coins +'_buy_future_ema_alert.txt')
         myfile2 = Path(file_path+ coins +'_sell_future_ema_alert.txt')
         myfile1.touch(exist_ok=True)
