@@ -17,10 +17,15 @@ file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
-crypto_coins = client.futures_symbol_ticker()
-for item in crypto_coins:
-   if (int(float(item['price'])) < 1) and item['symbol'].endswith('USDT'):
-        print(item['symbol'])
+# crypto_coins = client.futures_symbol_ticker()
+# for item in crypto_coins:
+#    if (int(float(item['price'])) < 1) and item['symbol'].endswith('USDT'):
+#         print(item['symbol'])
+
+body="Test"
+base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
+requests.get(base_url)
+print(body)
 
 # open_pos = client.futures_account()['positions']
 # for item in open_pos:
