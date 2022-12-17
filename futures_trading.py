@@ -56,8 +56,8 @@ class Signals:
 
     def decide(self):
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema7 > self.df.ema99) & (self.df.ema25 > self.df.ema99) & (self.df.macd > 0) & (self.df.rsi > 50), 1, 0)
-        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema7 < self.df.ema99) & (self.df.ema25 < self.df.ema99) & (self.df.macd < 0) & (self.df.rsi < 50), 1, 0)
+        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema7 > self.df.ema25) & (self.df.ema7 > self.df.ema99) & (self.df.ema25 > self.df.ema99) & (self.df.macd > 0) & (self.df.rsi > 50), 1, 0)
+        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema7 < self.df.ema25) & (self.df.ema7 < self.df.ema99) & (self.df.ema25 < self.df.ema99) & (self.df.macd < 0) & (self.df.rsi < 50), 1, 0)
         self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
         self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi > 50), 1, 0)
         self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd > 0), 1, 0)
@@ -192,7 +192,7 @@ while True:
         current_price = client.get_symbol_ticker(symbol=coins)
         stop_loss_market_buy = int(float(current_price['price']) * 0.998)
         stop_loss_market_sell = int(float(current_price['price']) * 1.002)
-        total_coins = round(float(600/(float(current_price['price']))),3)
+        total_coins = round(float(500/(float(current_price['price']))),3)
         myfile1 = Path(file_path+ coins +'_buy_future.txt')
         myfile2 = Path(file_path+ coins +'_sell_future.txt')
         myfile1.touch(exist_ok=True)
