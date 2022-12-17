@@ -69,10 +69,8 @@ class Signals:
         self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema25 < self.df.ema99), 1, 0)
         self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema7 < self.df.ema25) & (self.df.rsi < 50), 1, 0)
         self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema7 > self.df.ema25) & (self.df.rsi > 50), 1, 0)
-        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 60), 1, 0)
-        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 40), 1, 0)
-        self.df['TPBUY3'] = np.where((self.df.trigger) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
-        self.df['TPSELL3'] = np.where((self.df.trigger) & (self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
+        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 80), 1, 0)
+        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 20), 1, 0)
 # inst = Signals(df, 2)
 # inst.decide()
 # print(df)
@@ -118,7 +116,7 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif (df.TPBUY1.iloc[-1] and df.Buy.iloc[-1] == 0) or (df.TPBUY2.iloc[-1] and df.Buy.iloc[-1] == 0) or (df.TPBUY3.iloc[-1] and df.Buy.iloc[-1] == 0):
+                elif (df.TPBUY1.iloc[-1] and df.Buy.iloc[-1] == 0) or (df.TPBUY2.iloc[-1] and df.Buy.iloc[-1] == 0):
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
                         clean_buy_list = []
@@ -168,7 +166,7 @@ def strategy(pair, qty, open_position=False):
                             print(body)
                     with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif (df.TPSELL1.iloc[-1] and df.Sell.iloc[-1] == 0) or (df.TPSELL2.iloc[-1] and df.Sell.iloc[-1] == 0) or (df.TPSELL3.iloc[-1] and df.Sell.iloc[-1] == 0):
+                elif (df.TPSELL1.iloc[-1] and df.Sell.iloc[-1] == 0) or (df.TPSELL2.iloc[-1] and df.Sell.iloc[-1] == 0):
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future.txt', 'r') as f:
                         clean_sell_list = []
@@ -188,13 +186,13 @@ while True:
     crypto_coins = ["BTCUSDT"]
     for coins in crypto_coins:
         # try:
-        df = getminutedata(coins, '1m', "1 day ago SGT")
+        df = getminutedata(coins, '5m', "1 day ago SGT")
         acc_balance = client.futures_account_balance()
         active_position = client.futures_position_information(symbol=coins)
         current_price = client.get_symbol_ticker(symbol=coins)
         stop_loss_market_buy = int(float(current_price['price']) * 0.998)
         stop_loss_market_sell = int(float(current_price['price']) * 1.002)
-        total_coins = round(float(1000/(float(current_price['price']))),3)
+        total_coins = round(float(600/(float(current_price['price']))),3)
         myfile1 = Path(file_path+ coins +'_buy_future.txt')
         myfile2 = Path(file_path+ coins +'_sell_future.txt')
         myfile1.touch(exist_ok=True)
