@@ -69,7 +69,7 @@ class Signals:
         self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema25 < self.df.ema99), 1, 0)
         self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema7 < self.df.ema25) & (self.df.rsi < 50), 1, 0)
         self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema7 > self.df.ema25) & (self.df.rsi > 50), 1, 0)
-        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 80), 1, 0)
+        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70), 1, 0)
         self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 20), 1, 0)
 
 # inst = Signals(df, 2)
@@ -99,7 +99,7 @@ def strategy(pair, open_position=False):
             file = open(file_path+ pair +'_sell_future_ema_alert.txt', 'w')
             file.close()
             ##########################################################################################################
-            if pair not in clean_buy_list and float(open_position_check['entryPrice']) == 0:
+            if pair not in clean_buy_list:# and float(open_position_check['entryPrice']) == 0:
                 body = "BUY - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA7: " + str(df.ema7.iloc[-1]) + "\n" + "EMA25: " + str(df.ema25.iloc[-1]) + "\n" + "EMA99: " + str(df.ema99.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                 requests.get(base_url)
@@ -115,7 +115,7 @@ def strategy(pair, open_position=False):
             file = open(file_path+ pair +'_buy_future_ema_alert.txt', 'w')
             file.close()
             ###########################################################################################################
-            if pair in clean_buy_list and float(open_position_check['entryPrice']) != 0:
+            if pair in clean_buy_list:# and float(open_position_check['entryPrice']) != 0:
                 body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA7: " + str(df.ema7.iloc[-1]) + "\n" + "EMA25: " + str(df.ema25.iloc[-1]) + "\n" + "EMA99: " + str(df.ema99.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                 requests.get(base_url)
@@ -136,7 +136,7 @@ def strategy(pair, open_position=False):
             file = open(file_path+ pair +'_buy_future_ema_alert.txt', 'w')
             file.close()
             ###########################################################################################################
-            if pair not in clean_sell_list and float(open_position_check['entryPrice']) == 0:
+            if pair not in clean_sell_list:# and float(open_position_check['entryPrice']) == 0:
                 body = "SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA7: " + str(df.ema7.iloc[-1]) + "\n" + "EMA25: " + str(df.ema25.iloc[-1]) + "\n" + "EMA99: " + str(df.ema99.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                 requests.get(base_url)
@@ -152,7 +152,7 @@ def strategy(pair, open_position=False):
             file = open(file_path+ pair +'_sell_future_ema_alert.txt', 'w')
             file.close()
             ###########################################################################################################
-            if pair in clean_sell_list and float(open_position_check['entryPrice']) != 0:
+            if pair in clean_sell_list:# and float(open_position_check['entryPrice']) != 0:
                 body = "TAKE PROFIT FROM SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "EMA7: " + str(df.ema7.iloc[-1]) + "\n" + "EMA25: " + str(df.ema25.iloc[-1]) + "\n" + "EMA99: " + str(df.ema99.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                 requests.get(base_url)
@@ -162,7 +162,7 @@ while True:
     for coins in crypto_coins:
         # try:
         active_position = client.futures_position_information(symbol=coins)
-        df = getminutedata(coins, '5m', "1 day ago SGT")
+        df = getminutedata(coins, '1h', "7 days ago SGT")
         myfile1 = Path(file_path+ coins +'_buy_future_ema_alert.txt')
         myfile2 = Path(file_path+ coins +'_sell_future_ema_alert.txt')
         myfile1.touch(exist_ok=True)
