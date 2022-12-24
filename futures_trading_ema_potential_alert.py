@@ -146,20 +146,20 @@ def strategy(pair, open_position=False):
             print(body)
         with open(file_path+ pair +'_sell_future_ema_potential_alert.txt', 'a+') as f:
             f.write(str(pair) + '\n')
-        elif df.TPSELL2.iloc[-1]:
-            #####################Read the previous sell text output and empty the file ###############################
-            with open(file_path+ pair +'_sell_future_ema_alert.txt', 'r') as f:
-                clean_sell_list = []
-                for sell_list in f.readlines():
-                    clean_sell_list.append(sell_list.replace("\n", ""))
-            file = open(file_path+ pair +'_sell_future_ema_alert.txt', 'w')
-            file.close()
-            ###########################################################################################################
-            if pair in clean_sell_list:# and float(open_position_check['entryPrice']) != 0:
-                body = "TAKE PROFIT FROM SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1])
-                base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
-                requests.get(base_url)
-                print(body)
+    elif df.TPSELL2.iloc[-1]:
+        #####################Read the previous sell text output and empty the file ###############################
+        with open(file_path+ pair +'_sell_future_ema_alert.txt', 'r') as f:
+            clean_sell_list = []
+            for sell_list in f.readlines():
+                clean_sell_list.append(sell_list.replace("\n", ""))
+        file = open(file_path+ pair +'_sell_future_ema_alert.txt', 'w')
+        file.close()
+        ###########################################################################################################
+        if pair in clean_sell_list:# and float(open_position_check['entryPrice']) != 0:
+            body = "TAKE PROFIT FROM SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1])
+            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
+            requests.get(base_url)
+            print(body)
 while True:
     #crypto_coins = ["BTCUSDT", "ETHUSDT", "AXSUSDT"]
     crypto_coins = client.futures_symbol_ticker()
