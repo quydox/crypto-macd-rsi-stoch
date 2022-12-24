@@ -172,6 +172,6 @@ while True:
                 myfile1.touch(exist_ok=True)
                 myfile2.touch(exist_ok=True)
                 strategy(item['symbol'])
-                time.sleep(5)
+                time.sleep(10)
             except Exception:
                pass
