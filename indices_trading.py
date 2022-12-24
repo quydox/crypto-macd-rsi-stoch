@@ -16,7 +16,7 @@ import time
 api_key = 'PYWLG9YRF5A2EZD5'
 
 ts = TimeSeries(key=api_key, output_format='pandas')
-data, meta_data = ts.get_intraday(symbol='MSFT', interval='5min', outputsize='full')
+data, meta_data = ts.get_intraday(symbol='TSLA', interval='5min', outputsize='full')
 print(data)
 
 # api_key = os.getenv("api_key")
