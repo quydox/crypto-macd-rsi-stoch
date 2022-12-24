@@ -162,7 +162,7 @@ while True:
     for coins in crypto_coins:
         # try:
         active_position = client.futures_position_information(symbol=coins)
-        df = getminutedata(coins, '4h', "30 days ago SGT")
+        df = getminutedata(coins, '4h', "7 days ago SGT")
         myfile1 = Path(file_path+ coins +'_buy_future_ema_alert.txt')
         myfile2 = Path(file_path+ coins +'_sell_future_ema_alert.txt')
         myfile1.touch(exist_ok=True)
