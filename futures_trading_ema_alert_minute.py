@@ -34,7 +34,7 @@ def applytechnicals(df):
     df['%D'] = df['%K'].rolling(3).mean()
     df['rsi'] = ta.momentum.rsi(df.Close, window=14)
     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=26, window_fast=12, window_sign=9)
-    df['ema10'] = ta.trend.ema_indicator(df.Close, window=10)
+    df['ema50'] = ta.trend.ema_indicator(df.Close, window=10)
     df['ema100'] = ta.trend.ema_indicator(df.Close, window=20)
     df['ema150'] = ta.trend.ema_indicator(df.Close, window=50)
     df.dropna(inplace=True)
@@ -86,7 +86,7 @@ def strategy(pair, open_position=False):
     inst.decide()
     for open_position_check in active_position:
         print(df)
-        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1]))
+        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1]))
         if df.Buy.iloc[-1]:
             #####################Read the previous buy text output and empty the file ################################
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'r') as f:
@@ -104,7 +104,7 @@ def strategy(pair, open_position=False):
             file.close()
             ##########################################################################################################
             if pair not in clean_buy_list:# and float(open_position_check['entryPrice']) == 0:
-                body = "BUY - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
+                body = "BUY - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
@@ -120,7 +120,7 @@ def strategy(pair, open_position=False):
             file.close()
             ###########################################################################################################
             if pair in clean_buy_list:# and float(open_position_check['entryPrice']) != 0:
-                body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
+                body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
@@ -141,7 +141,7 @@ def strategy(pair, open_position=False):
             file.close()
             ###########################################################################################################
             if pair not in clean_sell_list:# and float(open_position_check['entryPrice']) == 0:
-                body = "SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
+                body = "SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
@@ -157,7 +157,7 @@ def strategy(pair, open_position=False):
             file.close()
             ###########################################################################################################
             if pair in clean_sell_list:# and float(open_position_check['entryPrice']) != 0:
-                body = "TAKE PROFIT FROM SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
+                body = "TAKE PROFIT FROM SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
