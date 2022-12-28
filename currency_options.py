@@ -22,8 +22,6 @@ def getminutedata(symbol):
     frame = pd.DataFrame(yf.download(symbol, interval = "1m", period = "1d"))
     frame = frame.iloc[:,:4]
     frame.columns = ['Open', 'High', 'Low', 'Close']
-    # frame = frame.set_index('Time')
-    # frame.index = pd.to_datetime(frame.index, unit='ms')
     frame = frame.astype(float)
     return frame
 
