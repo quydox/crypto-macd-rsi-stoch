@@ -86,7 +86,7 @@ def strategy(pair):
         print(body)
         time.sleep(60)
 while True:
-    crypto_coins = ["AUDCHF=X", "BRL=X"]
+    crypto_coins = ["BRL=X"]
     for coins in crypto_coins:
         # try:
         df = getminutedata(coins)
