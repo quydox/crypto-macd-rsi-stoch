@@ -61,8 +61,8 @@ class Signals:
         # self.df['emaSELL1'] = np.where((self.df.ema7 < self.df.ema25), 1, 0)
         # self.df['emaSELL2'] = np.where((self.df.ema7 < self.df.ema99), 1, 0)
         # self.df['emaSELL3'] = np.where((self.df.ema25 < self.df.ema99), 1, 0)
-        self.df['uptrend'] = np.where((self.df.ema7 > self.df.ema99) & (self.df.ema25 > self.df.ema99), 1, 0)
-        self.df['downtrend'] = np.where((self.df.ema7 < self.df.ema99) & (self.df.ema25 < self.df.ema99), 1, 0)
+        # self.df['uptrend'] = np.where((self.df.ema7 > self.df.ema99) & (self.df.ema25 > self.df.ema99), 1, 0)
+        # self.df['downtrend'] = np.where((self.df.ema7 < self.df.ema99) & (self.df.ema25 < self.df.ema99), 1, 0)
 
 # inst = Signals(df, 2)
 # inst.decide()
@@ -73,12 +73,12 @@ def strategy(pair):
     inst = Signals(df, 5)
     inst.decide()
     print(df)
-    if df.Buy.iloc[-1] & df.uptrend.iloc[-1]:
+    if df.Buy.iloc[-1]: # & df.uptrend.iloc[-1]:
         body = "BUY -" + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1])
         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
         requests.get(base_url)
         print(body)
-    elif df.Sell.iloc[-1] & df.downtrend.iloc[-1]:
+    elif df.Sell.iloc[-1]: # & df.downtrend.iloc[-1]:
         body = "SELL -" + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1])
         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
         requests.get(base_url)
