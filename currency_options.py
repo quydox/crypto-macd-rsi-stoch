@@ -48,19 +48,19 @@ class Signals:
         self.lags = lags
 
     def decide(self):
-        self.df['Buy'] = np.where((self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema7 > self.df.ema25) & (self.df.ema7 > self.df.ema99) & (self.df.ema25 > self.df.ema99), 1, 0)
-        self.df['Sell'] = np.where((self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema7 < self.df.ema25) & (self.df.ema7 < self.df.ema99) & (self.df.ema25 < self.df.ema99), 1, 0)
+        self.df['Buy'] = np.where((self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
+        self.df['Sell'] = np.where((self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
         self.df['Stochastic'] = np.where((self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
         self.df['rsiBUY'] = np.where((self.df.rsi > 50), 1, 0)
         self.df['macdBUY'] = np.where((self.df.macd > 0), 1, 0)
-        self.df['emaBUY1'] = np.where((self.df.ema7 > self.df.ema25), 1, 0)
-        self.df['emaBUY2'] = np.where((self.df.ema7 > self.df.ema99), 1, 0)
-        self.df['emaBUY3'] = np.where((self.df.ema25 > self.df.ema99), 1, 0)
+        # self.df['emaBUY1'] = np.where((self.df.ema7 > self.df.ema25), 1, 0)
+        # self.df['emaBUY2'] = np.where((self.df.ema7 > self.df.ema99), 1, 0)
+        # self.df['emaBUY3'] = np.where((self.df.ema25 > self.df.ema99), 1, 0)
         self.df['macdSELL'] = np.where((self.df.macd < 0), 1, 0)
         self.df['rsiSELL'] = np.where((self.df.rsi < 50), 1, 0)
-        self.df['emaSELL1'] = np.where((self.df.ema7 < self.df.ema25), 1, 0)
-        self.df['emaSELL2'] = np.where((self.df.ema7 < self.df.ema99), 1, 0)
-        self.df['emaSELL3'] = np.where((self.df.ema25 < self.df.ema99), 1, 0)
+        # self.df['emaSELL1'] = np.where((self.df.ema7 < self.df.ema25), 1, 0)
+        # self.df['emaSELL2'] = np.where((self.df.ema7 < self.df.ema99), 1, 0)
+        # self.df['emaSELL3'] = np.where((self.df.ema25 < self.df.ema99), 1, 0)
         self.df['uptrend'] = np.where((self.df.ema7 > self.df.ema99) & (self.df.ema25 > self.df.ema99), 1, 0)
         self.df['downtrend'] = np.where((self.df.ema7 < self.df.ema99) & (self.df.ema25 < self.df.ema99), 1, 0)
 
