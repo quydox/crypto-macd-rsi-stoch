@@ -115,7 +115,7 @@ def strategy(pair):
         # file.close()
         # ###########################################################################################################
         # if pair not in clean_sell_list:
-        body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - CLOSE OR NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema7.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
+        body = pair, "\n" + "ORDER: ", order,"\n" + "SELL - CLOSE OR NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema7.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
         requests.get(base_url)
         print(body)
