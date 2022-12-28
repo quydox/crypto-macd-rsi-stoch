@@ -46,11 +46,12 @@ class Signals:
     def decide(self):
         self.df['Buy'] = np.where((self.df['%K'] > self.df['%D']) & (self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
         self.df['Sell'] = np.where((self.df['%K'] < self.df['%D']) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
-        self.df['Stochastic'] = np.where((self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
-        self.df['rsiBUY'] = np.where((self.df.rsi > 50), 1, 0)
-        self.df['macdBUY'] = np.where((self.df.macd > 0), 1, 0)
-        self.df['macdSELL'] = np.where((self.df.macd < 0), 1, 0)
-        self.df['rsiSELL'] = np.where((self.df.rsi < 50), 1, 0)
+        self.df['stbuy'] = np.where((self.df['%K'] > self.df['%D']), 1, 0)
+        self.df['stsell'] = np.where((self.df['%K'] < self.df['%D']), 1, 0)
+        self.df['rbuy'] = np.where((self.df.rsi > 50), 1, 0)
+        self.df['mbuy'] = np.where((self.df.macd > 0), 1, 0)
+        self.df['msell'] = np.where((self.df.macd < 0), 1, 0)
+        self.df['rsell'] = np.where((self.df.rsi < 50), 1, 0)
 
 # inst = Signals(df, 2)
 # inst.decide()
