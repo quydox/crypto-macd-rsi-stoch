@@ -78,13 +78,11 @@ def strategy(pair):
         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
         requests.get(base_url)
         print(body)
-        time.sleep(60)
     elif df.Sell.iloc[-1] & df.downtrend.iloc[-1]:
         body = "SELL -" + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1])
         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
         requests.get(base_url)
         print(body)
-        time.sleep(60)
 while True:
     crypto_coins = ["AUDCHF=X", "BRL=X"]
     for coins in crypto_coins:
