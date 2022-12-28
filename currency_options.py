@@ -84,7 +84,7 @@ def strategy(pair):
         requests.get(base_url)
         print(body)
 while True:
-    crypto_coins = ["AUDCHF=X"]
+    crypto_coins = ["AUDCHF=X", "BRL=X"]
     for coins in crypto_coins:
         # try:
         df = getminutedata(coins)
