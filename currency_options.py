@@ -18,71 +18,57 @@ api_telegram1 = os.getenv("api_telegram1")
 msg_id_telegram1 = os.getenv("msg_id_telegram1")
 file_path = os.getenv("file_path")
 
-# def getminutedata(symbol):
-#     #frame = pd.DataFrame(yf.download(symbol, interval = "1m", period = "1d"))
-#     frame = frame.iloc[:,:6]
-#     frame.columns = ['Time', 'Open', 'High', 'Low', 'Close', 'Volume']
-#     frame = frame.set_index('Time')
-#     frame.index = pd.to_datetime(frame.index, unit='ms')
-#     frame = frame.astype(float)
-#     return frame
-
 def getminutedata(symbol):
-    frame = yf.Ticker(symbol)
-    frame = frame.history(period="1D", interval = "1m")
-    frame = frame.iloc[:,:5]
-    frame.columns = ['Time','Open', 'High', 'Low', 'Close']
-    #frame = frame.set_index('Datetime')
-#    frame.index = pd.to_datetime(frame.index, unit='ms')
+    frame = pd.DataFrame(yf.download(symbol, interval = "1m", period = "1d"))
+    frame = frame.iloc[:,:4]
+    frame.columns = ['Open', 'High', 'Low', 'Close']
+    # frame = frame.set_index('Time')
+    # frame.index = pd.to_datetime(frame.index, unit='ms')
     frame = frame.astype(float)
     return frame
 
 df = getminutedata("AUDCHF=X")
+#print(df.High)
+#df.to_csv("final.csv")
+
+def applytechnicals(df):
+    df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=6, smooth_window=3)
+    df['%D'] = df['%K'].rolling(3).mean()
+    df['rsi'] = ta.momentum.rsi(df.Close, window=6)
+    df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
+    df['ema7'] = ta.trend.ema_indicator(df.Close, window=7)
+    df['ema25'] = ta.trend.ema_indicator(df.Close, window=25)
+    df['ema99'] = ta.trend.ema_indicator(df.Close, window=99)
+    df.dropna(inplace=True)
+
+applytechnicals(df)
+#print(df)
+
+class Signals:
+    def __init__(self,df, lags):
+        self.df = df
+        self.lags = lags
+
+    def decide(self):
+        self.df['Buy'] = np.where((self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema7 > self.df.ema25) & (self.df.ema7 > self.df.ema99) & (self.df.ema25 > self.df.ema99), 1, 0)
+        self.df['Sell'] = np.where((self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema7 < self.df.ema25) & (self.df.ema7 < self.df.ema99) & (self.df.ema25 < self.df.ema99), 1, 0)
+        self.df['Stochastic'] = np.where((self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
+        self.df['rsiBUY'] = np.where((self.df.rsi > 50), 1, 0)
+        self.df['macdBUY'] = np.where((self.df.macd > 0), 1, 0)
+        self.df['emaBUY1'] = np.where((self.df.ema7 > self.df.ema25), 1, 0)
+        self.df['emaBUY2'] = np.where((self.df.ema7 > self.df.ema99), 1, 0)
+        self.df['emaBUY3'] = np.where((self.df.ema25 > self.df.ema99), 1, 0)
+        self.df['macdSELL'] = np.where((self.df.macd < 0), 1, 0)
+        self.df['rsiSELL'] = np.where((self.df.rsi < 50), 1, 0)
+        self.df['emaSELL1'] = np.where((self.df.ema7 < self.df.ema25), 1, 0)
+        self.df['emaSELL2'] = np.where((self.df.ema7 < self.df.ema99), 1, 0)
+        self.df['emaSELL3'] = np.where((self.df.ema25 < self.df.ema99), 1, 0)
+        self.df['uptrend'] = np.where((self.df.ema7 > self.df.ema99) & (self.df.ema25 > self.df.ema99), 1, 0)
+        self.df['downtrend'] = np.where((self.df.ema7 < self.df.ema99) & (self.df.ema25 < self.df.ema99), 1, 0)
+
+inst = Signals(df, 2)
+inst.decide()
 print(df)
-
-# def applytechnicals(df):
-#     df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=6, smooth_window=3)
-#     df['%D'] = df['%K'].rolling(3).mean()
-#     df['rsi'] = ta.momentum.rsi(df.Close, window=6)
-#     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
-#     df['ema7'] = ta.trend.ema_indicator(df.Close, window=7)
-#     df['ema25'] = ta.trend.ema_indicator(df.Close, window=25)
-#     df.dropna(inplace=True)
-
-# #applytechnicals(df)
-# #print(df)
-
-# class Signals:
-#     def __init__(self,df, lags):
-#         self.df = df
-#         self.lags = lags
-
-#     def gettrigger(self):
-#         dfx = pd.DataFrame()
-#         for i in range(self.lags +1):
-#             mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
-#             dfx = pd.concat([mask], ignore_index=True)
-#         return dfx.sum(axis=0)
-
-#     def decide(self):
-#         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-#         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi > 50) & (self.df.macd > 0) & (self.df.ema7 < self.df.Close) & (self.df.ema7 > self.df.ema25), 1, 0)
-#         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.rsi < 50) & (self.df.macd < 0) & (self.df.ema7 > self.df.Close) & (self.df.ema7 < self.df.ema25), 1, 0)
-#         self.df['SellRule1'] = np.where((self.df.trigger) & (self.df['%K'] > 80) & (self.df['%D'] > 80) & (self.df.rsi > 70), 1, 0)
-#         self.df['BuyRule1'] = np.where((self.df.trigger) & (self.df['%K'] < 20) & (self.df['%D'] < 20) & (self.df.rsi < 30), 1, 0)
-#         self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
-#         self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi > 50), 1, 0)
-#         self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd > 0), 1, 0)
-#         self.df['emaBUY'] = np.where((self.df.trigger) & (self.df.ema7 < self.df.Close), 1, 0)
-#         self.df['emaBUY2'] = np.where((self.df.trigger) & (self.df.ema7 > self.df.ema25), 1, 0)
-#         self.df['macdSELL'] = np.where((self.df.trigger) & (self.df.macd < 0), 1, 0)
-#         self.df['rsiSELL'] = np.where((self.df.trigger) & (self.df.rsi < 50), 1, 0)
-#         self.df['emaSELL'] = np.where((self.df.trigger) & (self.df.ema7 > self.df.Close), 1, 0)
-#         self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema7 < self.df.ema25), 1, 0)
-
-# # inst = Signals(df, 2)
-# # inst.decide()
-# # print(df)
 
 # def strategy(pair):
 #     applytechnicals(df)
