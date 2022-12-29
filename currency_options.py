@@ -44,8 +44,8 @@ class Signals:
         self.lags = lags
 
     def decide(self):
-        self.df['Buy'] = np.where((self.df['%K'] > self.df['%D']) & (self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
-        self.df['Sell'] = np.where((self.df['%K'] < self.df['%D']) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
+        self.df['Buy'] = np.where((self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df['%K'] > self.df['%D']) & (self.df.rsi > 50) & (self.df.macd > 0), 1, 0)
+        self.df['Sell'] = np.where((self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df['%K'] < self.df['%D']) & (self.df.rsi < 50) & (self.df.macd < 0), 1, 0)
         self.df['stbuy'] = np.where((self.df['%K'] > self.df['%D']), 1, 0)
         self.df['stsell'] = np.where((self.df['%K'] < self.df['%D']), 1, 0)
         self.df['rbuy'] = np.where((self.df.rsi > 50), 1, 0)
