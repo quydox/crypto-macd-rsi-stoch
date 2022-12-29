@@ -110,7 +110,7 @@ def strategy(pair):
         with open(file_path+ pair +'_sell_options.txt', 'a+') as f:
             f.write(str(pair) + '\n')
 while True:
-    crypto_coins = ["BRL=X"]
+    crypto_coins = ["AUDCHF=X"]
     for coins in crypto_coins:
         # try:
         df = getminutedata(coins)
