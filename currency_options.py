@@ -19,7 +19,7 @@ msg_id_telegram1 = os.getenv("msg_id_telegram1")
 file_path = os.getenv("file_path")
 
 def getminutedata(symbol):
-    frame = pd.DataFrame(yf.download(symbol, interval = "1m", period = "1d"))
+    frame = pd.DataFrame(yf.download(symbol, interval = "1m", period = "7d"))
     frame = frame.iloc[:,:4]
     frame.columns = ['Open', 'High', 'Low', 'Close']
     frame = frame.astype(float)
