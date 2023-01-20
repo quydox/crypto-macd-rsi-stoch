@@ -32,6 +32,7 @@ def getminutedata(symbol, interval, lookback):
 def applytechnicals(df):
     df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
     df['%D'] = df['%K'].rolling(3).mean()
+    df['rsi'] = ta.momentum.rsi(df.Close, window=14)
     df['ema10'] = ta.trend.ema_indicator(df.Close, window=10)
     df['ema20'] = ta.trend.ema_indicator(df.Close, window=20)
     df['ema50'] = ta.trend.ema_indicator(df.Close, window=50)
@@ -96,7 +97,7 @@ def strategy(pair, open_position=False):
                 print(body)
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPBUY.iloc[-1]:# and float(open_position_check['entryPrice']) != 0):
+        elif df.TPBUY.iloc[-1] & df.stochSELL.iloc[-1]:# and float(open_position_check['entryPrice']) != 0):
             #####################Read the previous buy text output and empty the file ################################
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'r') as f:
                 clean_buy_list = []
@@ -133,7 +134,7 @@ def strategy(pair, open_position=False):
                 print(body)
             with open(file_path+ pair +'_sell_future_ema_alert_minute.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPSELL.iloc[-1]: #and float(open_position_check['entryPrice']) != 0):
+        elif df.TPSELL.iloc[-1] & df.stochBUY.iloc[-1]: #and float(open_position_check['entryPrice']) != 0):
             #####################Read the previous sell text output and empty the file ###############################
             with open(file_path+ pair +'_sell_future_ema_alert_minute.txt', 'r') as f:
                 clean_sell_list = []
