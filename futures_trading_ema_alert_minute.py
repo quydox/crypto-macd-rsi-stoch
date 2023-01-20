@@ -71,7 +71,7 @@ def strategy(pair, open_position=False):
     inst = Signals(df, 5)
     inst.decide()
     for open_position_check in active_position:
-        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]))
+        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]))
         if df.Buy.iloc[-1]:
             #####################Read the previous buy text output and empty the file ################################
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'r') as f:
