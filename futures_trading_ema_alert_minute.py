@@ -99,7 +99,7 @@ def strategy(pair, open_position=False):
                 print(body)
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPBUY.iloc[-1] or (df.TPBUY_STOCH.iloc[-1] & & df.TPBUY_RSI.iloc[-1]):# and float(open_position_check['entryPrice']) != 0):
+        elif df.TPBUY.iloc[-1] or (df.TPBUY_STOCH.iloc[-1] & df.TPBUY_RSI.iloc[-1]):# and float(open_position_check['entryPrice']) != 0):
             #####################Read the previous buy text output and empty the file ################################
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'r') as f:
                 clean_buy_list = []
