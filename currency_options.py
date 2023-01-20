@@ -11,7 +11,6 @@ import datetime
 import time
 import os
 
-
 api_key = os.getenv("api_key")
 api_secret = os.getenv("api_secret")
 api_telegram1 = os.getenv("api_telegram1")
@@ -26,7 +25,7 @@ def getminutedata(symbol):
     return frame
 
 # df = getminutedata("AUDCHF=X")
-#print(df.High)
+# print(df)
 
 def applytechnicals(df):
     df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
