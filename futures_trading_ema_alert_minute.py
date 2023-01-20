@@ -57,10 +57,12 @@ class Signals:
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 > self.df.ema20) & (self.df.ema10 > self.df.ema50) & (self.df.ema20 > self.df.ema50), 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 < self.df.ema20) & (self.df.ema10 < self.df.ema50) & (self.df.ema20 < self.df.ema50), 1, 0)
-        self.df['stochBUY'] = np.where((self.df.trigger) & (self.df['%K'] > self.df['%D']), 1, 0)
-        self.df['stochSELL'] = np.where((self.df.trigger) & (self.df['%K'] < self.df['%D']), 1, 0)
+        self.df['TPSELL_STOCH'] = np.where((self.df.trigger) & (self.df['%K'] > self.df['%D']), 1, 0)
+        self.df['TPBUY_STOCH'] = np.where((self.df.trigger) & (self.df['%K'] < self.df['%D']), 1, 0)
         self.df['TPBUY'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema20), 1, 0)
         self.df['TPSELL'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema20), 1, 0)
+        self.df['TPBUY_RSI'] = np.where((self.df.trigger) & (self.df.rsi > 65), 1, 0)
+        self.df['TPSELL_RSI'] = np.where((self.df.trigger) & (self.df.rsi < 35), 1, 0)
 
 
 # inst = Signals(df, 2)
@@ -97,7 +99,7 @@ def strategy(pair, open_position=False):
                 print(body)
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPBUY.iloc[-1] & df.stochSELL.iloc[-1]:# and float(open_position_check['entryPrice']) != 0):
+        elif df.TPBUY.iloc[-1] or (df.TPBUY_STOCH.iloc[-1] & & df.TPBUY_RSI.iloc[-1]):# and float(open_position_check['entryPrice']) != 0):
             #####################Read the previous buy text output and empty the file ################################
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'r') as f:
                 clean_buy_list = []
@@ -134,7 +136,7 @@ def strategy(pair, open_position=False):
                 print(body)
             with open(file_path+ pair +'_sell_future_ema_alert_minute.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPSELL.iloc[-1] & df.stochBUY.iloc[-1]: #and float(open_position_check['entryPrice']) != 0):
+        elif df.TPSELL.iloc[-1] or (df.TPSELL_STOCH.iloc[-1] & df.TPSELL_RSI.iloc[-1]): #and float(open_position_check['entryPrice']) != 0):
             #####################Read the previous sell text output and empty the file ###############################
             with open(file_path+ pair +'_sell_future_ema_alert_minute.txt', 'r') as f:
                 clean_sell_list = []
