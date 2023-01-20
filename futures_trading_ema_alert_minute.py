@@ -20,51 +20,51 @@ client = Client(api_key, api_secret)
 def getminutedata(symbol, interval, lookback):
     frame = pd.DataFrame(client.futures_historical_klines(symbol, interval, lookback))
     frame = frame.iloc[:,:6]
-    # frame.columns = ['Time', 'Open', 'High', 'Low', 'Close', 'Volume']
-    # frame = frame.set_index('Time')
-    # frame.index = pd.to_datetime(frame.index, unit='ms')
-    # frame = frame.astype(float)
+    frame.columns = ['Time', 'Open', 'High', 'Low', 'Close', 'Volume']
+    frame = frame.set_index('Time')
+    frame.index = pd.to_datetime(frame.index, unit='ms')
+    frame = frame.astype(float)
     return frame
 
 df = getminutedata('BTCUSDT', '1m', "1 day ago SGT")
 print(df)
 
-# def applytechnicals(df):
-    # df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
-    # df['%D'] = df['%K'].rolling(3).mean()
-    # df['ema10'] = ta.trend.ema_indicator(df.Close, window=10)
-    # df['ema20'] = ta.trend.ema_indicator(df.Close, window=20)
-    # df['ema50'] = ta.trend.ema_indicator(df.Close, window=50)
-    # df.dropna(inplace=True)
+def applytechnicals(df):
+    df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
+    df['%D'] = df['%K'].rolling(3).mean()
+    df['ema10'] = ta.trend.ema_indicator(df.Close, window=10)
+    df['ema20'] = ta.trend.ema_indicator(df.Close, window=20)
+    df['ema50'] = ta.trend.ema_indicator(df.Close, window=50)
+    df.dropna(inplace=True)
 
-# applytechnicals(df)
-# print(df)
+applytechnicals(df)
+print(df)
 
-# class Signals:
-    # def __init__(self,df, lags):
-        # self.df = df
-        # self.lags = lags
+class Signals:
+    def __init__(self,df, lags):
+        self.df = df
+        self.lags = lags
 
-    # def gettrigger(self):
-        # dfx = pd.DataFrame()
-        # for i in range(self.lags +1):
-            # mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
-            # dfx = pd.concat([mask], ignore_index=True)
-        # return dfx.sum(axis=0)
+    def gettrigger(self):
+        dfx = pd.DataFrame()
+        for i in range(self.lags +1):
+            mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
+            dfx = pd.concat([mask], ignore_index=True)
+        return dfx.sum(axis=0)
 
-    # def decide(self):
-        # self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-        # self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 > self.df.ema20) & (self.df.ema10 > self.df.ema50) & (self.df.ema20 > self.df.ema50), 1, 0)
-        # self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 < self.df.ema20) & (self.df.ema10 < self.df.ema50) & (self.df.ema20 < self.df.ema50), 1, 0)
-        # self.df['stochBUY'] = np.where((self.df.trigger) & (self.df['%K'] > self.df['%D']), 1, 0)
-        # self.df['stochSELL'] = np.where((self.df.trigger) & (self.df['%K'] < self.df['%D']), 1, 0)
-        # self.df['TPBUY'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema20), 1, 0)
-        # self.df['TPSELL'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema20), 1, 0)
+    def decide(self):
+        self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
+        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 > self.df.ema20) & (self.df.ema10 > self.df.ema50) & (self.df.ema20 > self.df.ema50), 1, 0)
+        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 < self.df.ema20) & (self.df.ema10 < self.df.ema50) & (self.df.ema20 < self.df.ema50), 1, 0)
+        self.df['stochBUY'] = np.where((self.df.trigger) & (self.df['%K'] > self.df['%D']), 1, 0)
+        self.df['stochSELL'] = np.where((self.df.trigger) & (self.df['%K'] < self.df['%D']), 1, 0)
+        self.df['TPBUY'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema20), 1, 0)
+        self.df['TPSELL'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema20), 1, 0)
 
 
-# inst = Signals(df, 2)
-# inst.decide()
-# print(df)
+inst = Signals(df, 2)
+inst.decide()
+print(df)
 
 # def strategy(pair, open_position=False):
     # applytechnicals(df)
