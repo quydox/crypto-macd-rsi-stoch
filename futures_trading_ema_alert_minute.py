@@ -62,6 +62,8 @@ class Signals:
         self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema20) & (self.df['%K'] > self.df['%D']), 1, 0)
         self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df['%K'] < self.df['%D']), 1, 0)
         self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df['%K'] > self.df['%D']), 1, 0)
+        self.df['uptrend'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema50) & (self.df.ema20 > self.df.ema50), 1, 0)
+        self.df['downtrend'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema50) & (self.df.ema20 < self.df.ema50), 1, 0)
 
 
 # inst = Signals(df, 2)
@@ -98,7 +100,7 @@ def strategy(pair, open_position=False):
                 print(body)
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]:# and float(open_position_check['entryPrice']) != 0):
+        elif (df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]) & df.uptrend.iloc[-1]:# and float(open_position_check['entryPrice']) != 0):
             #####################Read the previous buy text output and empty the file ################################
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'r') as f:
                 clean_buy_list = []
@@ -135,7 +137,7 @@ def strategy(pair, open_position=False):
                 print(body)
             with open(file_path+ pair +'_sell_future_ema_alert_minute.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1]: #and float(open_position_check['entryPrice']) != 0):
+        elif (df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1]) & df.downtrend.iloc[-1]: #and float(open_position_check['entryPrice']) != 0):
             #####################Read the previous sell text output and empty the file ###############################
             with open(file_path+ pair +'_sell_future_ema_alert_minute.txt', 'r') as f:
                 clean_sell_list = []
