@@ -59,8 +59,8 @@ class Signals:
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 < self.df.ema20) & (self.df.ema10 < self.df.ema50) & (self.df.ema20 < self.df.ema50), 1, 0)
         self.df['TPSELL_STOCH'] = np.where((self.df.trigger) & (self.df['%K'] > self.df['%D']), 1, 0)
         self.df['TPBUY_STOCH'] = np.where((self.df.trigger) & (self.df['%K'] < self.df['%D']), 1, 0)
-        self.df['TPBUY'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema20), 1, 0)
-        self.df['TPSELL'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema20), 1, 0)
+        self.df['TPBUY'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema20) & (self.df.rsi < 50), 1, 0)
+        self.df['TPSELL'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema20) & (self.df.rsi > 50), 1, 0)
         self.df['TPBUY_RSI'] = np.where((self.df.trigger) & (self.df.rsi > 65), 1, 0)
         self.df['TPSELL_RSI'] = np.where((self.df.trigger) & (self.df.rsi < 35), 1, 0)
 
