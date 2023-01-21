@@ -33,6 +33,7 @@ def applytechnicals(df):
     df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
     df['%D'] = df['%K'].rolling(3).mean()
     df['rsi'] = ta.momentum.rsi(df.Close, window=14)
+    df['macd'] = ta.trend.macd_diff(df.Close, window_slow=26, window_fast=12, window_sign=9)
     df['ema10'] = ta.trend.ema_indicator(df.Close, window=10)
     df['ema20'] = ta.trend.ema_indicator(df.Close, window=20)
     df['ema50'] = ta.trend.ema_indicator(df.Close, window=50)
@@ -57,12 +58,10 @@ class Signals:
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 > self.df.ema20) & (self.df.ema10 > self.df.ema50) & (self.df.ema20 > self.df.ema50), 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 < self.df.ema20) & (self.df.ema10 < self.df.ema50) & (self.df.ema20 < self.df.ema50), 1, 0)
-        self.df['TPSELL_STOCH'] = np.where((self.df.trigger) & (self.df['%K'] > self.df['%D']), 1, 0)
-        self.df['TPBUY_STOCH'] = np.where((self.df.trigger) & (self.df['%K'] < self.df['%D']), 1, 0)
-        self.df['TPBUY'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema20) & (self.df.rsi < 50), 1, 0)
-        self.df['TPSELL'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema20) & (self.df.rsi > 50), 1, 0)
-        self.df['TPBUY_RSI'] = np.where((self.df.trigger) & (self.df.rsi > 65), 1, 0)
-        self.df['TPSELL_RSI'] = np.where((self.df.trigger) & (self.df.rsi < 35), 1, 0)
+        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema20) & (self.df['%K'] < self.df['%D']), 1, 0)
+        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema20) & (self.df['%K'] > self.df['%D']), 1, 0)
+        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df['%K'] < self.df['%D']), 1, 0)
+        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df['%K'] > self.df['%D']), 1, 0)
 
 
 # inst = Signals(df, 2)
@@ -99,7 +98,7 @@ def strategy(pair, open_position=False):
                 print(body)
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPBUY.iloc[-1] or (df.TPBUY_STOCH.iloc[-1] & df.TPBUY_RSI.iloc[-1]):# and float(open_position_check['entryPrice']) != 0):
+        elif df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]:# and float(open_position_check['entryPrice']) != 0):
             #####################Read the previous buy text output and empty the file ################################
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'r') as f:
                 clean_buy_list = []
@@ -136,7 +135,7 @@ def strategy(pair, open_position=False):
                 print(body)
             with open(file_path+ pair +'_sell_future_ema_alert_minute.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPSELL.iloc[-1] or (df.TPSELL_STOCH.iloc[-1] & df.TPSELL_RSI.iloc[-1]): #and float(open_position_check['entryPrice']) != 0):
+        elif df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1]: #and float(open_position_check['entryPrice']) != 0):
             #####################Read the previous sell text output and empty the file ###############################
             with open(file_path+ pair +'_sell_future_ema_alert_minute.txt', 'r') as f:
                 clean_sell_list = []
