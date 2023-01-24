@@ -56,15 +56,14 @@ class Signals:
 
     def decide(self):
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 > self.df.ema100) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150) & (self.df.rsi > 50), 1, 0)
-        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 < self.df.ema100) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150) & (self.df.rsi < 50), 1, 0)
+        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 > self.df.ema100) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150) & (self.df['rsi'].between(50,56)), 1, 0)
+        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 < self.df.ema100) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150) & (self.df['rsi'].between(44,50)), 1, 0)
         self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema100), 1, 0)
         self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema100), 1, 0)
         self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70), 1, 0)
         self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30), 1, 0)
         self.df['uptrend'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150), 1, 0)
         self.df['downtrend'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150), 1, 0)
-        self.df['test'] = np.where((self.df.trigger) & (self.df['rsi'].between(50,56)), 1, 0)
 # inst = Signals(df, 2)
 # inst.decide()
 # print(df)
@@ -153,7 +152,7 @@ def strategy(pair, qty, open_position=False):
                             order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=2)
                             client.futures_create_order(symbol=pair, side='BUY', type='STOP_MARKET', stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC' )
                             #client.futures_create_order(symbol=pair,side='BUY',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC')
-                            body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']), "\n" + "EMA: ", str(df.ema150.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
+                            body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']), "\n" + "EMA50: ", str(df.ema50.iloc[-1]), "\n" + "EMA100: ", str(df.ema100.iloc[-1]), "\n" + "EMA150: ", str(df.ema150.iloc[-1])
                             #body = "SELL -" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema150.iloc[-1]) + "\n" + "ema20: " + str(df.ema100.iloc[-1] + "\n" + order)
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
@@ -171,7 +170,7 @@ def strategy(pair, qty, open_position=False):
                     if pair in clean_sell_list and float(open_position_check['entryPrice']) != 0:
                         order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=2)
                         open_position = True
-                        body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "TAKE PROFIT FROM SELL: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema150.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
+                        body = "TAKE PROFIT FROM SELL: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                         #body = "BUY - TAKE PROFIT FROM SELL" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema150.iloc[-1]) + "\n" + "ema20: " + str(df.ema100.iloc[-1] + "\n" + order)
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                         requests.get(base_url)
