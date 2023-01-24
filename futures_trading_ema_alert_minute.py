@@ -34,9 +34,9 @@ def applytechnicals(df):
     df['%D'] = df['%K'].rolling(3).mean()
     df['rsi'] = ta.momentum.rsi(df.Close, window=14)
     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=26, window_fast=12, window_sign=9)
-    df['ema10'] = ta.trend.ema_indicator(df.Close, window=10)
-    df['ema20'] = ta.trend.ema_indicator(df.Close, window=20)
     df['ema50'] = ta.trend.ema_indicator(df.Close, window=50)
+    df['ema100'] = ta.trend.ema_indicator(df.Close, window=100)
+    df['ema150'] = ta.trend.ema_indicator(df.Close, window=150)
     df.dropna(inplace=True)
 
 # applytechnicals(df)
@@ -56,14 +56,14 @@ class Signals:
 
     def decide(self):
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 > self.df.ema20) & (self.df.ema10 > self.df.ema50) & (self.df.ema20 > self.df.ema50), 1, 0)
-        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 < self.df.ema20) & (self.df.ema10 < self.df.ema50) & (self.df.ema20 < self.df.ema50), 1, 0)
-        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema20), 1, 0)
-        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema20), 1, 0)
+        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 > self.df.ema100) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150) & (self.df.rsi > 50), 1, 0)
+        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 < self.df.ema100) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150) & (self.df.rsi < 50), 1, 0)
+        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema100), 1, 0)
+        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema100), 1, 0)
         self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70), 1, 0)
         self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30), 1, 0)
-        self.df['uptrend'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema50) & (self.df.ema20 > self.df.ema50), 1, 0)
-        self.df['downtrend'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema50) & (self.df.ema20 < self.df.ema50), 1, 0)
+        self.df['uptrend'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150), 1, 0)
+        self.df['downtrend'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150), 1, 0)
 
 
 # inst = Signals(df, 2)
@@ -76,7 +76,7 @@ def strategy(pair, open_position=False):
     inst.decide()
     for open_position_check in active_position:
         print(df)
-        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]))
+        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1]))
         if df.Buy.iloc[-1]:
             #####################Read the previous buy text output and empty the file ################################
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'r') as f:
@@ -94,7 +94,7 @@ def strategy(pair, open_position=False):
             file.close()
             ##########################################################################################################
             if pair not in clean_buy_list:# and float(open_position_check['entryPrice']) == 0:
-                body = "BUY - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1])
+                body = "BUY - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
@@ -110,7 +110,7 @@ def strategy(pair, open_position=False):
             file.close()
             ###########################################################################################################
             if pair in clean_buy_list:# and float(open_position_check['entryPrice']) != 0:
-                body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1])
+                body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
@@ -131,7 +131,7 @@ def strategy(pair, open_position=False):
             file.close()
             ###########################################################################################################
             if pair not in clean_sell_list:# and float(open_position_check['entryPrice']) == 0:
-                body = "SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1])
+                body = "SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
@@ -147,7 +147,7 @@ def strategy(pair, open_position=False):
             file.close()
             ###########################################################################################################
             if pair in clean_sell_list:# and float(open_position_check['entryPrice']) != 0:
-                body = "TAKE PROFIT FROM SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1])
+                body = "TAKE PROFIT FROM SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
@@ -156,7 +156,7 @@ while True:
     for coins in crypto_coins:
         # try:
         active_position = client.futures_position_information(symbol=coins)
-        df = getminutedata(coins, '1h', "30 days ago SGT")
+        df = getminutedata(coins, '1h', "60 days ago SGT")
         myfile1 = Path(file_path+ coins +'_buy_future_ema_alert_minute.txt')
         myfile2 = Path(file_path+ coins +'_sell_future_ema_alert_minute.txt')
         myfile1.touch(exist_ok=True)
