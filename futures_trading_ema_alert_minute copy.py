@@ -56,25 +56,12 @@ class Signals:
 
     def decide(self):
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 > self.df.ema100) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150) & (self.df.macd > 0) & (self.df.rsi > 50), 1, 0)
-        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 < self.df.ema100) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150) & (self.df.macd < 0) & (self.df.rsi < 50), 1, 0)
-        self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
-        # self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi > 50), 1, 0)
-        # self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd > 0), 1, 0)
-        # self.df['emaBUY1'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema150), 1, 0)
-        # self.df['emaBUY2'] = np.where((self.df.trigger) & (self.df.ema100 > self.df.ema150), 1, 0)
-        # self.df['macdSELL'] = np.where((self.df.trigger) & (self.df.macd < 0), 1, 0)
-        # self.df['rsiSELL'] = np.where((self.df.trigger) & (self.df.rsi < 50), 1, 0)
-        # self.df['emaSELL1'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema150), 1, 0)
-        # self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema100 < self.df.ema150), 1, 0)
-        self.df['stochBUY'] = np.where((self.df.trigger) & (self.df['%K'] > self.df['%D']), 1, 0)
-        self.df['stochSELL'] = np.where((self.df.trigger) & (self.df['%K'] < self.df['%D']), 1, 0)
-        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema100) & (self.df.rsi < 50), 1, 0)
-        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df['%K'] < self.df['%D']), 1, 0)
-        self.df['TPBUY3'] = np.where((self.df.trigger) & (self.df.macd < 0) & (self.df.ema50 < self.df.ema100), 1, 0)
-        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema100) & (self.df.rsi > 50), 1, 0)
-        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df['%K'] > self.df['%D']), 1, 0)
-        self.df['TPSELL3'] = np.where((self.df.trigger) & (self.df.macd > 0) & (self.df.ema50 > self.df.ema100), 1, 0)
+        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 > self.df.ema100) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150) & (self.df.rsi > 50), 1, 0)
+        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 < self.df.ema100) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150) & (self.df.rsi < 50), 1, 0)
+        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema100), 1, 0)
+        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema100), 1, 0)
+        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70), 1, 0)
+        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30), 1, 0)
         self.df['uptrend'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150), 1, 0)
         self.df['downtrend'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150), 1, 0)
 
@@ -89,8 +76,8 @@ def strategy(pair, open_position=False):
     inst.decide()
     for open_position_check in active_position:
         print(df)
-        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1]))
-        if df.Buy.iloc[-1] & df.uptrend.iloc[-1]:
+        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1]))
+        if df.Buy.iloc[-1]:
             #####################Read the previous buy text output and empty the file ################################
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'r') as f:
                 clean_buy_list = []
@@ -107,13 +94,13 @@ def strategy(pair, open_position=False):
             file.close()
             ##########################################################################################################
             if pair not in clean_buy_list:# and float(open_position_check['entryPrice']) == 0:
-                body = "BUY - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
+                body = "BUY - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPBUY2.iloc[-1] or ((df.TPBUY1.iloc[-1] or df.TPBUY3.iloc[-1]) and float(open_position_check['entryPrice']) != 0):
+        elif (df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]) & df.uptrend.iloc[-1]:# and float(open_position_check['entryPrice']) != 0):
             #####################Read the previous buy text output and empty the file ################################
             with open(file_path+ pair +'_buy_future_ema_alert_minute.txt', 'r') as f:
                 clean_buy_list = []
@@ -123,11 +110,11 @@ def strategy(pair, open_position=False):
             file.close()
             ###########################################################################################################
             if pair in clean_buy_list:# and float(open_position_check['entryPrice']) != 0:
-                body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
+                body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
-        elif df.Sell.iloc[-1] & df.downtrend.iloc[-1]:
+        elif df.Sell.iloc[-1]:
             #####################Read the previous sell text output and empty the file ###############################
             with open(file_path+ pair +'_sell_future_ema_alert_minute.txt', 'r') as f:
                 clean_sell_list = []
@@ -144,13 +131,13 @@ def strategy(pair, open_position=False):
             file.close()
             ###########################################################################################################
             if pair not in clean_sell_list:# and float(open_position_check['entryPrice']) == 0:
-                body = "SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
+                body = "SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
             with open(file_path+ pair +'_sell_future_ema_alert_minute.txt', 'a+') as f:
                 f.write(str(pair) + '\n')
-        elif df.TPSELL2.iloc[-1] or ((df.TPSELL1.iloc[-1] or df.TPSELL3.iloc[-1]) and float(open_position_check['entryPrice']) != 0):
+        elif (df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1]) & df.downtrend.iloc[-1]: #and float(open_position_check['entryPrice']) != 0):
             #####################Read the previous sell text output and empty the file ###############################
             with open(file_path+ pair +'_sell_future_ema_alert_minute.txt', 'r') as f:
                 clean_sell_list = []
@@ -160,7 +147,7 @@ def strategy(pair, open_position=False):
             file.close()
             ###########################################################################################################
             if pair in clean_sell_list:# and float(open_position_check['entryPrice']) != 0:
-                body = "TAKE PROFIT FROM SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
+                body = "TAKE PROFIT FROM SELL - EMA " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
                 base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                 requests.get(base_url)
                 print(body)
@@ -169,7 +156,7 @@ while True:
     for coins in crypto_coins:
         # try:
         active_position = client.futures_position_information(symbol=coins)
-        df = getminutedata(coins, '4h', "60 days ago SGT")
+        df = getminutedata(coins, '1m', "1 day ago SGT")
         myfile1 = Path(file_path+ coins +'_buy_future_ema_alert_minute.txt')
         myfile2 = Path(file_path+ coins +'_sell_future_ema_alert_minute.txt')
         myfile1.touch(exist_ok=True)

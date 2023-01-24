@@ -30,13 +30,13 @@ def getminutedata(symbol, interval, lookback):
 # print(df)
 
 def applytechnicals(df):
-    df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=6, smooth_window=3)
+    df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
     df['%D'] = df['%K'].rolling(3).mean()
-    df['rsi'] = ta.momentum.rsi(df.Close, window=6)
-    df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
-    df['ema10'] = ta.trend.ema_indicator(df.Close, window=7)
-    df['ema20'] = ta.trend.ema_indicator(df.Close, window=25)
-    df['ema50'] = ta.trend.ema_indicator(df.Close, window=99)
+    df['rsi'] = ta.momentum.rsi(df.Close, window=14)
+    df['macd'] = ta.trend.macd_diff(df.Close, window_slow=26, window_fast=12, window_sign=9)
+    df['ema50'] = ta.trend.ema_indicator(df.Close, window=50)
+    df['ema100'] = ta.trend.ema_indicator(df.Close, window=100)
+    df['ema150'] = ta.trend.ema_indicator(df.Close, window=150)
     df.dropna(inplace=True)
 
 # applytechnicals(df)
@@ -56,25 +56,14 @@ class Signals:
 
     def decide(self):
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 > self.df.ema20) & (self.df.ema10 > self.df.ema50) & (self.df.ema20 > self.df.ema50) & (self.df.macd > 0) & (self.df.rsi > 50), 1, 0)
-        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema10 < self.df.ema20) & (self.df.ema10 < self.df.ema50) & (self.df.ema20 < self.df.ema50) & (self.df.macd < 0) & (self.df.rsi < 50), 1, 0)
-        self.df['Stochastic'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
-        self.df['rsiBUY'] = np.where((self.df.trigger) & (self.df.rsi > 50), 1, 0)
-        self.df['macdBUY'] = np.where((self.df.trigger) & (self.df.macd > 0), 1, 0)
-        self.df['emaBUY1'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema50), 1, 0)
-        self.df['emaBUY2'] = np.where((self.df.trigger) & (self.df.ema20 > self.df.ema50), 1, 0)
-        self.df['macdSELL'] = np.where((self.df.trigger) & (self.df.macd < 0), 1, 0)
-        self.df['rsiSELL'] = np.where((self.df.trigger) & (self.df.rsi < 50), 1, 0)
-        self.df['emaSELL1'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema50), 1, 0)
-        self.df['emaSELL2'] = np.where((self.df.trigger) & (self.df.ema20 < self.df.ema50), 1, 0)
-        self.df['stochBUY'] = np.where((self.df.trigger) & (self.df['%K'] > self.df['%D']), 1, 0)
-        self.df['stochSELL'] = np.where((self.df.trigger) & (self.df['%K'] < self.df['%D']), 1, 0)
-        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema10 < self.df.ema20) & (self.df.rsi < 50), 1, 0)
-        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema10 > self.df.ema20) & (self.df.rsi > 50), 1, 0)
-        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df['%K'] < self.df['%D']), 1, 0)
-        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df['%K'] > self.df['%D']), 1, 0)
-        self.df['TPBUY3'] = np.where((self.df.trigger) & (self.df.macd < 0) & (self.df.ema10 < self.df.ema20), 1, 0)
-        self.df['TPSELL3'] = np.where((self.df.trigger) & (self.df.macd > 0) & (self.df.ema10 > self.df.ema20), 1, 0)
+        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 > self.df.ema100) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150) & (self.df.rsi > 50), 1, 0)
+        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 < self.df.ema100) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150) & (self.df.rsi < 50), 1, 0)
+        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema100), 1, 0)
+        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema100), 1, 0)
+        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70), 1, 0)
+        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30), 1, 0)
+        self.df['uptrend'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150), 1, 0)
+        self.df['downtrend'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150), 1, 0)
 # inst = Signals(df, 2)
 # inst.decide()
 # print(df)
@@ -85,11 +74,11 @@ def strategy(pair, qty, open_position=False):
     inst.decide()
     for open_position_check in active_position:
         print(df)
-        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1]))
+        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "ema50: " + str(df.ema150.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1]))
         for check_balance in acc_balance:
             if check_balance['asset'] == "USDT":
                 busd_balance = check_balance["balance"]
-                profit_balance = int(float(busd_balance))/162 * 100 - 100
+                profit_balance = int(float(busd_balance))/50 * 100 - 100
                 if df.Buy.iloc[-1]:
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
@@ -112,15 +101,15 @@ def strategy(pair, qty, open_position=False):
                         client.futures_create_order(symbol=pair, side='SELL', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC' )
                         #client.futures_create_order(symbol=pair,side='SELL',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC')
                         open_position = True
-                        body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "BUY - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema10.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
-                        #body = "BUY -" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1] + "\n" + order)
-                        #body = "BUY -" + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1])
+                        body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "BUY - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']), "\n" + "EMA50: ", str(df.ema50.iloc[-1]), "\n" + "EMA100: ", str(df.ema100.iloc[-1]), "\n" + "EMA150: ", str(df.ema150.iloc[-1])
+                        #body = "BUY -" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema150.iloc[-1]) + "\n" + "ema20: " + str(df.ema100.iloc[-1] + "\n" + order)
+                        #body = "BUY -" + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema150.iloc[-1]) + "\n" + "ema20: " + str(df.ema100.iloc[-1])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
                     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif (((df.TPBUY2.iloc[-1] or df.TPBUY1.iloc[-1] or df.TPBUY3.iloc[-1]) & and df.Buy.iloc[-1] == 0) & float(open_position_check['entryPrice']) != 0):
+                elif ((df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]) and df.uptrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
                         clean_buy_list = []
@@ -134,8 +123,8 @@ def strategy(pair, qty, open_position=False):
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
                             order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=10)
-                            body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "TAKE PROFIT FROM BUY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema10.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
-                            #body = "SELL - TAKE PROFIT FROM BUY" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1] + "\n" + order)
+                            body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
+                            #body = "SELL - TAKE PROFIT FROM BUY" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema150.iloc[-1]) + "\n" + "ema20: " + str(df.ema100.iloc[-1] + "\n" + order)
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
@@ -163,14 +152,14 @@ def strategy(pair, qty, open_position=False):
                             order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=10)
                             client.futures_create_order(symbol=pair, side='BUY', type='STOP_MARKET', stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC' )
                             #client.futures_create_order(symbol=pair,side='BUY',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC')
-                            body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema10.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
-                            #body = "SELL -" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1] + "\n" + order)
+                            body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']), "\n" + "EMA: ", str(df.ema150.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
+                            #body = "SELL -" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema150.iloc[-1]) + "\n" + "ema20: " + str(df.ema100.iloc[-1] + "\n" + order)
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
                     with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif (df.TPSELL1.iloc[-1] and df.Sell.iloc[-1] == 0):
+                elif ((df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1]) and df.downtrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future.txt', 'r') as f:
                         clean_sell_list = []
@@ -181,8 +170,8 @@ def strategy(pair, qty, open_position=False):
                     if pair in clean_sell_list and float(open_position_check['entryPrice']) != 0:
                         order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=10)
                         open_position = True
-                        body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "TAKE PROFIT FROM SELL: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema10.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
-                        #body = "BUY - TAKE PROFIT FROM SELL" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema10.iloc[-1]) + "\n" + "ema20: " + str(df.ema20.iloc[-1] + "\n" + order)
+                        body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "TAKE PROFIT FROM SELL: ", str(df.Close.iloc[-1]), "\n" + "EMA: ", str(df.ema150.iloc[-1]), "\n" + " MACD: ", str(df.macd.iloc[-1])
+                        #body = "BUY - TAKE PROFIT FROM SELL" + pair + "\n" + profit_balance + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "MACD: " + str(df.macd.iloc[-1]) + "\n" + "RSI: " + str(df.rsi.iloc[-1]) + "\n" + "ema10: " + str(df.ema150.iloc[-1]) + "\n" + "ema20: " + str(df.ema100.iloc[-1] + "\n" + order)
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
@@ -190,12 +179,12 @@ while True:
     crypto_coins = ["BTCUSDT"]
     for coins in crypto_coins:
         # try:
-        df = getminutedata(coins, '5m', "1 day ago SGT")
+        df = getminutedata(coins, '1m', "1 day ago SGT")
         acc_balance = client.futures_account_balance()
         active_position = client.futures_position_information(symbol=coins)
         current_price = client.get_symbol_ticker(symbol=coins)
-        stop_loss_market_buy = int(float(current_price['price']) * 0.998)
-        stop_loss_market_sell = int(float(current_price['price']) * 1.002)
+        stop_loss_market_buy = int(float(current_price['price']) * 0.995)
+        stop_loss_market_sell = int(float(current_price['price']) * 1.005)
         total_coins = round(float(15/(float(current_price['price']))),3)
         myfile1 = Path(file_path+ coins +'_buy_future.txt')
         myfile2 = Path(file_path+ coins +'_sell_future.txt')
