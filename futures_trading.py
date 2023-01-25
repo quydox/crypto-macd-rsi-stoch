@@ -78,7 +78,7 @@ def strategy(pair, qty, open_position=False):
         for check_balance in acc_balance:
             if check_balance['asset'] == "USDT":
                 busd_balance = check_balance["balance"]
-                profit_balance = int(float(busd_balance))/50 * 100 - 100
+                profit_balance = int(float(busd_balance))/18.57 * 100 - 100
                 if df.Buy.iloc[-1]:
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
@@ -185,7 +185,7 @@ while True:
         current_price = client.get_symbol_ticker(symbol=coins)
         stop_loss_market_buy = int(float(current_price['price']) * 0.995)
         stop_loss_market_sell = int(float(current_price['price']) * 1.005)
-        total_coins = round(float(15/(float(current_price['price']))),3)
+        total_coins = round(float(18/(float(current_price['price']))),3)
         myfile1 = Path(file_path+ coins +'_buy_future.txt')
         myfile2 = Path(file_path+ coins +'_sell_future.txt')
         myfile1.touch(exist_ok=True)
