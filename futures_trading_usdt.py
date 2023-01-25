@@ -176,7 +176,7 @@ def strategy(pair, qty, open_position=False):
                         requests.get(base_url)
                         print(body)
 while True:
-    crypto_coins = ["BTCUSDT"]
+    crypto_coins = ["BTCBUSDT"]
     for coins in crypto_coins:
         # try:
         df = getminutedata(coins, '1m', "1 day ago SGT")
