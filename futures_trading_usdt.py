@@ -56,8 +56,10 @@ class Signals:
 
     def decide(self):
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
-        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 > self.df.ema100) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150) & (self.df['rsi'].between(50,56)), 1, 0)
-        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 < self.df.ema100) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150) & (self.df['rsi'].between(44,50)), 1, 0)
+        self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
+        self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)), 1, 0)
+        # self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 > self.df.ema100) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150) & (self.df['rsi'].between(50,56)), 1, 0)
+        # self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 < self.df.ema100) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150) & (self.df['rsi'].between(44,50)), 1, 0)
         self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema100), 1, 0)
         self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema100), 1, 0)
         self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df.ema50 < self.df.ema100), 1, 0)
