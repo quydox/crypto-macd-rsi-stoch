@@ -60,8 +60,12 @@ class Signals:
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 < self.df.ema100) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150) & (self.df['rsi'].between(44,50)), 1, 0)
         self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema100), 1, 0)
         self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema100), 1, 0)
-        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70), 1, 0)
-        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30), 1, 0)
+        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df.ema50 < self.df.ema100), 1, 0)
+        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df.ema50 > self.df.ema100), 1, 0)
+        self.df['TPBUY3'] = np.where((self.df.trigger) & (self.df.rsi > 80), 1, 0)
+        self.df['TPSELL3'] = np.where((self.df.trigger) & (self.df.rsi < 20), 1, 0)
+        self.df['TPBUY4'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2]), 1, 0)
+        self.df['TPSELL4'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2]), 1, 0)
         self.df['uptrend'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150), 1, 0)
         self.df['downtrend'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150), 1, 0)
 # inst = Signals(df, 2)
@@ -109,7 +113,7 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif ((df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]) and df.uptrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
+                elif ((df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1] or df.TPBUY3.iloc[-1]) and df.uptrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
                         clean_buy_list = []
@@ -159,7 +163,7 @@ def strategy(pair, qty, open_position=False):
                             print(body)
                     with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif ((df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1]) and df.downtrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
+                elif ((df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1] or df.TPSELL3.iloc[-1]) and df.downtrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future.txt', 'r') as f:
                         clean_sell_list = []
