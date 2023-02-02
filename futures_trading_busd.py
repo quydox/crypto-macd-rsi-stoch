@@ -60,8 +60,12 @@ class Signals:
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema50 < self.df.ema100) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150) & (self.df['rsi'].between(44,50)), 1, 0)
         self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema100), 1, 0)
         self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema100), 1, 0)
-        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70), 1, 0)
-        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30), 1, 0)
+        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df.ema50 < self.df.ema100), 1, 0)
+        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df.ema50 > self.df.ema100), 1, 0)
+        self.df['TPBUY3'] = np.where((self.df.trigger) & (self.df.rsi > 90), 1, 0)
+        self.df['TPSELL3'] = np.where((self.df.trigger) & (self.df.rsi < 10), 1, 0)
+        self.df['TPBUY4'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2]) & (self.df.rsi > 70), 1, 0)
+        self.df['TPSELL4'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2]) & (self.df.rsi < 30), 1, 0)
         self.df['uptrend'] = np.where((self.df.trigger) & (self.df.ema50 > self.df.ema150) & (self.df.ema100 > self.df.ema150), 1, 0)
         self.df['downtrend'] = np.where((self.df.trigger) & (self.df.ema50 < self.df.ema150) & (self.df.ema100 < self.df.ema150), 1, 0)
 # inst = Signals(df, 2)
@@ -107,7 +111,7 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future_busd.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif ((df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]) and df.uptrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
+                elif ((df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1] or df.TPBUY3.iloc[-1] or df.TPBUY4.iloc[-1]) and df.uptrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future_busd.txt', 'r') as f:
                         clean_buy_list = []
@@ -121,7 +125,7 @@ def strategy(pair, qty, open_position=False):
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
                             order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=2)
-                            body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
+                            body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPBUY1.iloc[-1]) + "\n" + "TP2: " + str(df.TPBUY2.iloc[-1]) + "\n" + "TP3: " + str(df.TPBUY3.iloc[-1]) + "\n" + "TP4: " + str(df.TPBUY4.iloc[-1])
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
@@ -155,7 +159,7 @@ def strategy(pair, qty, open_position=False):
                             print(body)
                     with open(file_path+ pair +'_sell_future_busd.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif ((df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1]) and df.downtrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
+                elif ((df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1] or df.TPSELL3.iloc[-1] or df.TPSELL4.iloc[-1]) and df.downtrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future_busd.txt', 'r') as f:
                         clean_sell_list = []
@@ -166,26 +170,28 @@ def strategy(pair, qty, open_position=False):
                     if pair in clean_sell_list and float(open_position_check['entryPrice']) != 0:
                         order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=2)
                         open_position = True
-                        body = "TAKE PROFIT FROM SELL: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "ema50: " + str(df.ema50.iloc[-1]) + "\n" + "ema100: " + str(df.ema100.iloc[-1]) + "\n" + "ema150: " + str(df.ema150.iloc[-1])
+                        body = "TAKE PROFIT FROM SELL: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPSELL1.iloc[-1]) + "\n" + "TP2: " + str(df.TPSELL2.iloc[-1]) + "\n" + "TP3: " + str(df.TPSELL3.iloc[-1]) + "\n" + "TP4: " + str(df.TPSELL4.iloc[-1])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
 while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
-        # try:
-        df = getminutedata(coins, '5m', "1 day ago SGT")
-        acc_balance = client.futures_account_balance()
-        active_position = client.futures_position_information(symbol=coins)
-        current_price = client.get_symbol_ticker(symbol=coins)
-        stop_loss_market_buy = int(float(current_price['price']) * 0.997)
-        stop_loss_market_sell = int(float(current_price['price']) * 1.003)
-        total_coins = round(float(50/(float(current_price['price']))),3)
-        myfile1 = Path(file_path+ coins +'_buy_future_busd.txt')
-        myfile2 = Path(file_path+ coins +'_sell_future_busd.txt')
-        myfile1.touch(exist_ok=True)
-        myfile2.touch(exist_ok=True)
-        strategy(coins, total_coins)
-        time.sleep(5)
-        # except Exception:
-        #    pass
+        try:
+            df = getminutedata(coins, '5m', "1 day ago SGT")
+            acc_balance = client.futures_account_balance()
+            active_position = client.futures_position_information(symbol=coins)
+            current_price = client.get_symbol_ticker(symbol=coins)
+            stop_loss_market_buy = int(float(current_price['price']) * 0.997)
+            stop_loss_market_sell = int(float(current_price['price']) * 1.003)
+            total_coins = round(float(50/(float(current_price['price']))),3)
+            myfile1 = Path(file_path+ coins +'_buy_future_busd.txt')
+            myfile2 = Path(file_path+ coins +'_sell_future_busd.txt')
+            myfile1.touch(exist_ok=True)
+            myfile2.touch(exist_ok=True)
+            strategy(coins, total_coins)
+            time.sleep(5)
+        except Exception as e:
+            body = "An error occurred while calling the Binance API: {}".format(e)
+            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
+            requests.get(base_url)
