@@ -178,19 +178,22 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = ["BTCUSDT"]
     for coins in crypto_coins:
-        # try:
-        df = getminutedata(coins, '1m', "1 day ago SGT")
-        acc_balance = client.futures_account_balance()
-        active_position = client.futures_position_information(symbol=coins)
-        current_price = client.get_symbol_ticker(symbol=coins)
-        stop_loss_market_buy = int(float(current_price['price']) * 0.998)
-        stop_loss_market_sell = int(float(current_price['price']) * 1.002)
-        total_coins = round(float(10/(float(current_price['price']))),3)
-        myfile1 = Path(file_path+ coins +'_buy_future.txt')
-        myfile2 = Path(file_path+ coins +'_sell_future.txt')
-        myfile1.touch(exist_ok=True)
-        myfile2.touch(exist_ok=True)
-        strategy(coins, total_coins)
-        time.sleep(5)
-        # except Exception:
-        #    pass
+        try:
+            df = getminutedata(coins, '1m', "1 day ago SGT")
+            acc_balance = client.futures_account_balance()
+            active_position = client.futures_position_information(symbol=coins)
+            current_price = client.get_symbol_ticker(symbol=coins)
+            stop_loss_market_buy = int(float(current_price['price']) * 0.998)
+            stop_loss_market_sell = int(float(current_price['price']) * 1.002)
+            total_coins = round(float(100/(float(current_price['price']))),3)
+            myfile1 = Path(file_path+ coins +'_buy_future.txt')
+            myfile2 = Path(file_path+ coins +'_sell_future.txt')
+            myfile1.touch(exist_ok=True)
+            myfile2.touch(exist_ok=True)
+            strategy(coins, total_coins)
+            time.sleep(5)
+        except Exception as e:
+            print("An error occurred while calling the Binance API:", e)
+            body = "An error occured while calling the Binance API", e
+            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
+            continue_script()
