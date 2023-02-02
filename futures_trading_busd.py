@@ -111,7 +111,7 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future_busd.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif ((df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1] or df.TPBUY3.iloc[-1] or df.TPBUY4.iloc[-1]) and df.uptrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
+                elif ((df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1] or df.TPBUY3.iloc[-1] or df.TPBUY4.iloc[-1]) and float(open_position_check['entryPrice']) != 0):
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future_busd.txt', 'r') as f:
                         clean_buy_list = []
@@ -159,7 +159,7 @@ def strategy(pair, qty, open_position=False):
                             print(body)
                     with open(file_path+ pair +'_sell_future_busd.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif ((df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1] or df.TPSELL3.iloc[-1] or df.TPSELL4.iloc[-1]) and df.downtrend.iloc[-1] and float(open_position_check['entryPrice']) != 0):
+                elif ((df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1] or df.TPSELL3.iloc[-1] or df.TPSELL4.iloc[-1]) and float(open_position_check['entryPrice']) != 0):
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future_busd.txt', 'r') as f:
                         clean_sell_list = []
