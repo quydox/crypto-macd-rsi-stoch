@@ -178,7 +178,7 @@ while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
         try:
-            df = getminutedata(coins, '4', "60 days ago SGT")
+            df = getminutedata(coins, '1h', "60 days ago SGT")
             acc_balance = client.futures_account_balance()
             active_position = client.futures_position_information(symbol=coins)
             current_price = client.get_symbol_ticker(symbol=coins)
