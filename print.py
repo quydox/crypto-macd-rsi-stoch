@@ -17,7 +17,7 @@ file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
 
-file = open(file_path+ pair +'_sell_future_busd.txt', 'w')
+file = open(file_path+ pair +'test.txt', 'w')
 file.close()
 
 # crypto_coins = client.futures_symbol_ticker()
