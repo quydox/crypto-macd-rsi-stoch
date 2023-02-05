@@ -82,7 +82,7 @@ def strategy(pair, qty, open_position=False):
                     client.futures_create_order(symbol=pair, side='SELL', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC' )
                     #client.futures_create_order(symbol=pair,side='SELL',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC')
                     open_position = True
-                    body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "BUY - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']), "\n" + "ema5: ", str(df.ema5.iloc[-1]), "\n" + "ema8: ", str(df.ema8.iloc[-1]), "\n" + "ema10: ", str(df.ema10.iloc[-1])
+                    body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "BUY - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice'])
                     base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                     requests.get(base_url)
                     print(body)
@@ -91,7 +91,7 @@ def strategy(pair, qty, open_position=False):
                     for item in fees:
                         qty_order = qty-(float(item['takerCommission'])*qty)
                         order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=2)
-                        body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPBUY1.iloc[-1]) + "\n" + "TP2: " + str(df.TPBUY2.iloc[-1]) + "\n" + "TP3: " + str(df.TPBUY3.iloc[-1]) + "\n" + "TP4: " + str(df.TPBUY4.iloc[-1])
+                        body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPBUY1.iloc[-1])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
@@ -102,14 +102,14 @@ def strategy(pair, qty, open_position=False):
                         order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=2)
                         client.futures_create_order(symbol=pair, side='BUY', type='STOP_MARKET', stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC' )
                         #client.futures_create_order(symbol=pair,side='BUY',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC')
-                        body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']), "\n" + "ema5: ", str(df.ema5.iloc[-1]), "\n" + "ema8: ", str(df.ema8.iloc[-1]), "\n" + "ema10: ", str(df.ema10.iloc[-1])
+                        body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice'])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
                 elif (df.TPSELL1.iloc[-1] and float(open_position_check['entryPrice']) != 0):
                     order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=2)
                     open_position = True
-                    body = "TAKE PROFIT FROM SELL: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPSELL1.iloc[-1]) + "\n" + "TP2: " + str(df.TPSELL2.iloc[-1]) + "\n" + "TP3: " + str(df.TPSELL3.iloc[-1]) + "\n" + "TP4: " + str(df.TPSELL4.iloc[-1])
+                    body = "TAKE PROFIT FROM SELL: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPSELL1.iloc[-1])
                     base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                     requests.get(base_url)
                     print(body)
