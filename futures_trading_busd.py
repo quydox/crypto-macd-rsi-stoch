@@ -80,7 +80,7 @@ def strategy(pair, qty, open_position=False):
         for check_balance in acc_balance:
             if check_balance['asset'] == "BUSD":
                 busd_balance = check_balance["balance"]
-                profit_balance = int(float(busd_balance))/50 * 100 - 100
+                profit_balance = int(float(busd_balance))/1221 * 100 - 100
                 if df.Buy.iloc[-1] and float(open_position_check['entryPrice']) == 0:
                     order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=2)
                     client.futures_create_order(symbol=pair, side='SELL', type='STOP_MARKET', stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC' )
@@ -127,7 +127,7 @@ while True:
             current_price = client.get_symbol_ticker(symbol=coins)
             stop_loss_market_buy = int(float(current_price['price']) * 0.999)
             stop_loss_market_sell = int(float(current_price['price']) * 1.001)
-            total_coins = round(float(50/(float(current_price['price']))),3)
+            total_coins = round(float(1000/(float(current_price['price']))),3)
             strategy(coins, total_coins)
             time.sleep(5)
         except Exception as e:
