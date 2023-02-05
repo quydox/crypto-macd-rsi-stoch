@@ -116,17 +116,17 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
-        # try:
-        df = getminutedata(coins, '1m', "1 day ago SGT")
-        acc_balance = client.futures_account_balance()
-        active_position = client.futures_position_information(symbol=coins)
-        current_price = client.get_symbol_ticker(symbol=coins)
-        stop_loss_market_buy = int(float(current_price['price']) * 0.999)
-        stop_loss_market_sell = int(float(current_price['price']) * 1.001)
-        total_coins = round(float(50/(float(current_price['price']))),3)
-        strategy(coins, total_coins)
-        time.sleep(5)
-        # except Exception as e:
-            # body = "An error occurred while calling the Binance API: {}".format(e)
-            # base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
-            # requests.get(base_url)
+        try:
+            df = getminutedata(coins, '1m', "1 day ago SGT")
+            acc_balance = client.futures_account_balance()
+            active_position = client.futures_position_information(symbol=coins)
+            current_price = client.get_symbol_ticker(symbol=coins)
+            stop_loss_market_buy = int(float(current_price['price']) * 0.999)
+            stop_loss_market_sell = int(float(current_price['price']) * 1.001)
+            total_coins = round(float(50/(float(current_price['price']))),3)
+            strategy(coins, total_coins)
+            time.sleep(5)
+        except Exception as e:
+            body = "An error occurred while calling the Binance API: {}".format(e)
+            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
+            requests.get(base_url)
