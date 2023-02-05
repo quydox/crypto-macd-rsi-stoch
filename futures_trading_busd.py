@@ -72,7 +72,7 @@ def strategy(pair, qty, open_position=False):
     inst.decide()
     for open_position_check in active_position:
         print(df)
-        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "ema5: " + str(df.ema10.iloc[-1]) + "\n" + "ema8: " + str(df.ema8.iloc[-1]) + "\n" + "ema10: " + str(df.ema10.iloc[-1]))
+        print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']))
         for check_balance in acc_balance:
             if check_balance['asset'] == "BUSD":
                 busd_balance = check_balance["balance"]
