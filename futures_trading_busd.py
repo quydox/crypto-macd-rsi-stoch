@@ -62,12 +62,6 @@ class Signals:
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df.ema5 < self.df.ema8) & (self.df.ema5 < self.df.ema10) & (self.df.ema8 < self.df.ema10) & (self.df['rsi'].between(44,50)), 1, 0)
         self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema5 < self.df.ema8) & (self.df.uptrend.iloc[-1]), 1, 0)
         self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema5 > self.df.ema8) & (self.df.downtrend.iloc[-1]), 1, 0)
-        self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.rsi > 70) & (self.df.ema5 < self.df.ema8) & (self.df.uptrend.iloc[-1]), 1, 0)
-        self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.rsi < 30) & (self.df.ema5 > self.df.ema8) & (self.df.downtrend.iloc[-1]), 1, 0)
-        self.df['TPBUY3'] = np.where((self.df.trigger) & (self.df.rsi > 90) & (self.df.uptrend.iloc[-1]), 1, 0)
-        self.df['TPSELL3'] = np.where((self.df.trigger) & (self.df.rsi < 10) & (self.df.downtrend.iloc[-1]), 1, 0)
-        self.df['TPBUY4'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] < self.df.Close.iloc[-2]) & (self.df.rsi > 70) & (self.df.uptrend.iloc[-1]), 1, 0)
-        self.df['TPSELL4'] = np.where((self.df.trigger) & (self.df.Close.iloc[-1] > self.df.Close.iloc[-2]) & (self.df.rsi < 30) & (self.df.downtrend.iloc[-1]), 1, 0)
 # inst = Signals(df, 2)
 # inst.decide()
 # print(df)
@@ -92,7 +86,7 @@ def strategy(pair, qty, open_position=False):
                     base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                     requests.get(base_url)
                     print(body)
-                elif ((df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1] or df.TPBUY3.iloc[-1] or df.TPBUY4.iloc[-1]) and float(open_position_check['entryPrice']) != 0):
+                elif (df.TPBUY1.iloc[-1] and float(open_position_check['entryPrice']) != 0):
                     fees = client.get_trade_fee(symbol=pair)
                     for item in fees:
                         qty_order = qty-(float(item['takerCommission'])*qty)
@@ -112,7 +106,7 @@ def strategy(pair, qty, open_position=False):
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
-                elif ((df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1] or df.TPSELL3.iloc[-1] or df.TPSELL4.iloc[-1]) and float(open_position_check['entryPrice']) != 0):
+                elif (df.TPSELL1.iloc[-1] and float(open_position_check['entryPrice']) != 0):
                     order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=2)
                     open_position = True
                     body = "TAKE PROFIT FROM SELL: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPSELL1.iloc[-1]) + "\n" + "TP2: " + str(df.TPSELL2.iloc[-1]) + "\n" + "TP3: " + str(df.TPSELL3.iloc[-1]) + "\n" + "TP4: " + str(df.TPSELL4.iloc[-1])
