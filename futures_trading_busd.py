@@ -64,6 +64,7 @@ class Signals:
         self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema5 > self.df.ema8) & (self.df.downtrend.iloc[-1]), 1, 0)
         self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.uptrend.iloc[-1]) & (self.df['rsi'] > 70 ), 1, 0)
         self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.downtrend.iloc[-1]) & (self.df['rsi'] < 30 ), 1, 0)
+        self.df['TPBOTH'] = np.where((self.df.trigger) & (self.df.uptrend.iloc[-1]) & (self.df.downtrend.iloc[-1]), 1, 0)
         # self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.ema5 < self.df.ema8) & (self.df.uptrend.iloc[-1]) & (self.df['rsi'] > 70 ), 1, 0)
         # self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.ema5 > self.df.ema8) & (self.df.downtrend.iloc[-1]) & (self.df['rsi'] < 30 ), 1, 0)
 # inst = Signals(df, 2)
@@ -90,12 +91,12 @@ def strategy(pair, qty, open_position=False):
                     base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                     requests.get(base_url)
                     print(body)
-                elif ((df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]) and float(open_position_check['entryPrice']) != 0):
+                elif ((df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1] or (df.TPBOTH.iloc[-1] == 0 )) and float(open_position_check['entryPrice']) != 0):
                     fees = client.get_trade_fee(symbol=pair)
                     for item in fees:
                         qty_order = qty-(float(item['takerCommission'])*qty)
                         order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=3)
-                        body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPBUY1.iloc[-1]) + "\n" + "TP2: " + str(df.TPBUY2.iloc[-1])
+                        body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPBUY1.iloc[-1]) + "\n" + "TP2: " + str(df.TPBUY2.iloc[-1]) + "\n" + "TPBOTH: " + str(df.TPBOTH.iloc[-1])
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
@@ -110,10 +111,10 @@ def strategy(pair, qty, open_position=False):
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
-                elif ((df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1]) and float(open_position_check['entryPrice']) != 0):
+                elif ((df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1] or (df.TPBOTH.iloc[-1] == 0 ) ) and float(open_position_check['entryPrice']) != 0):
                     order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=3)
                     open_position = True
-                    body = "TAKE PROFIT FROM SELL: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPSELL1.iloc[-1]) + "\n" + "TP2: " + str(df.TPSELL2.iloc[-1])
+                    body = "TAKE PROFIT FROM SELL: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPSELL1.iloc[-1]) + "\n" + "TP2: " + str(df.TPSELL2.iloc[-1]) + "\n" + "TPBOTH: " + str(df.TPBOTH.iloc[-1])
                     base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                     requests.get(base_url)
                     print(body)
