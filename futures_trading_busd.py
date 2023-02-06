@@ -128,7 +128,7 @@ while True:
             current_price = client.get_symbol_ticker(symbol=coins)
             stop_loss_market_buy = int(float(current_price['price']) * 0.999)
             stop_loss_market_sell = int(float(current_price['price']) * 1.001)
-            total_coins = round(float(3000/(float(current_price['price']))),3)
+            total_coins = round(float(2000/(float(current_price['price']))),3)
             strategy(coins, total_coins)
             time.sleep(10)
         except Exception as e:
