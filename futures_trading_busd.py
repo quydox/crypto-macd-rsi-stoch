@@ -64,7 +64,7 @@ class Signals:
         self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema5 > self.df.ema8) & (self.df.downtrend.iloc[-1]), 1, 0)
         self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.uptrend.iloc[-1]) & (self.df['rsi'] > 75 ), 1, 0)
         self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.downtrend.iloc[-1]) & (self.df['rsi'] < 25 ), 1, 0)
-        self.df['TPBOTH'] = np.where((self.df.trigger) & (self.df.uptrend.iloc[-1] == 0) & (self.df.downtrend.iloc[-1] == 0), 1, 0)
+        self.df['TPBOTH'] = np.where((self.df.trigger) & (self.df.uptrend.iloc[-1] < 1 ) & (self.df.downtrend.iloc[-1] < 1), 1, 0)
         # self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.ema5 < self.df.ema8) & (self.df.uptrend.iloc[-1]) & (self.df['rsi'] > 70 ), 1, 0)
         # self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.ema5 > self.df.ema8) & (self.df.downtrend.iloc[-1]) & (self.df['rsi'] < 30 ), 1, 0)
 # inst = Signals(df, 2)
