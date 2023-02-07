@@ -126,7 +126,7 @@ while True:
             stop_loss_market_sell = int(float(current_price['price']) * 1.002)
             total_coins = round(float(1000/(float(current_price['price']))),3)
             strategy(coins, total_coins)
-            time.sleep(10)
+            time.sleep(30)
         except Exception as e:
             body = "An error occurred while calling the Binance API: {}".format(e)
             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
