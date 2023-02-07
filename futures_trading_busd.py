@@ -60,8 +60,8 @@ class Signals:
         self.df['downtrend'] = np.where((self.df.trigger) & (self.df.ema5 < self.df.ema10) & (self.df.ema8 < self.df.ema10), 1, 0)
         self.df['Buy'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df['%K'] > self.df['%D']) & (self.df.ema5 > self.df.ema8) & (self.df.ema5 > self.df.ema10) & (self.df.ema8 > self.df.ema10) &  (self.df['rsi'].between(50,60)), 1, 0)
         self.df['Sell'] = np.where((self.df.trigger) & (self.df['%K'].between(20,80)) & (self.df['%D'].between(20,80)) & (self.df['%K'] < self.df['%D']) & (self.df.ema5 < self.df.ema8) & (self.df.ema5 < self.df.ema10) & (self.df.ema8 < self.df.ema10) & (self.df['rsi'].between(40,50)), 1, 0)
-        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema5 < self.df.ema8) & (self.df.uptrend.iloc[-1]), 1, 0)
-        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema5 > self.df.ema8) & (self.df.downtrend.iloc[-1]), 1, 0)
+        self.df['TPBUY1'] = np.where((self.df.trigger) & (self.df.ema5 < self.df.ema8) & (self.df.uptrend.iloc[-1]) & (self.df.rsi > 70), 1, 0)
+        self.df['TPSELL1'] = np.where((self.df.trigger) & (self.df.ema5 > self.df.ema8) & (self.df.downtrend.iloc[-1]) & (self.df.rsi < 30), 1, 0)
         self.df['TPBUY2'] = np.where((self.df.trigger) & (self.df.ema5 < self.df.ema8) & (self.df.uptrend.iloc[-1]) & (self.df['%K'] < self.df['%D']), 1, 0)
         self.df['TPSELL2'] = np.where((self.df.trigger) & (self.df.ema5 > self.df.ema8) & (self.df.downtrend.iloc[-1]) & (self.df['%K'] > self.df['%D']), 1, 0)
 
