@@ -32,7 +32,7 @@ def getminutedata(symbol, interval, lookback):
 def applytechnicals(df):
     df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
     df['%D'] = df['%K'].rolling(3).mean()
-    df['rsi'] = ta.momentum.rsi(df.Close, window=9)
+    df['rsi'] = ta.momentum.rsi(df.Close, window=7)
     df['macd'] = ta.trend.macd_diff(df.Close, window_slow=26, window_fast=12, window_sign=9)
     df['ema5'] = ta.trend.ema_indicator(df.Close, window=5)
     df['ema8'] = ta.trend.ema_indicator(df.Close, window=8)
