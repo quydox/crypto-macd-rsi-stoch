@@ -16,9 +16,9 @@ msg_id_telegram1 = os.getenv("msg_id_telegram1")
 file_path = os.getenv("file_path")
 
 client = Client(api_key, api_secret)
-pair = "BTCBUSD"
-file = open(file_path+ pair +'test.txt', 'w')
-file.close()
+# pair = "BTCBUSD"
+# file = open(file_path+ pair +'test.txt', 'w')
+# file.close()
 
 # crypto_coins = client.futures_symbol_ticker()
 # for item in crypto_coins:
@@ -94,8 +94,8 @@ file.close()
 # print(int(float(current_price['price']) * 1.005))
 
 
-# fees = client.get_trade_fee(symbol='BTCBUSD')
-# print(fees)
+fees = client.get_trade_fee(symbol='BTCBUSD')
+print(fees)
 
 # def getminutedata(symbol, interval, lookback):
 #     frame = pd.DataFrame(client.futures_historical_klines(symbol, interval, lookback))
