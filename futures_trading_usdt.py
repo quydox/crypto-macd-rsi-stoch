@@ -190,5 +190,5 @@ while True:
             time.sleep(5)
         except Exception as e:
             body = "An error occurred while calling the Binance API: {}".format(e)
-            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.
-            requests.get(base_url)   
+            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
+            requests.get(base_url)
