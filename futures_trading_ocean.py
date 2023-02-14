@@ -181,7 +181,11 @@ while True:
             current_price = client.get_symbol_ticker(symbol=coins)
             stop_loss_market_buy = float(current_price['price']) * 0.999
             stop_loss_market_sell = float(current_price['price']) * 1.001
-            total_coins = round(float(100/(float(current_price['price']))),3)
+            total_coins = round(float(100/(float(current_price['price']))),8)
+            print(current_price)
+            print(stop_loss_market_buy)
+            print(stop_loss_market_sell)
+            print(total_coins)
             myfile1 = Path(file_path+ coins +'_buy_future_ocean.txt')
             myfile2 = Path(file_path+ coins +'_sell_future_ocean.txt')
             myfile1.touch(exist_ok=True)
