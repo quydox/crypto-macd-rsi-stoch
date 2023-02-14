@@ -182,11 +182,12 @@ while True:
             stop_loss_market_buy = int(float(current_price['price']) * 0.999)
             stop_loss_market_sell = int(float(current_price['price']) * 1.001)
             total_coins = round(float(200/(float(current_price['price']))),3)
+            print(total_coins)
             myfile1 = Path(file_path+ coins +'_buy_future_ocean.txt')
             myfile2 = Path(file_path+ coins +'_sell_future_ocean.txt')
             myfile1.touch(exist_ok=True)
             myfile2.touch(exist_ok=True)
-            strategy(coins, total_coins)
+            # strategy(coins, total_coins)
             time.sleep(5)
         except Exception as e:
             body = "An error occurred while calling the Binance API: {}".format(e)
