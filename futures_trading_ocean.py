@@ -179,8 +179,8 @@ while True:
             acc_balance = client.futures_account_balance()
             active_position = client.futures_position_information(symbol=coins)
             current_price = client.get_symbol_ticker(symbol=coins)
-            stop_loss_market_buy = float(current_price['price']) * 0.999)
-            stop_loss_market_sell = float(current_price['price']) * 1.001)
+            stop_loss_market_buy = float(current_price['price']) * 0.999
+            stop_loss_market_sell = float(current_price['price']) * 1.001
             total_coins = round(float(200/(float(current_price['price']))))
             print(total_coins)
             print(current_price)
