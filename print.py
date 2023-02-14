@@ -94,7 +94,7 @@ client = Client(api_key, api_secret)
 # print(int(float(current_price['price']) * 1.005))
 
 
-fees = client.get_trade_fee(symbol='BTCBUSD')
+fees = client.get_trade_fee(symbol='OCEANUSDT')
 print(fees)
 
 # def getminutedata(symbol, interval, lookback):
