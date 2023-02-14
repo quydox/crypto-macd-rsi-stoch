@@ -77,7 +77,7 @@ def strategy(pair, qty, open_position=False):
         print(df)
         print(pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "CLOSE PRICE PREV: " + str(df.Close.iloc[-2]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']))
         for check_balance in acc_balance:
-            if check_balance['asset'] == "USDT":
+            if check_balance['asset'] == "BUSD":
                 busd_balance = check_balance["balance"]
                 profit_balance = int(float(busd_balance))/1221 * 100 - 100
                 if df.Buy.iloc[-1]:

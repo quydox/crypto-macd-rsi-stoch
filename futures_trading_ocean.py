@@ -146,7 +146,7 @@ def strategy(pair, qty, open_position=False):
                     if pair not in clean_sell_list and float(open_position_check['entryPrice']) == 0:
                         fees = client.get_trade_fee(symbol=pair)
                         for item in fees:
-                            qty_order = qty-(float(item['takerCommission'])*qty)
+                            qty_order = qty-(int(float(item['takerCommission'])*qty))
                             order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=2)
                             client.futures_create_order(symbol=pair, side='BUY', type='STOP_MARKET', stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC' )
                             #client.futures_create_order(symbol=pair,side='BUY',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC')
