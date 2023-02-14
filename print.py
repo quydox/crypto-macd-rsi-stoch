@@ -97,6 +97,9 @@ client = Client(api_key, api_secret)
 fees = client.get_trade_fee(symbol='OCEANUSDT')
 print(fees)
 
+info = client.get_symbol_info('OCEANUSDT')
+print(pformat(info))
+
 # def getminutedata(symbol, interval, lookback):
 #     frame = pd.DataFrame(client.futures_historical_klines(symbol, interval, lookback))
 #     frame = frame.iloc[:,:6]
