@@ -144,10 +144,10 @@ def strategy(pair, qty, open_position=False):
                     file.close()
                     ###########################################################################################################
                     if pair not in clean_sell_list and float(open_position_check['entryPrice']) == 0:
-                        # fees = client.get_trade_fee(symbol=pair)
-                        # for item in fees:
-                            # qty_order = qty-(int(float(item['takerCommission'])*qty))
-                        order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty, leverage=2)
+                        fees = client.get_trade_fee(symbol=pair)
+                        for item in fees:
+                            qty_order = qty-(int(float(item['takerCommission'])*qty))
+                        order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=2)
                         client.futures_create_order(symbol=pair, side='BUY', type='STOP_MARKET', stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC' )
                         #client.futures_create_order(symbol=pair,side='BUY',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC')
                         body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice'])
