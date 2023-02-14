@@ -181,7 +181,7 @@ while True:
             current_price = client.get_symbol_ticker(symbol=coins)
             stop_loss_market_buy = round((float(current_price['price']) * 0.999),8)
             stop_loss_market_sell = round((float(current_price['price']) * 1.001),8)
-            total_coins = round(float(100/(float(current_price['price']))),8)
+            total_coins = round(float(100/(float(current_price['price']))),5)
             print(current_price)
             print(stop_loss_market_buy)
             print(stop_loss_market_sell)
