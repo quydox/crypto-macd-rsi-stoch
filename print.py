@@ -98,7 +98,7 @@ fees = client.get_trade_fee(symbol='OCEANUSDT')
 print(fees)
 
 info = client.get_symbol_info('OCEANUSDT')
-print(pformat(info))
+print(format(info))
 
 # def getminutedata(symbol, interval, lookback):
 #     frame = pd.DataFrame(client.futures_historical_klines(symbol, interval, lookback))
