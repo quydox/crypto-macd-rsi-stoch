@@ -187,7 +187,7 @@ while True:
             myfile2 = Path(file_path+ coins +'_sell_future_ocean.txt')
             myfile1.touch(exist_ok=True)
             myfile2.touch(exist_ok=True)
-            # strategy(coins, total_coins)
+            strategy(coins, total_coins)
             time.sleep(5)
         except Exception as e:
             body = "An error occurred while calling the Binance API: {}".format(e)
