@@ -183,6 +183,8 @@ while True:
             stop_loss_market_sell = int(float(current_price['price']) * 1.001)
             total_coins = round(float(200/(float(current_price['price']))))
             print(total_coins)
+            print(stop_loss_market_buy)
+            print(stop_loss_market_sell)
             myfile1 = Path(file_path+ coins +'_buy_future_ocean.txt')
             myfile2 = Path(file_path+ coins +'_sell_future_ocean.txt')
             myfile1.touch(exist_ok=True)
