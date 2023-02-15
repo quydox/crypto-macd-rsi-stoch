@@ -108,7 +108,7 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif (df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]):
+                elif (df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]) and float(open_position_check['entryPrice']) != 0:
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
                         clean_buy_list = []
@@ -117,7 +117,7 @@ def strategy(pair, qty, open_position=False):
                     file = open(file_path+ pair +'_buy_future.txt', 'w')
                     file.close()
                     ###########################################################################################################
-                    if pair in clean_buy_list:
+                    if pair in clean_buy_list and float(open_position_check['entryPrice']) != 0:
                         fees = client.get_trade_fee(symbol=pair)
                         for item in fees:
                             qty_order = qty-(float(item['takerCommission'])*qty)
@@ -156,7 +156,7 @@ def strategy(pair, qty, open_position=False):
                             print(body)
                     with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif (df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1]):
+                elif (df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1]) and float(open_position_check['entryPrice']) != 0:
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future.txt', 'r') as f:
                         clean_sell_list = []
