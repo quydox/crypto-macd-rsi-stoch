@@ -155,7 +155,7 @@ def strategy(pair, qty, open_position=False):
                             client.futures_create_order(symbol=pair, side='BUY', type='STOP_MARKET', stopPrice=stop_loss_market_sell, closePosition='true', timeInForce='GTE_GTC' )
                             #client.futures_create_order(symbol=pair,side='BUY',type='TAKE_PROFIT_MARKET',stopPrice=stop_loss_market_buy, closePosition='true', timeInForce='GTE_GTC')
                             #body = pair, "\n" + "PROFIT: ", profit_balance, "\n" + "ORDER: ", order,"\n" + "SELL - NEW ENTRY: ", str(df.Close.iloc[-1]), "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice'])
-                            body = "BUY NEW ENTRY: " + pair + "\n"  + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "SL: " + str(stop_loss_market_sell)
+                            body = "SELL NEW ENTRY: " + pair + "\n"  + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "SL: " + str(stop_loss_market_sell)
                             base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
                             requests.get(base_url)
                             print(body)
