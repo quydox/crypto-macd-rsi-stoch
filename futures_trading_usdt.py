@@ -80,7 +80,10 @@ def strategy(pair, qty, open_position=False):
             if check_balance['asset'] == "BUSD":
                 busd_balance = check_balance["balance"]
                 profit_balance = int(float(busd_balance))/1221 * 100 - 100
-                if df.Buy.iloc[-1]:
+                if float(open_position_check['entryPrice']) == 0:
+                    file = open(file_path+ pair +'_buy_future.txt', 'w')
+                    file.close()
+                elif df.Buy.iloc[-1]:
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
                         clean_buy_list = []
