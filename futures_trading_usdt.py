@@ -83,6 +83,8 @@ def strategy(pair, qty, open_position=False):
                 if float(open_position_check['entryPrice']) == 0:
                     file = open(file_path+ pair +'_buy_future.txt', 'w')
                     file.close()
+                    file = open(file_path+ pair +'_sell_future.txt', 'w')
+                    file.close()
                 if df.Buy.iloc[-1]:
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
