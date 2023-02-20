@@ -182,12 +182,12 @@ while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
         try:
-            df = getminutedata(coins, '1h', "90 days ago SGT")
+            df = getminutedata(coins, '4h', "90 days ago SGT")
             acc_balance = client.futures_account_balance()
             active_position = client.futures_position_information(symbol=coins)
             current_price = client.get_symbol_ticker(symbol=coins)
-            stop_loss_market_buy = int(float(current_price['price']) * 0.998)
-            stop_loss_market_sell = int(float(current_price['price']) * 1.002)
+            stop_loss_market_buy = int(float(current_price['price']) * 0.999)
+            stop_loss_market_sell = int(float(current_price['price']) * 1.001)
             total_coins = round(float(9000/(float(current_price['price']))),3)
             myfile1 = Path(file_path+ coins +'_buy_future.txt')
             myfile2 = Path(file_path+ coins +'_sell_future.txt')
