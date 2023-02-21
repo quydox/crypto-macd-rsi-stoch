@@ -33,7 +33,7 @@ def applytechnicals(df):
     df['%K'] = ta.momentum.stoch(df.High,df.Low,df.Close, window=14, smooth_window=3)
     df['%D'] = df['%K'].rolling(3).mean()
     df['rsi'] = ta.momentum.rsi(df.Close, window=7)
-    df['macd'] = ta.trend.macd_diff(df.Close, window_slow=26, window_fast=12, window_sign=9)
+    df['macd'] = ta.trend.macd_diff(df.Close, window_slow=21, window_fast=8, window_sign=5)
     df['ema5'] = ta.trend.ema_indicator(df.Close, window=5)
     df['ema8'] = ta.trend.ema_indicator(df.Close, window=8)
     df['ema10'] = ta.trend.ema_indicator(df.Close, window=10)
@@ -182,7 +182,7 @@ while True:
     crypto_coins = ["BTCBUSD"]
     for coins in crypto_coins:
         try:
-            df = getminutedata(coins, '4h', "90 days ago SGT")
+            df = getminutedata(coins, '1h', "90 days ago SGT")
             acc_balance = client.futures_account_balance()
             active_position = client.futures_position_information(symbol=coins)
             current_price = client.get_symbol_ticker(symbol=coins)
