@@ -47,19 +47,19 @@ class Signals:
         self.df = df
         self.lags = lags
 
-    # def gettrigger(self):
-    #     dfx = pd.DataFrame()
-    #     for i in range(self.lags +1):
-    #         mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
-    #         dfx = pd.concat([mask], ignore_index=True)
-    #     return dfx.sum(axis=0)
-
     def gettrigger(self):
         dfx = pd.DataFrame()
         for i in range(self.lags +1):
             mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
-            dfx = pd.concat([dfx, mask], axis=1)
-        return dfx.sum(axis=1)
+            dfx = pd.concat([mask], ignore_index=True)
+        return dfx.sum(axis=0)
+
+    # def gettrigger(self):
+    #     dfx = pd.DataFrame()
+    #     for i in range(self.lags +1):
+    #         mask = (self.df['%K'].shift(i) < 20) & (self.df['%D'].shift(i) < 20)
+    #         dfx = pd.concat([dfx, mask], axis=1)
+    #     return dfx.sum(axis=1)
 
     def decide(self):
         self.df['trigger'] = np.where(self.gettrigger(), 1, 0)
