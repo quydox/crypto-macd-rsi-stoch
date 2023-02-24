@@ -62,7 +62,7 @@ def calculate_pnl(trades):
     return total_pnl
 
 # Get all trades
-trades = get_trades()
+trades = get_trades('BTCUSDT')
 # Calculate PNL for all trades
 # pnl = calculate_pnl(trades)
 # # Print PNL
