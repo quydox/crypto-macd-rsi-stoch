@@ -23,11 +23,17 @@ client = Client(api_key, api_secret)
 # API endpoint for trades
 ENDPOINT = 'https://api.binance.com/api/v3/myTrades'
 
-# Get all trades for a specific symbol
+# Get trades from the beginning of the year up to the current date
 def get_trades(symbol):
-    # Build query string parameters
+    # Get timestamp of the first day of the year
+    year = time.localtime().tm_year
+    first_day_of_year = time.mktime((year, 1, 1, 0, 0, 0, 0, 0, 0))
+    start_time = int(first_day_of_year * 1000)
+    end_time = int(time.time() * 1000)
     params = {
         'symbol': symbol,
+        'startTime': start_time,
+        'endTime': end_time,
         'timestamp': int(time.time() * 1000),
         'recvWindow': 5000
     }
@@ -62,14 +68,13 @@ def calculate_pnl(trades):
     return total_pnl
 
 # Specify the symbol you want to fetch trades for
-#symbol = 'BTCUSDT'
-symbol = 'BTCBUSD'
+symbol = 'BTCUSDT'
 
-# Get all trades for the specified symbol
+# Get all trades for the specified symbol from the beginning of the year up to the current date
 trades = get_trades(symbol)
 
 # Calculate PNL for all trades
 pnl = calculate_pnl(trades)
 
 # Print PNL
-print(f"Total PNL for {symbol}: {pnl}")
+print(f"Total PNL for {symbol} from the beginning of the year up to the current date: {pnl}")
