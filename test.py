@@ -64,9 +64,10 @@ def calculate_pnl(trades):
 # Get all trades
 trades = get_trades()
 # Calculate PNL for all trades
-pnl = calculate_pnl(trades)
-# Print PNL
-print(f"Total PNL: {pnl}")
+# pnl = calculate_pnl(trades)
+# # Print PNL
+# print(f"Total PNL: {pnl}")
+print(trades)
 
 # pair = "BTCBUSD"
 # file = open(file_path+ pair +'test.txt', 'w')
