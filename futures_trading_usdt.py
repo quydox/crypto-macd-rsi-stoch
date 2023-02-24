@@ -115,7 +115,25 @@ def strategy(pair, qty, open_position=False):
                         print(body)
                     with open(file_path+ pair +'_buy_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
-                elif (df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1] or df.TPBOTH.iloc[-1]) and float(open_position_check['entryPrice']) != 0:
+                elif (df.TPBUY1.iloc[-1] or df.TPBUY2.iloc[-1]) and float(open_position_check['entryPrice']) != 0:
+                    #####################Read the previous buy text output and empty the file ################################
+                    with open(file_path+ pair +'_buy_future.txt', 'r') as f:
+                        clean_buy_list = []
+                        for buy_list in f.readlines():
+                            clean_buy_list.append(buy_list.replace("\n", ""))
+                    file = open(file_path+ pair +'_buy_future.txt', 'w')
+                    file.close()
+                    ###########################################################################################################
+                    if pair in clean_buy_list and float(open_position_check['entryPrice']) != 0:
+                        fees = client.get_trade_fee(symbol=pair)
+                        for item in fees:
+                            qty_order = qty-(float(item['takerCommission'])*qty)
+                            order = client.futures_create_order(symbol=pair, side='SELL', type='MARKET', quantity=qty_order, leverage=2)
+                            body = "TAKE PROFIT FROM BUY: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPBUY1.iloc[-1]) + "\n" + "TP2: " + str(df.TPBUY2.iloc[-1]) + "\n" + "TP3: " + str(df.TPBOTH.iloc[-1])
+                            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1)+ '&text="{}"'.format(body)
+                            requests.get(base_url)
+                            print(body)
+                elif df.TPBOTH.iloc[-1] and float(open_position_check['entryPrice']) != 0:
                     #####################Read the previous buy text output and empty the file ################################
                     with open(file_path+ pair +'_buy_future.txt', 'r') as f:
                         clean_buy_list = []
@@ -165,6 +183,21 @@ def strategy(pair, qty, open_position=False):
                     with open(file_path+ pair +'_sell_future.txt', 'a+') as f:
                         f.write(str(pair) + '\n')
                 elif (df.TPSELL1.iloc[-1] or df.TPSELL2.iloc[-1] or df.TPBOTH.iloc[-1]) and float(open_position_check['entryPrice']) != 0:
+                    #####################Read the previous sell text output and empty the file ###############################
+                    with open(file_path+ pair +'_sell_future.txt', 'r') as f:
+                        clean_sell_list = []
+                        for sell_list in f.readlines():
+                            clean_sell_list.append(sell_list.replace("\n", ""))
+                    file = open(file_path+ pair +'_sell_future.txt', 'w')
+                    file.close()
+                    if pair in clean_sell_list and float(open_position_check['entryPrice']) != 0:
+                        order = client.futures_create_order(symbol=pair, side='BUY', type='MARKET', quantity=qty, leverage=2)
+                        open_position = True
+                        body = "TAKE PROFIT FROM SELL: " + pair + "\n" + "CLOSE PRICE: " + str(df.Close.iloc[-1]) + "\n" + "ENTRY PRICE: " + str(open_position_check['entryPrice']) + "\n" + "TP1: " + str(df.TPSELL1.iloc[-1]) + "\n" + "TP2: " + str(df.TPSELL2.iloc[-1]) + "\n" + "TP3: " + str(df.TPBOTH.iloc[-1])
+                        base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
+                        requests.get(base_url)
+                        print(body)
+                elif df.TPBOTH.iloc[-1] and float(open_position_check['entryPrice']) != 0:
                     #####################Read the previous sell text output and empty the file ###############################
                     with open(file_path+ pair +'_sell_future.txt', 'r') as f:
                         clean_sell_list = []
