@@ -62,7 +62,8 @@ def calculate_pnl(trades):
     return total_pnl
 
 # Specify the symbol you want to fetch trades for
-symbol = 'BTCUSDT'
+#symbol = 'BTCUSDT'
+symbol = 'BTCBUSD'
 
 # Get all trades for the specified symbol
 trades = get_trades(symbol)
