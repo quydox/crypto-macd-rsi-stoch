@@ -28,8 +28,8 @@ def get_trades(symbol):
     # Build query string parameters
     params = {
         'symbol': symbol,
-        'timestamp': int(time.time() * 10000),
-        'recvWindow': 50000
+        'timestamp': int(time.time() * 1000),
+        'recvWindow': 5000
     }
     # Generate signature for request
     query_string = '&'.join([f"{k}={v}" for k, v in params.items()])
