@@ -188,7 +188,7 @@ def strategy(pair, qty, open_position=False):
 #while True:
 crypto_coins = client.futures_symbol_ticker()
 for coins in crypto_coins:
-    if (int(float(coins['price'])) < 1) and coins['symbol'].endswith('USDT'):
+    if (int(float(coins['price'])) < 1) and coins['symbol'].endswith('BUSD'):
         print(coins['symbol'])
         #     try:
         #         df = getminutedata(coins, '1h', "90 days ago SGT")
