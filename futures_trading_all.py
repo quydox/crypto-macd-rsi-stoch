@@ -185,11 +185,10 @@ def strategy(pair, qty, open_position=False):
                         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
                         requests.get(base_url)
                         print(body)
-while True:
-    crypto_coins = client.futures_symbol_ticker()
-    for coins in crypto_coins:
-        print(coins['symbol'])
-        #print(coins['symbol'].endswith('USDT'))
+#while True:
+crypto_coins = client.futures_symbol_ticker()
+for coins in crypto_coins:
+    print(coins['symbol'].endswith('USDT'))
         # if (int(float(coins['price'])) < 1) and coins['symbol'].endswith('USDT'):
         #     try:
         #         df = getminutedata(coins, '1h', "90 days ago SGT")
