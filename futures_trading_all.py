@@ -190,8 +190,8 @@ crypto_coins = client.futures_symbol_ticker()
 for coins in crypto_coins:
     if (int(float(coins['price'])) < 1) and coins['symbol'].endswith('BUSD'):
         # print(coins['symbol'])
-        try:
-            df = getminutedata(coins['symbol'], '1h', "90 days ago SGT")
+        # try:
+        df = getminutedata(coins['symbol'], '1h', "90 days ago SGT")
         #     acc_balance = client.futures_account_balance()
         #     active_position = client.futures_position_information(symbol=coins['symbol'])
         #     current_price = client.get_symbol_ticker(symbol=coins['symbol'])
@@ -204,7 +204,7 @@ for coins in crypto_coins:
         #     myfile2.touch(exist_ok=True)
         #     strategy(coins['symbol'], total_coins)
         #     time.sleep(10)
-        except Exception as e:
-            body = "An error occurred while calling the Binance API: {}".format(e)
-            base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
-            requests.get(base_url)
+        # except Exception as e:
+        #     body = "An error occurred while calling the Binance API: {}".format(e)
+        #     base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
+        #     requests.get(base_url)
