@@ -193,7 +193,8 @@ for coins in crypto_coins:
         # try:
         df = getminutedata(coins['symbol'], '1h', "90 days ago SGT")
         print(df)
-        #     acc_balance = client.futures_account_balance()
+        acc_balance = client.futures_account_balance()
+        print(acc_balance)
         #     active_position = client.futures_position_information(symbol=coins['symbol'])
         #     current_price = client.get_symbol_ticker(symbol=coins['symbol'])
         #     stop_loss_market_buy = int(float(current_price['price']) * 0.999)
