@@ -190,7 +190,7 @@ crypto_coins = client.futures_symbol_ticker()
 for coins in crypto_coins:
     if (int(float(coins['price'])) < 1) and coins['symbol'].endswith('USDT'):
         try:
-            df = getminutedata(coins, '1h', "90 days ago SGT")
+            df = getminutedata(coins['symbol'], '1h', "90 days ago SGT")
             acc_balance = client.futures_account_balance()
             active_position = client.futures_position_information(symbol=coins['symbol'])
             current_price = client.get_symbol_ticker(symbol=coins['symbol'])
