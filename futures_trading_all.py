@@ -188,22 +188,23 @@ def strategy(pair, qty, open_position=False):
 while True:
     crypto_coins = client.futures_symbol_ticker()
     for coins in crypto_coins:
-        if (int(float(coins['price'])) < 1) and coins['symbol'].endswith('USDT'):
-            try:
-                df = getminutedata(coins, '1h', "90 days ago SGT")
-                acc_balance = client.futures_account_balance()
-                active_position = client.futures_position_information(symbol=coins)
-                current_price = client.get_symbol_ticker(symbol=coins)
-                stop_loss_market_buy = int(float(current_price['price']) * 0.999)
-                stop_loss_market_sell = int(float(current_price['price']) * 1.001)
-                total_coins = round(float(9000/(float(current_price['price']))),3)
-                myfile1 = Path(file_path+ coins +'_buy_future.txt')
-                myfile2 = Path(file_path+ coins +'_sell_future.txt')
-                myfile1.touch(exist_ok=True)
-                myfile2.touch(exist_ok=True)
-                strategy(coins, total_coins)
-                time.sleep(10)
-            except Exception as e:
-                body = "An error occurred while calling the Binance API: {}".format(e)
-                base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
-                requests.get(base_url)
+        print(coins['symbol'].endswith('USDT'))
+        # if (int(float(coins['price'])) < 1) and coins['symbol'].endswith('USDT'):
+        #     try:
+        #         df = getminutedata(coins, '1h', "90 days ago SGT")
+        #         acc_balance = client.futures_account_balance()
+        #         active_position = client.futures_position_information(symbol=coins)
+        #         current_price = client.get_symbol_ticker(symbol=coins)
+        #         stop_loss_market_buy = int(float(current_price['price']) * 0.999)
+        #         stop_loss_market_sell = int(float(current_price['price']) * 1.001)
+        #         total_coins = round(float(9000/(float(current_price['price']))),3)
+        #         myfile1 = Path(file_path+ coins +'_buy_future.txt')
+        #         myfile2 = Path(file_path+ coins +'_sell_future.txt')
+        #         myfile1.touch(exist_ok=True)
+        #         myfile2.touch(exist_ok=True)
+        #         strategy(coins, total_coins)
+        #         time.sleep(10)
+        #     except Exception as e:
+        #         body = "An error occurred while calling the Binance API: {}".format(e)
+        #         base_url = 'https://api.telegram.org/bot' + str(api_telegram1) + '/sendMessage?chat_id=' + str(msg_id_telegram1) + '&text="{}"'.format(body)
+        #         requests.get(base_url)
